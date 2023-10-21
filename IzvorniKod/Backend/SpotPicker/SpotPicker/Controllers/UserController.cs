@@ -20,7 +20,7 @@ namespace SpotPicker.Controllers
         {
 
             var user = _db.User.ToList();
-            var message = "sent from backend";
+            var message = "proba novi branch";
 
             user[0].Name = "Dodm";
 
