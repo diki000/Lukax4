@@ -30,7 +30,7 @@ namespace SpotPicker.Controllers
         }
 
         [HttpPost]
-        [Route("api/[controller]/AddNewUser")]
+        [Route("api/[controller]/Register")]
         public IActionResult Post([FromBody] UserModel user)
         {
 
@@ -43,8 +43,29 @@ namespace SpotPicker.Controllers
             {
                 return BadRequest(e.Message);
             }
+        }
 
+        [HttpPost]
+        [Route("api/[controller]/Login")]
+        public IActionResult LoginPost([FromBody] UserModel user)
+        {
+            try
+            {
+                bool userExists = _userFunctions.login(user);
 
+                if (userExists)
+                {
+                    return Ok("User exists in the database");
+                }
+                else
+                {
+                    return BadRequest("User does not exist in the database");
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }
