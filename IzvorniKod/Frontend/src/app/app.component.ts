@@ -12,10 +12,5 @@ export class AppComponent {
   constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
-    this.http.get('http://localhost:7020/api/Login/testing').subscribe(response => {
-      console.log(response);
-    }, error => {
-      console.log(error);
-    })
   }
 }
