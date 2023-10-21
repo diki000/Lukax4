@@ -1,3 +1,6 @@
+using SpotPicker.EFCore;
+using Microsoft.EntityFrameworkCore;
+
 var corsorgin = "_mycorsorigin";
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +19,9 @@ builder.Services.AddCors(options =>
             policy.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod();
         });
 });
+
+builder.Services.AddDbContext<_EFCore>(
+    o => o.UseNpgsql(builder.Configuration.GetConnectionString("SpotPickerDatabase")));
 
 var app = builder.Build();
 
