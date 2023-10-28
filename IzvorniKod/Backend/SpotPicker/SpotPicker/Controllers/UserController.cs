@@ -28,8 +28,6 @@ namespace SpotPicker.Controllers
             {
                 return BadRequest(e.Message);
             }
-
-
         }
     }
 }

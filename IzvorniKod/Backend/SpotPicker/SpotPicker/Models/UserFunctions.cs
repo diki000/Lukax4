@@ -1,4 +1,5 @@
 ﻿using SpotPicker.EFCore;
+using BCrypt.Net;
 
 namespace SpotPicker.Models
 {
@@ -12,9 +13,11 @@ namespace SpotPicker.Models
 
         public void register(UserModel user)
         {
+            string salt = BCrypt.Net.BCrypt.GenerateSalt(12);
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password, salt);
             User newUser = new User(){
                 Username = user.Username,
-                Password = user.Password,
+                Password = hashedPassword,
                 Name = user.Name,
                 Surname = user.Surname,
                 IBAN = user.IBAN,
