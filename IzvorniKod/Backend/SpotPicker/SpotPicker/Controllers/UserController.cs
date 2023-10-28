@@ -13,25 +13,10 @@ namespace SpotPicker.Controllers
             _db = dataContext;
             _userFunctions = new UserFunctions(dataContext);
         }
-        // GET: api/<LoginController>
-        [HttpGet]
-        [Route("api/[controller]/testing")]
-        public IActionResult Get()
-        {
-
-            var user = _db.User.ToList();
-            var message = "sent from backend";
-
-            user[0].Name = "Dodm";
-
-            _db.SaveChanges();
-
-            return Ok(user);
-        }
 
         [HttpPost]
         [Route("api/[controller]/AddNewUser")]
-        public IActionResult Post([FromBody] UserModel user)
+        public IActionResult RegisterUser([FromBody] UserModel user)
         {
 
             try
