@@ -42,10 +42,10 @@ namespace SpotPicker.Models
             _db.SaveChanges();
         }
 
-        public Boolean login(UserModel user)
+        public void login(UserModel user)
         {
             // Find the user in the database by username
-            var existingUser = _db.User.FirstOrDefault(u => u.Name == user.Name && u.Surname == user.Surname);
+            var existingUser = _db.User.FirstOrDefault(u => u.Username == user.Username);
 
             // If the user does not exist, throw an exception or handle the situation accordingly
             if (existingUser == null)
@@ -53,13 +53,21 @@ namespace SpotPicker.Models
                 throw new Exception("User not found");
             }
 
-            // Here you can perform additional checks, such as comparing passwords, implementing hashing and salting, etc.
-            // For simplicity, let's assume the check is successful
-            // KOMENTAR: dodaj hashing i salting sa Filipovog backenda registera
-            // KOMENTAR PS: checkiraj preko usernamea i passworda uz ovo hashanje i saltanje
+            // User-entered password
+            string enteredPassword = user.Password; // uzmi lozinku unesenu od strane usera na frontu
+            string storedPasswordHash = existingUser.Password; // checkiraj lozinku iz baze
 
-            // Return the user model if the login is successful
-            return true;
+            // Verify the entered password
+            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(enteredPassword, storedPasswordHash); // odradi hashing
+
+            if (isPasswordValid)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
