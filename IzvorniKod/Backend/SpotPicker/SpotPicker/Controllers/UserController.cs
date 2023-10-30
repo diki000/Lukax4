@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SpotPicker.EFCore;
 using SpotPicker.Models;
+using System;
 
 namespace SpotPicker.Controllers
 {
@@ -12,21 +13,6 @@ namespace SpotPicker.Controllers
         {
             _db = dataContext;
             _userFunctions = new UserFunctions(dataContext);
-        }
-        // GET: api/<LoginController>
-        [HttpGet]
-        [Route("api/[controller]/testing")]
-        public IActionResult Get()
-        {
-
-            var user = _db.User.ToList();
-            var message = "sent from backend";
-
-            user[0].Name = "Dodm";
-
-            _db.SaveChanges();
-
-            return Ok(user);
         }
 
         [HttpPost]
@@ -45,6 +31,22 @@ namespace SpotPicker.Controllers
             }
 
 
+        }
+
+        [HttpPost]
+        [Route("api/[controller]/Login")]
+        public IActionResult Post([FromBody] UserModel user)
+        {
+
+            try
+            {
+                _userFunctions.login(user);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }
