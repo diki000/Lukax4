@@ -1,0 +1,55 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+.grid-item {
+    padding: 10px;
+}
+.wrapper{
+    background: #95c8d8;
+    color: #fff;
+    border: 5px solid black;
+    width: 800px;
+    height: 400px;
+    position: relative;
+}
+
+.input-box{
+    margin-left: +10%;
+    margin-bottom: 20px;
+}
+.input-box input[type="text"],
+.input-box input[type="password"]{
+    width: 70%;
+    height: 20px;
+}
+
+.main-text{
+    color: blue;
+    font-size: 25px;
+    margin-left: +5%;
+    padding-top: 2%;
+    position: relative;
+    z-index: 2;
+}
+
+.main-text .logo {
+    position: absolute;
+    top: 20px;
+    right: 200px;
+    width: 10%;
+    height: 100%;
+    margin-left: 10px;
+    z-index: 1;
+  }
+
+
+
+.reg-button{
+    margin-left: 40%;
+}
+.log-button{
+   margin-left: 28%;
+}
+
