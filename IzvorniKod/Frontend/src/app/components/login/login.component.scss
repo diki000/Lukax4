@@ -1,0 +1,101 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+    min-height: 100vh;
+}
+
+form {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.wrapper {
+    position: relative;
+    width: 500px;
+    height: 400px;
+    background: #95C8D8;
+    border-radius: 0;
+    padding: 40px;
+    border: 5px solid #000;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.form-wrapper-sign-in {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+
+}
+
+h2 {
+    font-size: 30px;
+    color: #fff;
+    text-align: center;
+}
+
+.input-box {
+    position: relative;
+    color: #fff;
+    margin: 5px 0;
+    text-align: left;
+}
+
+.input-box label {
+    display: block;
+    margin-bottom: 5px;
+    margin-left: -25%;
+}
+
+.input-box input[type="text"] {
+    width: 150%;
+    margin: 0 -25%;
+    padding: 10px;
+    margin-bottom: 5px;
+    border: none;
+    border-radius: 0;
+    background: #f2f2f2;
+    text-align: left;
+}
+
+.logo {
+    text-align: center;
+    width: 100px;
+    height: 100px;
+}
+
+.novi-racun {
+    color: #fff;
+}
+
+.button-login {
+    text-align: center;
+    margin-top: 15px;
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+    background: blue;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    align-items: center;
+    text-align: center;
+
+}
