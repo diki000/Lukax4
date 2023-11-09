@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using SpotPicker.EFCore;
 using SpotPicker.Models;
 using SpotPicker.Services;
@@ -16,7 +17,7 @@ namespace SpotPicker.Controllers
         {
             _db = dataContext;
             _config = con;
-            _userFunctions = new UserFunctions(dataContext, _config);
+            _userFunctions = new UserFunctions(dataContext, _config, service);
             _emailService = service;
             _emailSender = new EmailSender(_config, _emailService);
         }
@@ -25,7 +26,7 @@ namespace SpotPicker.Controllers
         [Route("api/[controller]/Register")]
         public IActionResult RegisterUser([FromBody] UserModel user)
         {
-            /*
+
             try
             {
                 _userFunctions.register(user);
@@ -33,22 +34,9 @@ namespace SpotPicker.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                var statusCode = (int)e.Data["Kod"];
+                return StatusCode(statusCode);
             }
-            */
-
-            EmailDto em = new EmailDto()
-            {
-                Body = user.Email,
-                To = _config["EmailConfig:EmailUserNameSend"]!,
-                From = _config["EmailConfig:EmailUserNameSend"]!,
-                Subject = "Proba"
-            };
-
-            _emailService.SendEmail(em);
-            return Ok();
-
-
         }
 
         [HttpGet]
@@ -60,21 +48,13 @@ namespace SpotPicker.Controllers
                 bool result = _userFunctions.verifyEmail(id, token);
                 if (result)
                 {
-                    return Ok();
+                    return Redirect("localhost:4200/login");
                 }
                 else
                 {
-                    return BadRequest();
+                    return StatusCode(413);
                 }
-
-                var odgovor = new CustomErrorResponse
-                {
-                    StatusCode = dogovoreniKod,
-                    Message = poruka
-                };
-
-                return BadRequest(odgovor);
-            }
+            } catch(Exception e) { return StatusCode(413); }
         }
     }
 }
