@@ -1,18 +1,18 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { AuthService } from '../service/auth.service';
+import { UserService } from 'src/app/services/user.service';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
 
   userdata: any;
 
-  constructor(private builder: FormBuilder, private service: AuthService,
+  constructor(private builder: FormBuilder, private userService: UserService,
     private router: Router) {
 
   }
@@ -24,9 +24,14 @@ export class LoginComponent {
 
   proceedLogin() {
     if (this.loginForm.valid) {
-      this.service.Getbycode(this.loginForm.value.username).subscribe(res => {
-        this.userdata = res;
-        console.log(this.userdata);
+      const { username, password } = this.loginForm.value;
+      this.userService.login(username, password).subscribe(
+        (res) => {
+          this.userdata = res;
+          console.log(this.userdata);
+          
+          this.router.navigate(['/dashboard']);
+          this.userService.setCurrentUser(res);
       });
     } else {
       console.log("Error invalid form");
