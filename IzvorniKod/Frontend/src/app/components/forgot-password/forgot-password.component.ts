@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-forgot-password',
@@ -23,6 +25,10 @@ export class ForgotPasswordComponent {
 
   showPasswordResetForm: boolean = false;
   showWrongPasswordMessage: boolean = false;
+    constructor(private userService:UserService, private router:Router)
+    {
+
+    }
 
   focusNext(nextDigit: number) {
     const nextInput = document.getElementById(`digit${nextDigit}`) as HTMLInputElement;
@@ -34,11 +40,15 @@ export class ForgotPasswordComponent {
   onSendCode() {
     this.sentCode = '' //ovo je u slucaju da se vise puta klikne na reset(da se ne dodaje 5 znamenki na jos 5 znamenki na jos...)
     console.log(`Password reset requested for email: ${this.email}`);
-    for (let i = 0; i < 5; i++){
-        this.sentCode += Math.floor(Math.random() * 10).toString();
-    }
-    console.log(`Code sent on email: ${this.sentCode}`);
-    window.alert(this.sentCode)
+    this.userService.getRecoveryEmail(this.email).subscribe(
+        (data) => {
+          this.sentCode = data.toString();
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    
     this.showEnterEmailForm = false;
     this.showVerificationCodeForm = true;
   }
@@ -59,6 +69,14 @@ export class ForgotPasswordComponent {
   onNewPassword() {
     if (this.newPassword === this.confirmPassword) {
       console.log('Password reset successful');
+      this.userService.changePassword(this.email, this.newPassword).subscribe((data) => {
+        this.router.navigate(['/login']);
+        window.alert("Uspjesno promijenjena lozinka")
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
       this.showWrongPasswordMessage = false;
     } else {
       console.log('Passwords do not match');
