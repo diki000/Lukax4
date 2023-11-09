@@ -1,7 +1,14 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\IzvorniKod",
+    "\\IzvorniKod\\Backend",
+    "\\IzvorniKod\\Backend\\SpotPicker",
+    "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker",
+    "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\Controllers",
+    "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\EFCore",
+    "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\Models"
   ],
-  "SelectedNode": "\\SpotPicker.sln",
+  "SelectedNode": "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker.sln",
   "PreviewInSolutionExplorer": false
 }

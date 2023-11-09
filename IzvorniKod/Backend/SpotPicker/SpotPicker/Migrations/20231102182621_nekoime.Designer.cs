@@ -11,8 +11,8 @@ using SpotPicker.EFCore;
 namespace SpotPicker.Migrations
 {
     [DbContext(typeof(_EFCore))]
-    [Migration("20231028160644_ManagerAndUserCreation")]
-    partial class ManagerAndUserCreation
+    [Migration("20231102182621_nekoime")]
+    partial class nekoime
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

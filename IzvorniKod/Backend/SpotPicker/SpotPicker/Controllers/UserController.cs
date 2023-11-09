@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using SpotPicker.EFCore;
 using SpotPicker.Models;
 using System;
+using System.Text.Json.Nodes;
+using System.Xml.Linq;
 
 namespace SpotPicker.Controllers
 {
@@ -16,7 +19,7 @@ namespace SpotPicker.Controllers
         }
 
         [HttpPost]
-        [Route("api/[controller]/AddNewUser")]
+        [Route("api/[controller]/Register")]
         public IActionResult Post([FromBody] UserModel user)
         {
 
@@ -35,17 +38,24 @@ namespace SpotPicker.Controllers
 
         [HttpPost]
         [Route("api/[controller]/Login")]
-        public IActionResult Post([FromBody] UserModel user)
+        public IActionResult Login([FromBody] JsonObject JUserCredentials)
         {
 
             try
             {
-                _userFunctions.login(user);
-                return Ok();
+                string username = JObject.Parse(JUserCredentials.ToString())["username"].ToString();
+                string password = JObject.Parse(JUserCredentials.ToString())["password"].ToString();
+
+
+                //_userFunctions.login(username, password);
+                UserModel korisnik = _userFunctions.login(username, password);
+                return Ok(korisnik);
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                //return BadRequest(e.Message);
+                var statusCode = exc.Data.Keys.Cast<string>().Single();  // retrieves "3"
+                var statusMessage = exc.Data[statusCode].ToString();
             }
         }
     }

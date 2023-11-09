@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace SpotPicker.Migrations
 {
     /// <inheritdoc />
-    public partial class ManagerAndUserCreation : Migration
+    public partial class nekoime : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
