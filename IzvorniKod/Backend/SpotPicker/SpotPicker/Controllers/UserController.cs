@@ -15,7 +15,7 @@ namespace SpotPicker.Controllers
         }
 
         [HttpPost]
-        [Route("api/[controller]/AddNewUser")]
+        [Route("api/[controller]/Register")]
         public IActionResult RegisterUser([FromBody] UserModel user)
         {
 
@@ -26,7 +26,16 @@ namespace SpotPicker.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                var kod = exc.Data.Keys.Cast<string>().Single();
+                var poruka = exc.Data[statusCode].ToString();
+
+                var odgovor = new CustomErrorResponse
+                {
+                    StatusCode = dogovoreniKod,
+                    Message = poruka
+                };
+
+                return BadRequest(odgovor);
             }
         }
     }
