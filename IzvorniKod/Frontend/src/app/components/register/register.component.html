@@ -42,7 +42,7 @@
 
                     <div class="input-box">
                         <label>Slika osobne<br></label>
-                        <input type="file" accept="image/*" formControlName="file" required>
+                        <input type="file" accept="image/*" formControlName="file" required (change)="onFileSelected($event)">
                     </div>
                     
                     <div class="input-box">

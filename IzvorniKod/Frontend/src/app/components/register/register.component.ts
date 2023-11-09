@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { User } from 'src/app/models/User';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-register',
@@ -14,9 +15,14 @@ export class RegisterComponent implements OnInit{
     { value: 1, label: 'Klijent' },
     { value: 2, label: 'Voditelj Parkinga' }
   ];
+  
+  
   registrationForm: FormGroup = new FormGroup({});
+  fileToUpload: File[] | null = null;
+
+
   constructor(private builder: FormBuilder,
-    private router:Router) {
+    private router:Router, private userService: UserService) {
 
   }
   ngOnInit(): void {
@@ -36,23 +42,44 @@ export class RegisterComponent implements OnInit{
   //Napraviti fj za ucitavanje slike
 
   proceedRegistration(){
-   if(this.registrationForm.valid){
-    let newUser = {
-      firstName: this.registrationForm.value.firstname,
-      lastName: this.registrationForm.value.lastname,
-      username: this.registrationForm.value.username,
-      password: this.registrationForm.value.password,
-      email: this.registrationForm.value.email,
-      role: this.registrationForm.value.role,
-      ibanRacun: this.registrationForm.value.ibanRacun,
-      image: this.registrationForm.value.file
-    }
-    console.log(newUser);
-   }
-   else{
-     console.log("Forma nije validna");
-   }
 
+    let newUser = new User(
+      this.registrationForm.value.username,
+      this.registrationForm.value.password,
+      this.registrationForm.value.firstname,
+      this.registrationForm.value.lastname,
+      this.registrationForm.value.ibanRacun,
+      this.registrationForm.value.email,
+      false,
+      this.registrationForm.value.role
+    );
+     this.userService.register(newUser).subscribe({ next: (result) => {
+      this.uploadImg(newUser.Username);
+     }
+    });
+
+}
+  
+  onFileSelected(event: any){
+    this.fileToUpload = event.target.files;
+  }
+
+  uploadImg(username: string) {
+    console.log(username);
+    const formData = new FormData();
+    if (this.fileToUpload) {
+      formData.append('files', this.fileToUpload[0]);
+    }
+    formData.append('username', username.toString());
+
+    this.userService.postImage(formData).subscribe(
+      (response) => {
+        console.log(response);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 
 }

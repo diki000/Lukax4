@@ -39,6 +39,31 @@ namespace SpotPicker.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("api/[controller]/UploadImage")]
+        public async Task<IActionResult> UploadImage()
+        {
+            try
+            {
+                string username = Request.Form["username"]!;
+                var files = Request.Form.Files;
+
+                await  _userFunctions.UpladImages(Request);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                using (StreamWriter writer = new StreamWriter("assets2/errorLog.txt"))
+                {
+                    writer.WriteLine(ex.Message);
+
+                }
+                Console.WriteLine(ex.Message + ex.StackTrace);
+                return BadRequest(ex);
+            }
+        }
+
         [HttpGet]
         [Route("api/[controller]/verifyEmail")]
         public IActionResult verifyEmail(int id, string token)
@@ -48,7 +73,7 @@ namespace SpotPicker.Controllers
                 bool result = _userFunctions.verifyEmail(id, token);
                 if (result)
                 {
-                    return Redirect("localhost:4200/login");
+                    return Redirect("http://localhost:4200/login");
                 }
                 else
                 {

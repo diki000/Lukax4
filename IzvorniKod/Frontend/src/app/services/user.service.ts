@@ -7,13 +7,18 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class UserService {
-  url: string = "http://localhost:7020/api/User";
+  url: string = "https://localhost:7020/api/User";
   currentUser: User = new User("","","","","","",false,0);
 
   constructor(private http: HttpClient) { }
 
   public register(user: User): Observable<User>{
+    console.log("uso")
     return this.http.post<User>(this.url + "/Register", user);
+  }
+
+  public postImage(data: FormData): Observable<any> {
+    return this.http.post<any>(this.url + '/UploadImage', data);
   }
 
   public login(username: string, password: string): Observable<User>{

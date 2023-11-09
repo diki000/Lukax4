@@ -84,7 +84,8 @@ namespace SpotPicker.Models
                     IBAN = user.IBAN,
                     Email = user.Email,
                     IsEmailConfirmed = false,
-                    RoleID = user.RoleID
+                    RoleID = user.RoleID,
+                    idImagePath = ""
                 };
 
                 _db.User.Add(newUser);
@@ -110,6 +111,59 @@ namespace SpotPicker.Models
                 throw ex;
             }
         }
+
+        public async Task UpladImages(HttpRequest request)
+        {
+            try
+            {
+                string filePath;
+                string username = request.Form["username"]!;
+                var file = request.Form.Files[0];
+
+                if(file.Length > 0)
+                {
+                    string uniqueFileName = Guid.NewGuid().ToString();
+
+                    string fileExtension = Path.GetExtension(file.FileName);
+
+                    string fileName = uniqueFileName + fileExtension;
+
+                    string uploadPath = Path.Combine("assets2", "images", "idPhoto");
+
+                    if (!Directory.Exists(uploadPath))
+                    {
+                        Directory.CreateDirectory(uploadPath);
+                    }
+
+                    filePath = Path.Combine(uploadPath, fileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(fileStream);
+                    }
+
+                    var userUpdate = _db.User.Where(user => user.Username.Equals(username)).FirstOrDefault();
+                    if(userUpdate != null)
+                    {
+                        userUpdate.idImagePath = filePath;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                using (StreamWriter writer = new StreamWriter("assets2/errorLog.txt"))
+                {
+                    writer.WriteLine(ex.Message);
+
+                    // You can continue writing more lines or use other writer methods as needed.
+                }
+                throw new Exception(message: ex.Message);
+            }
+
+            _db.SaveChanges();
+        }
+
 
         public bool verifyEmail(int id, string tokenFromUrl)
         {
