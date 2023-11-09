@@ -164,10 +164,6 @@ namespace SpotPicker.Models
             _db.SaveChanges();
         }
 
-            // User-entered password
-            string enteredPassword = user.Password; // uzmi lozinku unesenu od strane usera na frontu
-            string storedPasswordHash = existingUser.Password; // checkiraj lozinku iz baze
-
         public bool verifyEmail(int id, string tokenFromUrl)
         {
             string hashKey = _config["SecredHashKey"]!;
