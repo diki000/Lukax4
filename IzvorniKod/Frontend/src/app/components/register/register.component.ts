@@ -1,48 +1,44 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { AuthService } from '../service/auth.service';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit{
 
   roleOptions = [
     { value: 1, label: 'Klijent' },
     { value: 2, label: 'Voditelj Parkinga' }
   ];
 
-  constructor(private builder: FormBuilder,private service:AuthService,
+  registrationForm: FormGroup = new FormGroup({});
+  constructor(private builder: FormBuilder,
     private router:Router) {
 
   }
-
-  registrationForm=this.builder.group({
-    username:this.builder.control('',Validators.compose([Validators.required,Validators.minLength(5)])),
-    name:this.builder.control('',Validators.required),
-    surname:this.builder.control('',Validators.required),
-    password:this.builder.control('',Validators.compose([Validators.required])),
-    email:this.builder.control('',Validators.compose([Validators.required,Validators.email])),
-    ibanRacun:this.builder.control('',Validators.required),  
-    role:this.builder.control('',Validators.required),
-    file: this.builder.control('',Validators.required)
-  });
+  ngOnInit(): void {
+    this. registrationForm = new FormGroup({
+      role: new FormControl('', [Validators.required]),
+      username: new FormControl('', [Validators.required]),
+      password: new FormControl('', [Validators.required]),
+      email: new FormControl('', [Validators.email, Validators.required]),
+      firstName: new FormControl('', [Validators.required]),
+      lastName: new FormControl('', [Validators.required]),
+      file: new FormControl('', [Validators.required]),
+      ibanRacun: new FormControl('', [Validators.required])  
+    });
+  }
 
 
   //Napraviti fj za ucitavanje slike
 
   proceedRegistration(){
    if(this.registrationForm.valid){
-      this.service.Proceedregister(this.registrationForm.value).subscribe(res => {
-       console.log("")
-       this.router.navigate(['login']); 
-      });
-    }else{
-      console.log("Error invalid form");
-    }
+
+   }
   }
 
 }

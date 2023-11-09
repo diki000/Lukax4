@@ -1,7 +1,7 @@
 <body>
     <div class="wrapper">
         <div>
-        <h2 class="main-text">Kreiraj račun<img class="logo" src="assets/logo.png" alt="logo"></h2>
+            <h2 class="main-text">Kreiraj račun<img class="logo" src="assets/logo.png" alt="logo"></h2>
         </div>
         <form class="regForm" [formGroup]="registrationForm" (ngSubmit)="proceedRegistration()">
             <div class="grid-container">
@@ -33,11 +33,11 @@
                 <div class="grid-item">
                     <div class="input-box">
                         <label>Ime<br></label>
-                        <input type="text" formControlName="name" required>
+                        <input type="text" formControlName="firstname" required>
                     </div>
                     <div class="input-box">
                         <label>Prezime<br></label>
-                        <input type="text" formControlName="surname" required>
+                        <input type="text" formControlName="lastname" required>
                     </div>
 
                     <div class="input-box">
