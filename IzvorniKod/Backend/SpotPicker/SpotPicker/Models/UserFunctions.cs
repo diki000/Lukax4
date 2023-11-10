@@ -56,7 +56,7 @@ namespace SpotPicker.Models
 
                 //return 400; //vrati 400, user not found
                 var ex = new Exception();
-                ex.Data["User not found"] = 400;
+                ex.Data["Kod"] = 400;
                 throw ex;
                 //throw new Exception("User not found. Status code: 400");
             }
@@ -106,24 +106,24 @@ namespace SpotPicker.Models
 
             if (isPasswordValid)
             {
-                /*if(existingUser.IsEmailConfirmed == false)
+                if(existingUser.IsEmailConfirmed == false)
                 {
                     // throw new Exception(string.Format("{0} - {1}", statusMessage, statusCode));
-                    //throw new Exception("Mail not confirmed. Status code: 402"); // nije potvrdjen mail
+                    //throw new Exception("Mail not confirmed. Status code: 401"); // nije potvrdjen mail
                     var ex = new Exception();
-                    ex.Data["Mail not confirmed"] = 402;
+                    ex.Data["Kod"] = 401;
                     throw ex;
 
                 }
 
                 // ako je user vlasnik parkinga, provjeri je li potvrdjen od admina, ako nije returnaj error
-                if(existingUser.RoleID == 1 && !managerCheck.ConfirmedByAdmin)
+                if(existingUser.RoleID == 2 && !managerCheck.ConfirmedByAdmin)
                 {
                     var ex = new Exception();
-                    ex.Data["Owner not confirmed by admin"] = 403;
+                    ex.Data["Kod"] = 403;
                     throw ex;
                     //throw new Exception("Owner not confirmed by admin. Status code: 403"); // vlasnik parkinga nije potvrdjen od admina
-                }*/
+                }
 
                 return korisnik; // AKO SVE VALJA, VRATI USERA NA FRONT
             }
@@ -131,7 +131,7 @@ namespace SpotPicker.Models
             {
                 //throw new Exception("Incorrect password. Status code: 402"); //lozinka nevalja
                 var ex = new Exception();
-                ex.Data["Incorrect password"] = 402;
+                ex.Data["Kod"] = 402;
                 throw ex;
             }
         }
