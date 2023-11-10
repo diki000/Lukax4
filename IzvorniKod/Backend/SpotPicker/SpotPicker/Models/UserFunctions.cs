@@ -185,6 +185,30 @@ namespace SpotPicker.Models
                 }
             }
         }
+        public UserModel changePassword(string email, string password)
+        {
+            //string email = JObject.Parse(JUserCredentials.ToString())["email"].toString();
+            //string password = JObject.Parse(JUserCredentials.ToString())["password"].toString();
+
+            string salt = BCrypt.Net.BCrypt.GenerateSalt(12);
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password, salt);
+
+            var currentUser = _db.User.Where(u => u.Email == email).FirstOrDefault();
+            currentUser.Password = hashedPassword;
+            _db.SaveChanges();
+            UserModel model = new UserModel()
+            {
+                Username = currentUser.Username,
+                Password = "",
+                Name = currentUser.Name,
+                Surname = currentUser.Surname,
+                IBAN = currentUser.IBAN,
+                IsEmailConfirmed = currentUser.IsEmailConfirmed,
+                RoleID = currentUser.RoleID,
+            };
+
+            return model;
+        }
 
     }
 }

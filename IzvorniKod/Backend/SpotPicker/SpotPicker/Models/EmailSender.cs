@@ -36,7 +36,7 @@ namespace SpotPicker.Models
             {
                 To = email,
                 From = _config["EmailConfig:EmailUserNameSend"]!,
-                Subject = "Proba",
+                Subject = "Potvrda registracije",
                 Body = emaildata
             };
 

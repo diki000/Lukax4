@@ -49,7 +49,7 @@ namespace SpotPicker.Controllers
                 string username = Request.Form["username"]!;
                 var files = Request.Form.Files;
 
-                await  _userFunctions.UpladImages(Request);
+                await _userFunctions.UpladImages(Request);
 
                 return Ok();
             }
@@ -80,7 +80,7 @@ namespace SpotPicker.Controllers
                 {
                     return StatusCode(413);
                 }
-            } catch(Exception e) { return StatusCode(413); }
+            } catch (Exception e) { return StatusCode(413); }
         }
 
         [HttpGet]
@@ -92,10 +92,28 @@ namespace SpotPicker.Controllers
                 EmailSender sendEmail = new EmailSender(_config, _emailService);
                 var code = sendEmail.SendChangePasswordCode(email);
                 return Ok(code);
-            } catch(Exception e)
+            } catch (Exception e)
             {
                 return BadRequest();
             }
+        }
+
+        [HttpPost]
+        [Route("api/[controller]/ChangePassword")]
+        public IActionResult changePassword([FromBody] JObject JUserCredentials)
+        {
+            try
+            {
+                string email = JObject.Parse(JUserCredentials.ToString())["email"].ToString();
+                string password = JObject.Parse(JUserCredentials.ToString())["password"].ToString();
+                UserModel result = _userFunctions.changePassword(email, password);
+                return Ok(result);
+
+            }
+            catch(Exception e) {
+                return BadRequest();
+            }
+
         }
     }
 }
