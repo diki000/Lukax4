@@ -14,8 +14,12 @@
             </div>
             <div class="novi-racun">
                 <label>Nemate račun? <br></label> 
-                <a href="#">Kreirajte novi</a>
+                <a [routerLink]="'/register'">Kreirajte novi</a>
                 <br>
+             </div>
+             <div class="novi-racun">
+                <br>
+                <a [routerLink]="'/forgot-password'">Zaboravio si lozinku</a>
              </div>
              <button type="submit" class="button-login">Prijavi se</button>
          </form> 

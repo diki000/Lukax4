@@ -24,7 +24,8 @@ export class LoginComponent {
 
   proceedLogin() {
     if (this.loginForm.valid) {
-      const { username, password } = this.loginForm.value;
+      let username = this.loginForm.value.username || "";
+      let password = this.loginForm.value.password || "";
       this.userService.login(username, password).subscribe(
         (res) => {
           this.userdata = res;
@@ -37,3 +38,4 @@ export class LoginComponent {
       console.log("Error invalid form");
     }
   }
+}

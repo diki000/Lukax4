@@ -1,3 +1,10 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+    min-height: 96vh;
+}
 .grid-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -47,7 +54,16 @@
 
 
 .reg-button{
-    margin-left: 40%;
+    margin-left: 42%;
+    text-align: center;
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+    background: blue;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+
 }
 .log-button{
    margin-left: 28%;

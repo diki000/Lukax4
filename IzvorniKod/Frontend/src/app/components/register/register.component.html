@@ -8,9 +8,9 @@
                 <div class="grid-item">
                      
                     <div class="input-box">
-                        <label><br></label>
+                        <label>Vrsta računa<br></label>
                          
-                        <select formControlName="role" required>
+                        <select formControlName="role" required style="width: 72.5%; height: 24px;">
                             <option value="" disabled selected>Odaberi:</option>
                             <option *ngFor="let option of roleOptions" [value]="option.value">{{ option.label }}
                             </option>
