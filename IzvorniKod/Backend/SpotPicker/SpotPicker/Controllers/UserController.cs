@@ -110,10 +110,14 @@ namespace SpotPicker.Controllers
                 return Ok(result);
 
             }
-            catch(Exception e) {
-                return BadRequest();
+            catch (Exception e)
+            {
+                //return BadRequest(e.Message);
+                //var statusCode = exc.Data.Keys.Cast<string>().Single();  // retrieves "3"
+                //var statusMessage = exc.Data[statusCode].ToString();
+                var statusCode = (int)e.Data["Kod"];
+                return StatusCode(statusCode);
             }
-
         }
     }
 }
