@@ -41,6 +41,46 @@ namespace SpotPicker.Models
             };
 
             _emailService.SendEmail(newEmail);
-        } 
+        }
+        
+        public int SendChangePasswordCode(string email)
+        {
+            const string allowedChars = "0123456789";
+
+            var result = new System.Text.StringBuilder(6);
+
+            using (var rng = new System.Security.Cryptography.RNGCryptoServiceProvider())
+            {
+                var buffer = new byte[sizeof(uint)];
+
+                while (result.Length < 6)
+                {
+
+                    rng.GetBytes(buffer);
+                    uint randomNumber = BitConverter.ToUInt32(buffer, 0);
+
+                    int index = (int)(randomNumber % allowedChars.Length);
+
+                    result.Append(allowedChars[index]);
+                }
+            }
+
+            string emailText = File.ReadAllText("assets2/changePasswordEmail.txt");
+            string emailData = String.Format(emailText, result.ToString());
+
+            EmailDto newEmail = new EmailDto()
+            {
+                To = email,
+                From = _config["EmailConfig:EmailUserNameSend"]!,
+                Subject = "Promjena lozinke",
+                Body = emailData
+            };
+
+            _emailService.SendEmail(newEmail);
+
+            return Int32.Parse(result.ToString());
+
+
+        }
     }
 }

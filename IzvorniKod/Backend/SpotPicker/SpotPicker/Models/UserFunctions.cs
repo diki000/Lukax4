@@ -186,6 +186,5 @@ namespace SpotPicker.Models
             }
         }
 
-
     }
 }

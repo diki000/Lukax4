@@ -82,5 +82,20 @@ namespace SpotPicker.Controllers
                 }
             } catch(Exception e) { return StatusCode(413); }
         }
+
+        [HttpGet]
+        [Route("api/[controller]/GetRecoveryEmail")]
+        public IActionResult getRecoveryEmail(string email)
+        {
+            try
+            {
+                EmailSender sendEmail = new EmailSender(_config, _emailService);
+                var code = sendEmail.SendChangePasswordCode(email);
+                return Ok(code);
+            } catch(Exception e)
+            {
+                return BadRequest();
+            }
+        }
     }
 }
