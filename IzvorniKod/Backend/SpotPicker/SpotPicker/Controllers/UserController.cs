@@ -107,15 +107,14 @@ namespace SpotPicker.Controllers
             } catch (Exception e) { return StatusCode(413); }
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("api/[controller]/GetRecoveryEmail")]
-        public IActionResult getRecoveryEmail(JObject email)
+        public IActionResult getRecoveryEmail(string email)
         {
             try
             {
-                string _email = JObject.Parse(email.ToString())["email"].ToString();
                 EmailSender sendEmail = new EmailSender(_config, _emailService);
-                var code = sendEmail.SendChangePasswordCode(_email);
+                var code = sendEmail.SendChangePasswordCode(email);
                 return Ok(code);
             } catch (Exception e)
             {
@@ -125,7 +124,7 @@ namespace SpotPicker.Controllers
 
         [HttpPost]
         [Route("api/[controller]/ChangePassword")]
-        public IActionResult changePassword([FromBody] JObject JUserCredentials)
+        public IActionResult changePassword([FromBody] JsonObject JUserCredentials)
         {
             try
             {

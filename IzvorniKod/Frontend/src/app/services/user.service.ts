@@ -32,14 +32,8 @@ export class UserService {
   }
 
   public getRecoveryEmail(email: string): Observable<number>{
-    let httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-      })
-    };
-    let body = JSON.stringify({email});
-    console.log(body)
-    return this.http.post<number>(this.url + "/GetRecoveryEmail", body, httpOptions);
+
+    return this.http.get<number>(this.url + "/GetRecoveryEmail?email=" + email);
   }
 
   public changePassword(email: string, password: string): Observable<User>{
@@ -59,6 +53,13 @@ export class UserService {
 
   public getCurrentUser(): User{
     return this.currentUser;
+  }
+  
+  public isLoggedIn(): boolean{
+    if(this.currentUser.Username == ""){
+      return false;
+    }
+    return true;
   }
 
   public logout(){
