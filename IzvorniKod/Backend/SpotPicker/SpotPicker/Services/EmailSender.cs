@@ -50,13 +50,13 @@ namespace SpotPicker.Services
         {
             const string allowedChars = "0123456789";
 
-            var result = new StringBuilder(6);
+            var result = new System.Text.StringBuilder(5);
 
             using (var rng = new RNGCryptoServiceProvider())
             {
                 var buffer = new byte[sizeof(uint)];
 
-                while (result.Length < 6)
+                while (result.Length < 5)
                 {
 
                     rng.GetBytes(buffer);
