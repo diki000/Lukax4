@@ -21,7 +21,7 @@ namespace SpotPicker.Controllers
             _config = con;
             _userFunctions = new UserFunctions(dataContext, _config, service);
             _emailService = service;
-            _emailSender = new EmailSender(_config, _emailService);
+            _emailSender = new EmailSender(_config, _emailService, dataContext);
         }
 
         [HttpPost]
@@ -95,7 +95,7 @@ namespace SpotPicker.Controllers
         {
             try
             {
-                bool result = _userFunctions.verifyEmail(id, token);
+                bool result = _emailSender.verifyEmail(id, token);
                 if (result)
                 {
                     return Redirect("http://localhost:4200/login");
@@ -114,8 +114,7 @@ namespace SpotPicker.Controllers
             try
             {
                 string _email = JObject.Parse(email.ToString())["email"].ToString();
-                EmailSender sendEmail = new EmailSender(_config, _emailService);
-                var code = sendEmail.SendChangePasswordCode(_email);
+                var code = _emailSender.SendChangePasswordCode(_email);
                 return Ok(code);
             } catch (Exception e)
             {

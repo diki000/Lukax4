@@ -1,18 +1,21 @@
-﻿using SpotPicker.Services;
+﻿using SpotPicker.EFCore;
+using SpotPicker.Models;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace SpotPicker.Models
+namespace SpotPicker.Services
 {
     public class EmailSender
     {
         private readonly IConfiguration _config;
         private readonly IEmailService _emailService;
-        
-        public EmailSender(IConfiguration config, IEmailService emailservice)
+        private readonly _EFCore _db;
+
+        public EmailSender(IConfiguration config, IEmailService emailservice, _EFCore db)
         {
             _config = config;
             _emailService = emailservice;
+            _db = db;
         }
 
         public void SendEmailConfirmation(int id, string email)
@@ -29,8 +32,8 @@ namespace SpotPicker.Models
 
             string url = "https://localhost:7020/api/User/verifyEmail?id=" + id.ToString() + "&token=" + token;
 
-            string emailText = File.ReadAllText("assets2/emailVerification.txt");
-            string emaildata = String.Format(emailText, url);
+            string emailText = File.ReadAllText("assets2/emailVerification.html");
+            string emaildata = string.Format(emailText, url);
 
             EmailDto newEmail = new EmailDto()
             {
@@ -42,14 +45,14 @@ namespace SpotPicker.Models
 
             _emailService.SendEmail(newEmail);
         }
-        
+
         public int SendChangePasswordCode(string email)
         {
             const string allowedChars = "0123456789";
 
-            var result = new System.Text.StringBuilder(6);
+            var result = new StringBuilder(6);
 
-            using (var rng = new System.Security.Cryptography.RNGCryptoServiceProvider())
+            using (var rng = new RNGCryptoServiceProvider())
             {
                 var buffer = new byte[sizeof(uint)];
 
@@ -65,8 +68,8 @@ namespace SpotPicker.Models
                 }
             }
 
-            string emailText = File.ReadAllText("assets2/changePasswordEmail.txt");
-            string emailData = String.Format(emailText, result.ToString());
+            string emailText = File.ReadAllText("assets2/changePasswordEmail.html");
+            string emailData = string.Format(emailText, result.ToString());
 
             EmailDto newEmail = new EmailDto()
             {
@@ -78,9 +81,31 @@ namespace SpotPicker.Models
 
             _emailService.SendEmail(newEmail);
 
-            return Int32.Parse(result.ToString());
+            return int.Parse(result.ToString());
 
 
+        }
+
+        public bool verifyEmail(int id, string tokenFromUrl)
+        {
+            string hashKey = _config["SecredHashKey"]!;
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(id.ToString() + hashKey));
+                string recreatedToken = BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
+
+                if (recreatedToken == tokenFromUrl)
+                {
+                    var currentUser = _db.User.Where(u => u.Id == id).FirstOrDefault();
+                    currentUser.IsEmailConfirmed = true;
+                    _db.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
         }
     }
 }

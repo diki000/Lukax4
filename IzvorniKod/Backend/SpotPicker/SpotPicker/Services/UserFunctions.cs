@@ -4,12 +4,12 @@ using System.Security.Cryptography;
 using System.Text;
 using BCrypt.Net;
 using Microsoft.AspNetCore.Mvc;
-using SpotPicker.Services;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Text.RegularExpressions;
+using SpotPicker.Models;
 
-namespace SpotPicker.Models
+namespace SpotPicker.Services
 {
     public class UserFunctions
     {
@@ -20,7 +20,7 @@ namespace SpotPicker.Models
         {
             _db = database;
             _config = config;
-            _emailSender = new EmailSender(_config, service);
+            _emailSender = new EmailSender(_config, service,  database);
         }
 
         // funkcija za provjeru validnosti IBAN-a
@@ -168,7 +168,7 @@ namespace SpotPicker.Models
                 string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password, salt);
                 User newUser = new User()
                 {
- 
+
                     Username = user.Username,
                     Password = hashedPassword,
                     Name = user.Name,
@@ -212,7 +212,7 @@ namespace SpotPicker.Models
                 string username = request.Form["username"]!;
                 var file = request.Form.Files[0];
 
-                if(file.Length > 0)
+                if (file.Length > 0)
                 {
                     string uniqueFileName = Guid.NewGuid().ToString();
 
@@ -235,7 +235,7 @@ namespace SpotPicker.Models
                     }
 
                     var userUpdate = _db.User.Where(user => user.Username.Equals(username)).FirstOrDefault();
-                    if(userUpdate != null)
+                    if (userUpdate != null)
                     {
                         userUpdate.idImagePath = filePath;
                     }
