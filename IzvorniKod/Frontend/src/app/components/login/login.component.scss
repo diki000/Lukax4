@@ -74,7 +74,16 @@ h2 {
     background: #f2f2f2;
     text-align: left;
 }
-
+.input-box input[type="password"] {
+    width: 150%;
+    margin: 0 -25%;
+    padding: 10px;
+    margin-bottom: 5px;
+    border: none;
+    border-radius: 0;
+    background: #f2f2f2;
+    text-align: left;
+}
 .logo {
     text-align: center;
     width: 100px;

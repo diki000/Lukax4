@@ -41,9 +41,13 @@ export class LoginComponent {
             role: res.RoleId,
           }
           localStorage.setItem('currentUser', JSON.stringify({currentUser}))
+      }
+      ,(error) => {
+        window.alert("Invalid username or password")
       });
     } else {
       console.log("Error invalid form");
+
       this.userService.updateLoggedInState(false);
     }
   }

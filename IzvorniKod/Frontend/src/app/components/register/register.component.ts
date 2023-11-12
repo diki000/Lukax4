@@ -55,6 +55,10 @@ export class RegisterComponent implements OnInit{
     );
      this.userService.register(newUser).subscribe({ next: (result) => {
       this.uploadImg(newUser.Username);
+     },
+     error: (error) => {
+       console.log(error);
+       window.alert("Error registering user")
      }
     });
 
@@ -78,6 +82,7 @@ export class RegisterComponent implements OnInit{
       },
       (error) => {
         console.log(error);
+        window.alert("Error uploading image")
       }
     );
   }
