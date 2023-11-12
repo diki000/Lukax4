@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../models/User';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +9,16 @@ import { Observable } from 'rxjs';
 export class UserService {
   url: string = "https://localhost:7020/api/User";
   currentUser: User = new User("","","","","","",false,0);
+  private authSubject = new BehaviorSubject<boolean>(false);
+  isLoggedIn$ = this.authSubject.asObservable();
 
+  updateLoggedInState(status: boolean){
+      this.authSubject.next(status);
+  }
+
+  public isAuthenticated(): Observable<boolean> {
+       return this.isLoggedIn$;
+  }
   constructor(private http: HttpClient) { }
 
   public register(user: User): Observable<User>{
@@ -54,7 +63,7 @@ export class UserService {
   public getCurrentUser(): User{
     return this.currentUser;
   }
-  
+
   public isLoggedIn(): boolean{
     if(this.currentUser.Username == ""){
       return false;
