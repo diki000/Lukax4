@@ -7,6 +7,7 @@ using SpotPicker.Services;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Text.RegularExpressions;
+using System.Text.Json.Nodes;
 
 namespace SpotPicker.Models
 {
@@ -23,7 +24,7 @@ namespace SpotPicker.Models
         }
 
         // funkcija za provjeru validnosti IBAN-a
-        public static bool CheckIban(string iban)
+        public bool CheckIban(string iban)
         {
             iban = iban.Replace(" ", "");
 
@@ -50,25 +51,38 @@ namespace SpotPicker.Models
             return remainder == 1;
         }
 
+        public bool checkPasswordRegex(string password)
+        {
+            // TODO: promijeni regex da bude konzistentno sa zmakovim
+            var pattern = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$";
+            Match m = Regex.Match(password, pattern);
+            if (!m.Success)
+            {
+                return false;
+            } else
+            {
+                return true;
+            }
+        }
+
         public void register(UserModel user)
         {
             bool usernameAvailable = !_db.User.Any(u => u.Username == user.Username);
+            bool emailAvailable = !_db.User.Any(u => u.Email == user.Email);
 
-            if (usernameAvailable)
+            if (usernameAvailable && emailAvailable)
             {
-                var pattern = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$";
-                Match m = Regex.Match(user.Password, pattern);
-                if (!m.Success)
+                if (!checkPasswordRegex(user.Password))
                 {
                     var ex = new Exception();
-                    ex.Data["Kod"] = 411;
+                    ex.Data["Kod"] = 411; // 411 je slaba lozinka
                     throw ex;
                 }
 
                 if (!CheckIban(user.IBAN))
                 {
                     var ex = new Exception();
-                    ex.Data["Kod"] = 412;
+                    ex.Data["Kod"] = 412; // 412 je neispravan IBAN
                     throw ex;
                 }
 
@@ -106,7 +120,7 @@ namespace SpotPicker.Models
             else
             {
                 var ex = new Exception();
-                ex.Data["Kod"] = 410;
+                ex.Data["Kod"] = !usernameAvailable ? 410 : 414; // 410 kad je nedostupno korisnicko ime, 414 kad je nedostupan mail
                 throw ex;
             }
         }
@@ -133,6 +147,29 @@ namespace SpotPicker.Models
             }
         }
 
+        public UserModel changePassword(string email, string password)
+        {
+            //string email = JObject.Parse(JUserCredentials.ToString())["email"].toString();
+            //string password = JObject.Parse(JUserCredentials.ToString())["password"].toString();
 
+            string salt = BCrypt.Net.BCrypt.GenerateSalt(12);
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password, salt);
+
+            var currentUser = _db.User.Where(u => u.Email == email).FirstOrDefault();
+            currentUser.Password = hashedPassword;
+            _db.SaveChanges();
+            UserModel model = new UserModel()
+            {
+                Username = currentUser.Username,
+                Password = "",
+                Name = currentUser.Name,
+                Surname = currentUser.Surname,
+                IBAN = currentUser.IBAN,
+                IsEmailConfirmed = currentUser.IsEmailConfirmed,
+                RoleID = currentUser.RoleID,
+            };
+
+            return model;
+        }
     }
 }
