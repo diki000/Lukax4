@@ -30,12 +30,21 @@ export class LoginComponent {
         (res) => {
           this.userdata = res;
           console.log(this.userdata);
-          
+          this.userService.updateLoggedInState(true);
           this.router.navigate(['/dashboard']);
           this.userService.setCurrentUser(res);
+          let currentUser = {
+            username: res.Username,
+            email: res.Email,
+            firstName: res.Name,
+            lastName: res.Surname,
+            role: res.RoleId,
+          }
+          localStorage.setItem('currentUser', JSON.stringify({currentUser}))
       });
     } else {
       console.log("Error invalid form");
+      this.userService.updateLoggedInState(false);
     }
   }
 }

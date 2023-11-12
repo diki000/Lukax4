@@ -39,7 +39,6 @@ export class ForgotPasswordComponent {
 
   onSendCode() {
     this.sentCode = '' //ovo je u slucaju da se vise puta klikne na reset(da se ne dodaje 5 znamenki na jos 5 znamenki na jos...)
-    console.log(`Password reset requested for email: ${this.email}`);
     this.userService.getRecoveryEmail(this.email).subscribe(
         (data) => {
           this.sentCode = data.toString();
@@ -56,19 +55,15 @@ export class ForgotPasswordComponent {
   onSubmitCode() {
     const code = this.digit1 + this.digit2 + this.digit3 + this.digit4 + this.digit5;
     if (code == this.sentCode) {
-        console.log("same code")
         this.showVerificationCodeForm = false;
         this.showPasswordResetForm = true;
     } else {
-        console.log("wrong code")
         this.showWrongCodeMessage = true;
     }
-
   }
 
   onNewPassword() {
     if (this.newPassword === this.confirmPassword) {
-      console.log('Password reset successful');
       this.userService.changePassword(this.email, this.newPassword).subscribe((data) => {
         this.router.navigate(['/login']);
         window.alert("Uspjesno promijenjena lozinka")
