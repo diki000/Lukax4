@@ -113,8 +113,7 @@ namespace SpotPicker.Controllers
         {
             try
             {
-                EmailSender sendEmail = new EmailSender(_config, _emailService);
-                var code = sendEmail.SendChangePasswordCode(email);
+                var code = _emailSender.SendChangePasswordCode(email);
                 return Ok(code);
             } catch (Exception e)
             {
