@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using SpotPicker.EFCore;
 using SpotPicker.Models;
 using SpotPicker.Services;
+using System.Text.Json.Nodes;
 
 namespace SpotPicker.Controllers
 {
@@ -39,7 +40,30 @@ namespace SpotPicker.Controllers
                 return StatusCode(statusCode);
             }
         }
+        [HttpPost]
+        [Route("api/[controller]/Login")]
+        public IActionResult Login([FromBody] JsonObject JUserCredentials)
+        {
 
+            try
+            {
+                string username = JObject.Parse(JUserCredentials.ToString())["username"].ToString();
+                string password = JObject.Parse(JUserCredentials.ToString())["password"].ToString();
+
+
+                //_userFunctions.login(username, password);
+                UserModel korisnik = _userFunctions.login(username, password);
+                return Ok(korisnik);
+            }
+            catch (Exception e)
+            {
+                //return BadRequest(e.Message);
+                //var statusCode = exc.Data.Keys.Cast<string>().Single();  // retrieves "3"
+                //var statusMessage = exc.Data[statusCode].ToString();
+                var statusCode = (int)e.Data["Kod"];
+                return StatusCode(statusCode);
+            }
+        }
         [HttpPost]
         [Route("api/[controller]/UploadImage")]
         public async Task<IActionResult> UploadImage()
@@ -83,14 +107,15 @@ namespace SpotPicker.Controllers
             } catch (Exception e) { return StatusCode(413); }
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("api/[controller]/GetRecoveryEmail")]
-        public IActionResult getRecoveryEmail(string email)
+        public IActionResult getRecoveryEmail(JObject email)
         {
             try
             {
+                string _email = JObject.Parse(email.ToString())["email"].ToString();
                 EmailSender sendEmail = new EmailSender(_config, _emailService);
-                var code = sendEmail.SendChangePasswordCode(email);
+                var code = sendEmail.SendChangePasswordCode(_email);
                 return Ok(code);
             } catch (Exception e)
             {

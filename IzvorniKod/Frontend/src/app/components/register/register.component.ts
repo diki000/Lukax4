@@ -74,7 +74,7 @@ export class RegisterComponent implements OnInit{
 
     this.userService.postImage(formData).subscribe(
       (response) => {
-        console.log(response);
+        this.router.navigate(['/login']);
       },
       (error) => {
         console.log(error);

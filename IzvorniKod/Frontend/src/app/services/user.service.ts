@@ -38,6 +38,7 @@ export class UserService {
       })
     };
     let body = JSON.stringify({email});
+    console.log(body)
     return this.http.post<number>(this.url + "/GetRecoveryEmail", body, httpOptions);
   }
 
