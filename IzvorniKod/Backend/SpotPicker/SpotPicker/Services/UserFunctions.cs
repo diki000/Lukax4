@@ -256,27 +256,6 @@ namespace SpotPicker.Services
             _db.SaveChanges();
         }
 
-        public bool verifyEmail(int id, string tokenFromUrl)
-        {
-            string hashKey = _config["SecredHashKey"]!;
-            using (SHA256 sha256 = SHA256.Create())
-            {
-                byte[] hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(id.ToString() + hashKey));
-                string recreatedToken = BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
-
-                if (recreatedToken == tokenFromUrl)
-                {
-                    var currentUser = _db.User.Where(u => u.Id == id).FirstOrDefault();
-                    currentUser.IsEmailConfirmed = true;
-                    _db.SaveChanges();
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
         public UserModel changePassword(string email, string password)
         {
             //string email = JObject.Parse(JUserCredentials.ToString())["email"].toString();
