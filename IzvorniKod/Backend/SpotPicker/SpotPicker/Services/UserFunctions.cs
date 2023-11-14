@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using System;
 using System.Text.RegularExpressions;
 using SpotPicker.Models;
+using System.Runtime.InteropServices;
 
 namespace SpotPicker.Services
 {
@@ -123,8 +124,8 @@ namespace SpotPicker.Services
                 }
 
                 // ako je user vlasnik parkinga, provjeri je li potvrdjen od admina, ako nije returnaj error
-                if (existingUser.RoleID == 2 && !managerCheck.ConfirmedByAdmin)
-                {
+            if (existingUser.RoleID == 2 && !managerCheck.ConfirmedByAdmin != null && managerCheck.ConfirmedByAdmin == false)
+            {
                     var ex = new Exception();
                     ex.Data["Kod"] = 403;
                     throw ex;
@@ -196,15 +197,14 @@ namespace SpotPicker.Services
                 {
                     Manager newManager = new Manager()
                     {
-                        User = newUser,
-                        ConfirmedByAdmin = false
+                        User = newUser
                     };
 
                     _db.Manager.Add(newManager);
                 }
                 _db.SaveChanges();
                 var currentUser = _db.User.Where(u => u.Username == newUser.Username).FirstOrDefault();
-                _emailSender.SendEmailConfirmation(currentUser.Id, currentUser.Email);
+               // _emailSender.SendEmailConfirmation(currentUser.Id, currentUser.Email);
             }
             else
             {

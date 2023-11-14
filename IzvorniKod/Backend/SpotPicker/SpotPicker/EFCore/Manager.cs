@@ -11,7 +11,7 @@ namespace SpotPicker.EFCore
         [ForeignKey("User")]
         public int UserId { get; set; }
 
-        public bool ConfirmedByAdmin { get; set; }
+        public bool? ConfirmedByAdmin { get; set; } = null;
         public virtual User User { get; set; }
 
     }

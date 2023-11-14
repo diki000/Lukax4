@@ -12,3 +12,4 @@
 *.toc
 
 *.vs
+/IzvorniKod/Backend/SpotPicker/SpotPicker/Migrations/_EFCoreModelSnapshot.cs
