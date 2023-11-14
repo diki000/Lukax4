@@ -1,20 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { Router } from '@angular/router';
+import { User } from 'src/app/models/User';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit{
 
   userdata: any;
 
   constructor(private builder: FormBuilder, private userService: UserService,
     private router: Router) {
 
+  }
+  ngOnInit(): void {
+    this.userService.logout();
   }
 
   loginForm = this.builder.group({
@@ -40,15 +44,13 @@ export class LoginComponent {
             lastName: res.Surname,
             role: res.RoleId,
           }
-          localStorage.setItem('currentUser', JSON.stringify({currentUser}))
+          localStorage.setItem('currentUser', JSON.stringify(res))
       }
       ,(error) => {
         window.alert("Invalid username or password")
+        this.userService.updateLoggedInState(false);
       });
     } else {
-      console.log("Error invalid form");
-
-      this.userService.updateLoggedInState(false);
     }
   }
 }

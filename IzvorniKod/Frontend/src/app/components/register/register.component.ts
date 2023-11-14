@@ -36,6 +36,7 @@ export class RegisterComponent implements OnInit{
       file: new FormControl('', [Validators.required]),
       ibanRacun: new FormControl('', [Validators.required])  
     });
+    this.userService.logout();
   }
 
 

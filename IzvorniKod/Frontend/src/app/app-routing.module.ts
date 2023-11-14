@@ -9,7 +9,7 @@ import { IsAuthenicatedGuard } from './guards/is-authenicated.guard';
 const routes: Routes = [
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
   },
   {
     path: 'register',

@@ -9,20 +9,16 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class UserService {
   url: string = "https://localhost:7020/api/User";
   currentUser: User = new User("","","","","","",false,0);
-  private authSubject = new BehaviorSubject<boolean>(false);
+  private authSubject : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(localStorage.getItem('currentUser') != null);
   isLoggedIn$ = this.authSubject.asObservable();
 
   updateLoggedInState(status: boolean){
       this.authSubject.next(status);
   }
 
-  public isAuthenticated(): Observable<boolean> {
-       return this.isLoggedIn$;
-  }
   constructor(private http: HttpClient) { }
 
   public register(user: User): Observable<User>{
-    console.log("uso")
     return this.http.post<User>(this.url + "/Register", user);
   }
 
@@ -58,21 +54,22 @@ export class UserService {
 
   public setCurrentUser(user: User){
     this.currentUser = user;
+    this.authSubject.next(true);
   }
 
   public getCurrentUser(): User{
     return this.currentUser;
   }
 
-  public isLoggedIn(): boolean{
-    if(this.currentUser.Username == ""){
-      return false;
-    }
-    return true;
+  public isLoggedIn(){
+    return this.authSubject.asObservable();
   }
 
   public logout(){
     this.currentUser = new User("","","","","","",false,0);
+    this.authSubject.next(false);
+    if(localStorage.getItem('currentUser') != null)
+      localStorage.removeItem('currentUser');
   }
   
 }

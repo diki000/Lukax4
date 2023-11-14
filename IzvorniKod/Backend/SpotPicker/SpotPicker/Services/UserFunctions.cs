@@ -99,7 +99,6 @@ namespace SpotPicker.Services
             if (existingUser != null)
             {
                 korisnik.Username = existingUser.Username;
-                korisnik.Password = existingUser.Password;
                 korisnik.Name = existingUser.Name;
                 korisnik.Surname = existingUser.Surname;
                 korisnik.IBAN = existingUser.IBAN;
@@ -142,25 +141,37 @@ namespace SpotPicker.Services
                 throw ex;
             }
         }
+        public bool checkPasswordRegex(string password)
+        {
+            var pattern = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$";
+            Match m = Regex.Match(password, pattern);
+            if (!m.Success)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
         public void register(UserModel user)
         {
             bool usernameAvailable = !_db.User.Any(u => u.Username == user.Username);
+            bool emailAvailable = !_db.User.Any(u => u.Email == user.Email);
 
-            if (usernameAvailable)
+            if (usernameAvailable && emailAvailable)
             {
-                var pattern = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$";
-                Match m = Regex.Match(user.Password, pattern);
-                if (!m.Success)
+                if (!checkPasswordRegex(user.Password))
                 {
                     var ex = new Exception();
-                    ex.Data["Kod"] = 411;
+                    ex.Data["Kod"] = 411; // 411 je slaba lozinka
                     throw ex;
                 }
 
                 if (!CheckIban(user.IBAN))
                 {
                     var ex = new Exception();
-                    ex.Data["Kod"] = 412;
+                    ex.Data["Kod"] = 412; // 412 je neispravan IBAN
                     throw ex;
                 }
 
@@ -176,8 +187,7 @@ namespace SpotPicker.Services
                     IBAN = user.IBAN,
                     Email = user.Email,
                     IsEmailConfirmed = false,
-                    RoleID = user.RoleID,
-                    idImagePath = ""
+                    RoleID = user.RoleID
                 };
 
                 _db.User.Add(newUser);
@@ -199,7 +209,7 @@ namespace SpotPicker.Services
             else
             {
                 var ex = new Exception();
-                ex.Data["Kod"] = 410;
+                ex.Data["Kod"] = !usernameAvailable ? 410 : 414; // 410 kad je nedostupno korisnicko ime, 414 kad je nedostupan mail
                 throw ex;
             }
         }

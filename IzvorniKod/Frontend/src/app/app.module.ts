@@ -10,6 +10,8 @@ import { CommonModule } from '@angular/common';
 import { RegisterComponent } from './components/register/register.component';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { NavigationBarComponent } from './components/navigation-bar/navigation-bar.component';
+import { AdminComponent } from './components/admin/admin.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,9 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     LoginComponent,
     ForgotPasswordComponent,
     RegisterComponent,
-    DashboardComponent
+    DashboardComponent,
+    NavigationBarComponent,
+    AdminComponent
   ],
   imports: [
     FormsModule,
