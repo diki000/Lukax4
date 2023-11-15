@@ -18,8 +18,18 @@
 \usepackage{adjustbox}
 \usepackage{geometry}
 \usepackage[classicReIm]{kpfonts}
-\usepackage{hyperref}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{
+	colorlinks   = true, %Colours links instead of ugly boxes
+	urlcolor     = blue, %Colour for external hyperlinks
+	linkcolor    = blue, %Colour of internal links
+	citecolor   = red %Colour of citations
+}
 \usepackage{fancyhdr}
+
+\usepackage{url} % Add this package to support URL formatting
+\usepackage{graphicx}
+\usepackage{helvet}
 
 \usepackage{float}
 \usepackage{setspace}
@@ -143,7 +153,6 @@
 	\eject 
 		
 	\include{Dodatak}
-
 
 \end{document} %naredbe i tekst nakon ove naredbe ne ulaze u izgrađen dokument 
 
