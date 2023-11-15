@@ -204,7 +204,7 @@ namespace SpotPicker.Services
                 }
                 _db.SaveChanges();
                 var currentUser = _db.User.Where(u => u.Username == newUser.Username).FirstOrDefault();
-               // _emailSender.SendEmailConfirmation(currentUser.Id, currentUser.Email);
+               _emailSender.SendEmailConfirmation(currentUser.Id, currentUser.Email);
             }
             else
             {

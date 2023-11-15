@@ -13,6 +13,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { NavigationBarComponent } from './components/navigation-bar/navigation-bar.component';
 import { AdminComponent } from './components/admin/admin.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,8 +31,7 @@ import { AdminComponent } from './components/admin/admin.component';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    CommonModule
-  ],
+    CommonModule],
   providers: [],
   bootstrap: [AppComponent]
 })

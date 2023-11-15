@@ -29,7 +29,7 @@ namespace SpotPicker.EFCore
 
         public int RoleID {  get; set; }
         [MaxLength(500)]
-        public string idImagePath { get; set; }
+        public string? idImagePath { get; set; }
 
         public virtual Manager Manager { get; set; }
     }

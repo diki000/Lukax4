@@ -30,7 +30,7 @@ namespace SpotPicker.Controllers
             return Ok(t);
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("api/[controller]/AcceptManager")]
         public IActionResult AcceptManager(string username)
         {
@@ -38,7 +38,7 @@ namespace SpotPicker.Controllers
             return Ok();
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("api/[controller]/DeclineManager")]
         public IActionResult DeclineManager(string username)
         {
