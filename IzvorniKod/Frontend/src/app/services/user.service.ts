@@ -10,10 +10,15 @@ export class UserService {
   url: string = "https://localhost:7020/api/User";
   currentUser: User = new User("","","","","","",false,0);
   private authSubject : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(localStorage.getItem('currentUser') != null);
+  private adminSubject : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(localStorage.getItem('currentUser') != null && JSON.parse(localStorage.getItem('currentUser')!).roleID == 3);
   isLoggedIn$ = this.authSubject.asObservable();
+  isAdmin$ = this.authSubject.asObservable();
 
   updateLoggedInState(status: boolean){
       this.authSubject.next(status);
+  }
+  updateAdminState(status: boolean){
+    this.adminSubject.next(status);
   }
 
   constructor(private http: HttpClient) { }
@@ -57,17 +62,21 @@ export class UserService {
     this.authSubject.next(true);
   }
 
-  public getCurrentUser(): User{
+  public getCurrentUser(): any{
     return this.currentUser;
   }
 
   public isLoggedIn(){
     return this.authSubject.asObservable();
   }
+  public isAdmin(){
+    return this.adminSubject.asObservable();
+  }
 
   public logout(){
     this.currentUser = new User("","","","","","",false,0);
     this.authSubject.next(false);
+    this.adminSubject.next(false);
     if(localStorage.getItem('currentUser') != null)
       localStorage.removeItem('currentUser');
   }

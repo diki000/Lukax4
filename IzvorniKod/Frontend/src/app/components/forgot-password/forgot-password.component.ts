@@ -74,7 +74,6 @@ export class ForgotPasswordComponent {
     );
       this.showWrongPasswordMessage = false;
     } else {
-      console.log('Passwords do not match');
       this.showWrongPasswordMessage = true;
     }
   }

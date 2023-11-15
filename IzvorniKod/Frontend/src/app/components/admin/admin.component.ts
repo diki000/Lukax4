@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { User } from 'src/app/models/User';
 import { AdminService } from 'src/app/services/admin.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-admin',
@@ -8,14 +10,15 @@ import { AdminService } from 'src/app/services/admin.service';
   styleUrls: ['./admin.component.scss']
 })
 export class AdminComponent implements OnInit{
-  constructor(private adminService: AdminService) { }
+  constructor(private adminService: AdminService, private userService: UserService) { }
   UnapprovedManagers: any[] = [];
-
+  isAdmin$ : Observable<boolean> | undefined;
 
   ngOnInit(): void {
     this.adminService.getAllUnapprovedManagers().subscribe((data: any[]) => {
       this.UnapprovedManagers = data;
     });
+    this.isAdmin$ = this.userService.isAdmin();
   }
 
   approveManager(username: string){

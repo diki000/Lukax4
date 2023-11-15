@@ -33,22 +33,20 @@ export class LoginComponent implements OnInit{
       this.userService.login(username, password).subscribe(
         (res) => {
           this.userdata = res;
-          console.log(this.userdata);
           this.userService.updateLoggedInState(true);
           this.router.navigate(['/dashboard']);
           this.userService.setCurrentUser(res);
-          let currentUser = {
-            username: res.Username,
-            email: res.Email,
-            firstName: res.Name,
-            lastName: res.Surname,
-            role: res.RoleId,
-          }
           localStorage.setItem('currentUser', JSON.stringify(res))
+
+          if(this.userService.getCurrentUser().roleID == 3){
+            console.log("admin")
+            this.userService.updateAdminState(true);
+          }
       }
       ,(error) => {
         window.alert("Invalid username or password")
         this.userService.updateLoggedInState(false);
+        this.userService.updateAdminState(false);
       });
     } else {
     }

@@ -70,7 +70,6 @@ export class RegisterComponent implements OnInit{
   }
 
   uploadImg(username: string) {
-    console.log(username);
     const formData = new FormData();
     if (this.fileToUpload) {
       formData.append('files', this.fileToUpload[0]);
