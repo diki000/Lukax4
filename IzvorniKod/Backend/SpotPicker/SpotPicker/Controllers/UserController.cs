@@ -98,7 +98,7 @@ namespace SpotPicker.Controllers
                 bool result = _emailSender.verifyEmail(id, token);
                 if (result)
                 {
-                    return Redirect("http://localhost:4200/login");
+                    return Redirect("https://spotpicker.online/login");
                 }
                 else
                 {

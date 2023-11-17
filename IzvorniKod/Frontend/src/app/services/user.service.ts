@@ -7,7 +7,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class UserService {
-  url: string = "https://localhost:7020/api/User";
+  url: string = "https://spotpicker.online/api/User";
   currentUser: User = new User("","","","","","",false,0);
   private authSubject : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(localStorage.getItem('currentUser') != null);
   private adminSubject : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(localStorage.getItem('currentUser') != null && JSON.parse(localStorage.getItem('currentUser')!).roleID == 3);

@@ -28,12 +28,12 @@ form {
     position: relative;
     width: 500px;
     height: 400px;
-    background: #95C8D8;
-    border-radius: 0;
+    background: linear-gradient(0deg, rgb(220, 220, 220), transparent);
+    border-radius: 10px;
     padding: 40px;
-    border: 5px solid #000;
     margin: 0 auto;
     box-sizing: border-box;
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
 }
 
 .form-wrapper-sign-in {
@@ -47,13 +47,13 @@ form {
 
 h2 {
     font-size: 30px;
-    color: #fff;
+    color: black;
     text-align: center;
 }
 
 .input-box {
     position: relative;
-    color: #fff;
+    color: black;
     margin: 5px 0;
     text-align: left;
 }
@@ -70,8 +70,8 @@ h2 {
     padding: 10px;
     margin-bottom: 5px;
     border: none;
-    border-radius: 0;
-    background: #f2f2f2;
+    border-radius: 5px;
+    background: #ffffff;
     text-align: left;
 }
 .input-box input[type="password"] {
@@ -80,8 +80,8 @@ h2 {
     padding: 10px;
     margin-bottom: 5px;
     border: none;
-    border-radius: 0;
-    background: #f2f2f2;
+    border-radius: 5px;
+    background: #ffffff;
     text-align: left;
 }
 .logo {
@@ -92,15 +92,19 @@ h2 {
 
 .novi-racun {
     color: #fff;
+    color: black;
 }
-
+a{
+    text-decoration: none;
+    color: #da1884;
+}
 .button-login {
     text-align: center;
     margin-top: 15px;
     padding: 5px;
     border: none;
     border-radius: 5px;
-    background: blue;
+    background:#da1884;
     color: #fff;
     font-size: 20px;
     cursor: pointer;

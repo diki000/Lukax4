@@ -14,12 +14,12 @@ body {
     padding: 10px;
 }
 .wrapper{
-    background: #95c8d8;
-    color: #fff;
-    border: 5px solid black;
+    background: linear-gradient(0deg, rgb(220, 220, 220), transparent);
+    color: black;
     width: 800px;
     height: 400px;
     position: relative;
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
 }
 
 .input-box{
@@ -33,7 +33,7 @@ body {
 }
 
 .main-text{
-    color: blue;
+    color: #da1884;
     font-size: 25px;
     margin-left: +5%;
     padding-top: 2%;
@@ -58,13 +58,14 @@ body {
     padding: 5px;
     border: none;
     border-radius: 5px;
-    background: blue;
+    background: #da1884;
     color: #fff;
     font-size: 20px;
     cursor: pointer;
-
 }
 .log-button{
    margin-left: 28%;
+   text-decoration: none;
+   color: #da1884;
 }
 

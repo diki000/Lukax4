@@ -30,7 +30,7 @@ namespace SpotPicker.Services
                 token = BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
             }
 
-            string url = "https://localhost:7020/api/User/verifyEmail?id=" + id.ToString() + "&token=" + token;
+            string url = "https://spotpicker.online/api/User/verifyEmail?id=" + id.ToString() + "&token=" + token;
 
             string emailText = File.ReadAllText("assets2/emailVerification.html");
             string emaildata = string.Format(emailText, url);
