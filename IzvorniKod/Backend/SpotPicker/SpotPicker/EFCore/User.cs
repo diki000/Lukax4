@@ -28,6 +28,8 @@ namespace SpotPicker.EFCore
         public bool IsEmailConfirmed { get; set; }
 
         public int RoleID {  get; set; }
+        [MaxLength(500)]
+        public string? idImagePath { get; set; }
 
         public virtual Manager Manager { get; set; }
     }

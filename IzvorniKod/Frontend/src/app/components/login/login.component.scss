@@ -1,0 +1,114 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+    min-height: 96vh;
+}
+
+form {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.wrapper {
+    position: relative;
+    width: 500px;
+    height: 400px;
+    background: linear-gradient(0deg, rgb(220, 220, 220), transparent);
+    border-radius: 10px;
+    padding: 40px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+}
+
+.form-wrapper-sign-in {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+
+}
+
+h2 {
+    font-size: 30px;
+    color: black;
+    text-align: center;
+}
+
+.input-box {
+    position: relative;
+    color: black;
+    margin: 5px 0;
+    text-align: left;
+}
+
+.input-box label {
+    display: block;
+    margin-bottom: 5px;
+    margin-left: -25%;
+}
+
+.input-box input[type="text"] {
+    width: 150%;
+    margin: 0 -25%;
+    padding: 10px;
+    margin-bottom: 5px;
+    border: none;
+    border-radius: 5px;
+    background: #ffffff;
+    text-align: left;
+}
+.input-box input[type="password"] {
+    width: 150%;
+    margin: 0 -25%;
+    padding: 10px;
+    margin-bottom: 5px;
+    border: none;
+    border-radius: 5px;
+    background: #ffffff;
+    text-align: left;
+}
+.logo {
+    text-align: center;
+    width: 100px;
+    height: 100px;
+}
+
+.novi-racun {
+    color: #fff;
+    color: black;
+}
+a{
+    text-decoration: none;
+    color: #da1884;
+}
+.button-login {
+    text-align: center;
+    margin-top: 15px;
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+    background:#da1884;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    align-items: center;
+    text-align: center;
+
+}

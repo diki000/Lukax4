@@ -1,1 +1,28 @@
-<p>login works!</p>
+
+<body>
+    <div class="wrapper">
+        <div class="form-wrapper-sign-in">
+        <form [formGroup]="loginForm" (ngSubmit)="proceedLogin()">
+           <h2> <img src="assets/logo.png" class="logo"> </h2>
+            <div class="input-box">
+                <label for="">Korisničko ime <br></label>
+                <input type="text" placeholder="Korisičko ime"  formControlName="username" required >
+            </div>
+            <div class="input-box">
+                <label for="">Lozinka <br></label>
+                <input type="password" placeholder="Lozinka" formControlName="password" required>
+            </div>
+            <div class="novi-racun">
+                <label>Nemate račun? <br></label> 
+                <a [routerLink]="'/register'">Kreirajte novi</a>
+                <br>
+             </div>
+             <div class="novi-racun">
+                <br>
+                <a [routerLink]="'/forgot-password'">Zaboravio si lozinku</a>
+             </div>
+             <button type="submit" class="button-login">Prijavi se</button>
+         </form> 
+        </div> 
+    </div>
+</body>

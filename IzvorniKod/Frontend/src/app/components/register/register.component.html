@@ -1,0 +1,60 @@
+<body>
+    <div class="wrapper">
+        <div>
+            <h2 class="main-text">Kreiraj račun<img class="logo" src="../../../assets/logo.png" alt="logo"></h2>
+        </div>
+        <form class="regForm" [formGroup]="registrationForm" (ngSubmit)="proceedRegistration()">
+            <div class="grid-container">
+                <div class="grid-item">
+                     
+                    <div class="input-box">
+                        <label>Vrsta računa<br></label>
+                         
+                        <select formControlName="role" required style="width: 72.5%; height: 24px;">
+                            <option value="" disabled selected>Odaberi:</option>
+                            <option *ngFor="let option of roleOptions" [value]="option.value">{{ option.label }}
+                            </option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-box">
+                        <label for="">Korisničko ime <br></label>
+                        <input type="text" formControlName="username" required>
+                    </div>
+                    <div class="input-box">
+                        <label>Lozinka<br></label>
+                        <input type="password" formControlName="password" required>
+                    </div>
+                    <div class="input-box">
+                        <label>E-mail<br></label>
+                        <input type="text" formControlName="email" required>
+                    </div>
+                </div>
+                <div class="grid-item">
+                    <div class="input-box">
+                        <label>Ime<br></label>
+                        <input type="text" formControlName="firstname" required>
+                    </div>
+                    <div class="input-box">
+                        <label>Prezime<br></label>
+                        <input type="text" formControlName="lastname" required>
+                    </div>
+
+                    <div class="input-box">
+                        <label>Slika osobne<br></label>
+                        <input type="file" accept="image/*" formControlName="file" required (change)="onFileSelected($event)">
+                    </div>
+                    
+                    <div class="input-box">
+                        <label>IBAN račun<br></label>
+                        <input type="text" formControlName="ibanRacun" required>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <button class="reg-button" mat-raised-button color="accent">Registriraj se</button>
+                <a routerLink="/login" class="log-button" mat-raised-button color="accent">Nazad na login</a>
+            </div>
+        </form>
+    </div>
+</body>
