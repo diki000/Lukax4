@@ -1,0 +1,13 @@
+<div class="navbar-wrapper" *ngIf="loggedIn$ | async">
+    <div class="logo">
+        <img src="../../../assets/logo.png" alt="logo">
+    </div>
+    <div class="brand-name">
+        <h2>Spot Picker</h2>
+    </div>
+    <div class="log-out-wrapper" (click)="logOut()">
+        <div class="log-out">
+            Odjavi se
+        </div>
+    </div>
+</div>

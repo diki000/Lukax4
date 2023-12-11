@@ -1,0 +1,71 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+    min-height: 96vh;
+}
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+.grid-item {
+    padding: 10px;
+}
+.wrapper{
+    background: linear-gradient(0deg, rgb(220, 220, 220), transparent);
+    color: black;
+    width: 800px;
+    height: 400px;
+    position: relative;
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+}
+
+.input-box{
+    margin-left: +10%;
+    margin-bottom: 20px;
+}
+.input-box input[type="text"],
+.input-box input[type="password"]{
+    width: 70%;
+    height: 20px;
+}
+
+.main-text{
+    color: #da1884;
+    font-size: 25px;
+    margin-left: +5%;
+    padding-top: 2%;
+    position: relative;
+    z-index: 2;
+}
+
+.main-text .logo {
+    position: absolute;
+    top: -8px;
+    right: 200px;
+    width: 10%;
+    margin-left: 10px;
+    z-index: 1;
+  }
+
+
+
+.reg-button{
+    margin-left: 42%;
+    text-align: center;
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+    background: #da1884;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+}
+.log-button{
+   margin-left: 28%;
+   text-decoration: none;
+   color: #da1884;
+}
+

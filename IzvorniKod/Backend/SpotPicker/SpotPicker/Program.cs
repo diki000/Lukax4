@@ -1,5 +1,6 @@
 using SpotPicker.EFCore;
 using Microsoft.EntityFrameworkCore;
+using SpotPicker.Services;
 
 var corsorgin = "_mycorsorigin";
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +23,8 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddDbContext<_EFCore>(
     o => o.UseNpgsql(builder.Configuration.GetConnectionString("SpotPickerDatabase")));
+
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 var app = builder.Build();
 

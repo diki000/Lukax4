@@ -1,0 +1,24 @@
+<div class="unapproved-managers-wrapper" *ngIf="isAdmin$ | async">
+    <div class="unapproved-managers">
+        <div class="title">Zahtjevi za izradu računa s roleom vlasnika parkirališta</div>
+        <div class="manager" *ngFor="let manager of UnapprovedManagers">
+            <div class="manager-username">
+                {{manager.username}}
+            </div>
+            <div class="manager-name-surname">
+                {{manager.name + ' ' + manager.surname}}
+            </div>
+            <div class="vote">
+                <div class="button" (click)="approveManager(manager.username)">
+                    <img src="../../../assets/accept.png">
+                </div>
+                <div class="button" (click)="declineManager(manager.username)">
+                    <img src="../../../assets/decline.png" style="width: 36px; height: 36px;">
+                </div>
+            </div>
+        </div>
+        <div class="message" *ngIf="UnapprovedManagers.length == 0">
+            Nema novih zahtjeva za izradu računa vlasnika parkinga
+        </div>
+    </div>
+</div>
