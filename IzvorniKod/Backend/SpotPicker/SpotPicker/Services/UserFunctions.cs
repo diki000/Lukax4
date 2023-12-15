@@ -156,7 +156,9 @@ namespace SpotPicker.Services
                         new Claim("UserId", Id.ToString()),
                         new Claim("Username", korisnik.Username),
                         new Claim("Name", korisnik.Name),
-                        new Claim("Email", korisnik.Email)
+                        new Claim("Email", korisnik.Email),
+                        new Claim("RoleID", korisnik.RoleID.ToString()),
+                        new Claim("Surname", korisnik.Surname)
                     };
 
 
