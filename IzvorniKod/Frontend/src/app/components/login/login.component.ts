@@ -4,6 +4,8 @@ import { UserService } from 'src/app/services/user.service';
 import { Router } from '@angular/router';
 import { User } from 'src/app/models/User';
 
+
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -11,7 +13,7 @@ import { User } from 'src/app/models/User';
 })
 export class LoginComponent implements OnInit{
 
-  userdata: any;
+  
 
   constructor(private builder: FormBuilder, private userService: UserService,
     private router: Router) {
@@ -19,6 +21,7 @@ export class LoginComponent implements OnInit{
   }
   ngOnInit(): void {
     this.userService.logout();
+    debugger
   }
 
   loginForm = this.builder.group({
@@ -28,16 +31,16 @@ export class LoginComponent implements OnInit{
 
   proceedLogin() {
     if (this.loginForm.valid) {
+      //this.userService.checkToken();
       let username = this.loginForm.value.username || "";
       let password = this.loginForm.value.password || "";
       this.userService.login(username, password).subscribe(
         (res) => {
-          this.userdata = res;
           this.userService.updateLoggedInState(true);
           this.router.navigate(['/dashboard']);
-          this.userService.setCurrentUser(res);
-          localStorage.setItem('currentUser', JSON.stringify(res))
-
+          
+          localStorage.setItem('jwt',"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imx1a2ExIiwicGFzc3dvcmQiOiJsb3ppbmthMSIsIm5hbWUiOiJhIiwic3VybmFtZSI6ImEiLCJlbWFpbCI6Imx1a2F6bWFrMDJAZ21haWwuY29tIiwiaWJhbiI6IkhSMTYyMzQwMDA5ODI5NzMzNjQ4NSIsInJvbGVJRCI6M30.Q51baeGk36PTeFzJ3VD_ooHqNdE2f9lpDtLHos4YG0I")
+          this.userService.checkToken();            
           if(this.userService.getCurrentUser().roleID == 3){
             console.log("admin")
             this.userService.updateAdminState(true);

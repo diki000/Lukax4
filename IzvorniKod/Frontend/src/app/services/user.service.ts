@@ -8,9 +8,31 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class UserService {
   url: string = "https://spotpicker.online/api/User";
-  currentUser: User = new User("","","","","","",false,0);
-  private authSubject : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(localStorage.getItem('currentUser') != null);
-  private adminSubject : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(localStorage.getItem('currentUser') != null && JSON.parse(localStorage.getItem('currentUser')!).roleID == 3);
+  currentUser: User = new User("","","","","","",false,0,"");
+  
+  private prijavljen:boolean = localStorage.getItem('jwt') != undefined && localStorage.getItem('jwt') != "";
+  private decodedPayload:any = 1;
+  checkToken() {
+    if(localStorage.getItem('jwt') != undefined) {
+        let token = localStorage.getItem('jwt');
+        const payload = token!.split('.')[1];
+        const decodedToken = window.atob(payload);
+        this.decodedPayload = JSON.parse(decodedToken);
+
+        this.updateLoggedInState(true);
+        if(this.decodedPayload.roleID == 3) this.updateAdminState(true);
+        this.setCurrentUser(this.decodedPayload);
+    } else {
+        this.updateLoggedInState(false);
+        this.updateAdminState(false)
+    }
+  }
+  
+  
+  
+  private authSubject : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private adminSubject : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  
   isLoggedIn$ = this.authSubject.asObservable();
   isAdmin$ = this.authSubject.asObservable();
 
@@ -74,11 +96,11 @@ export class UserService {
   }
 
   public logout(){
-    this.currentUser = new User("","","","","","",false,0);
+    this.currentUser = new User("","","","","","",false,0,"");
     this.authSubject.next(false);
     this.adminSubject.next(false);
-    if(localStorage.getItem('currentUser') != null)
-      localStorage.removeItem('currentUser');
-  }
+    if(localStorage.getItem('jwt') != null)
+      localStorage.removeItem('jwt');
+    }
   
 }
