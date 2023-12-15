@@ -9,6 +9,9 @@ using System;
 using System.Text.RegularExpressions;
 using SpotPicker.Models;
 using System.Runtime.InteropServices;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace SpotPicker.Services
 {
@@ -106,6 +109,7 @@ namespace SpotPicker.Services
                 korisnik.Email = existingUser.Email;
                 korisnik.IsEmailConfirmed = existingUser.IsEmailConfirmed;
                 korisnik.RoleID = existingUser.RoleID;
+                korisnik.AccessToken = GetToken(korisnik, existingUser.Id);
             }
 
             //povezi ga s manager tablicom
@@ -142,6 +146,33 @@ namespace SpotPicker.Services
                 throw ex;
             }
         }
+
+        private string? GetToken(UserModel korisnik, int Id)
+        {
+            var claims = new[] {
+                        new Claim(JwtRegisteredClaimNames.Sub, _config["Jwt:Subject"]),
+                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                        new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
+                        new Claim("UserId", Id.ToString()),
+                        new Claim("Username", korisnik.Username),
+                        new Claim("Name", korisnik.Name),
+                        new Claim("Email", korisnik.Email)
+                    };
+
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+            var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var token = new JwtSecurityToken(
+                _config["Jwt:Issuer"],
+                _config["Jwt:Audience"],
+                claims,
+                expires: DateTime.UtcNow.AddMinutes(10),
+                signingCredentials: signIn);
+
+            string Token = new JwtSecurityTokenHandler().WriteToken(token);
+            return Token;
+        }
+
         public bool checkPasswordRegex(string password)
         {
             var pattern = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$";
@@ -175,6 +206,8 @@ namespace SpotPicker.Services
                     ex.Data["Kod"] = 412; // 412 je neispravan IBAN
                     throw ex;
                 }
+
+                // TODO: provjeri ispravnost maila
 
                 string salt = BCrypt.Net.BCrypt.GenerateSalt(12);
                 string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password, salt);

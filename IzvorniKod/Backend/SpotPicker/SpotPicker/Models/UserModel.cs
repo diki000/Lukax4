@@ -13,5 +13,6 @@
         public bool IsEmailConfirmed { get; set; }
         public int RoleID { get; set; }
         public string? idImagePath { get; set; }
+        public string? AccessToken { get; set; } = null;
     }
 }
