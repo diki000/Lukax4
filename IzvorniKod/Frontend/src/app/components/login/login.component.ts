@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit{
   }
   ngOnInit(): void {
     this.userService.logout();
-    debugger
+    
   }
 
   loginForm = this.builder.group({
@@ -38,8 +38,8 @@ export class LoginComponent implements OnInit{
         (res) => {
           this.userService.updateLoggedInState(true);
           this.router.navigate(['/dashboard']);
-          
-          localStorage.setItem('jwt',"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imx1a2ExIiwicGFzc3dvcmQiOiJsb3ppbmthMSIsIm5hbWUiOiJhIiwic3VybmFtZSI6ImEiLCJlbWFpbCI6Imx1a2F6bWFrMDJAZ21haWwuY29tIiwiaWJhbiI6IkhSMTYyMzQwMDA5ODI5NzMzNjQ4NSIsInJvbGVJRCI6M30.Q51baeGk36PTeFzJ3VD_ooHqNdE2f9lpDtLHos4YG0I")
+          console.log(res)
+          //localStorage.setItem('jwt', res.token)
           this.userService.checkToken();            
           if(this.userService.getCurrentUser().roleID == 3){
             console.log("admin")

@@ -7,7 +7,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class UserService {
-  url: string = "https://spotpicker.online/api/User";
+  url: string = "http://localhost:7020/api/User";
   currentUser: User = new User("","","","","","",false,0,"");
   
   private prijavljen:boolean = localStorage.getItem('jwt') != undefined && localStorage.getItem('jwt') != "";
@@ -60,6 +60,7 @@ export class UserService {
       })
     };
     let body = JSON.stringify({username, password});
+    console.log(body);
     return this.http.post<User>(this.url + "/Login", body, httpOptions);
   }
 

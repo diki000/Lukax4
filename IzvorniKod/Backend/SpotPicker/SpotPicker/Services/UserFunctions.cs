@@ -147,7 +147,7 @@ namespace SpotPicker.Services
             }
         }
 
-        private string? GetToken(UserModel korisnik, int Id)
+        private string GetToken(UserModel korisnik, int Id)
         {
             var claims = new[] {
                         new Claim(JwtRegisteredClaimNames.Sub, _config["Jwt:Subject"]),
