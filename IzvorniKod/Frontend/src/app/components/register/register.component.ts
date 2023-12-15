@@ -34,7 +34,7 @@ export class RegisterComponent implements OnInit{
       firstname: new FormControl('', [Validators.required]),
       lastname: new FormControl('', [Validators.required]),
       file: new FormControl('', [Validators.required]),
-      ibanRacun: new FormControl('', [Validators.required])  
+      ibanRacun: new FormControl('', [Validators.required])
     });
     this.userService.logout();
   }
@@ -52,7 +52,8 @@ export class RegisterComponent implements OnInit{
       this.registrationForm.value.ibanRacun,
       this.registrationForm.value.email,
       false,
-      this.registrationForm.value.role
+      this.registrationForm.value.role,
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imx1a2EiLCJwYXNzd29yZCI6Imxvemlua2ExIiwicm9sZUlEIjoiMSJ9.vLnJdDsQcYlWOf-Ng5Jw6DkAwPYM7PUb1x-Z-K3C1Uk"
     );
      this.userService.register(newUser).subscribe({ next: (result) => {
       this.uploadImg(newUser.Username);

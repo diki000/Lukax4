@@ -14,9 +14,8 @@ export class DashboardComponent implements OnInit{
   constructor(private userService: UserService) { }
 
   ngOnInit(): void {
-    if(localStorage.getItem('currentUser') != null){
-      this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}'); 
-    }
+      this.userService.checkToken();
+      this.currentUser = this.userService.getCurrentUser();
   }
 
 }
