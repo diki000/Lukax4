@@ -10,9 +10,8 @@ namespace SpotPicker.EFCore
         [Key]
         public int WalletID { get; set; }
 
-        public int UserID { get; set; }
-
         [ForeignKey("User")]
+        public int UserID { get; set; }
         public virtual User User { get; set; }
 
         public float Balance { get; set; }
