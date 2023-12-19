@@ -9,6 +9,7 @@ using System;
 using System.Text.RegularExpressions;
 using SpotPicker.Models;
 using System.Runtime.InteropServices;
+using Microsoft.EntityFrameworkCore;
 
 namespace SpotPicker.Services
 {
@@ -289,6 +290,90 @@ namespace SpotPicker.Services
             };
 
             return model;
+        }
+
+        public WalletModel getWallet(int id)
+        {
+            Wallet existingWallet = _db.Wallets.FirstOrDefault(wallet => wallet.UserID == id);
+
+            if (existingWallet == null)
+            {
+                Console.Write("NEPOSTOJI OVAJ WALLET \n\n\n");
+                var ex = new Exception();
+                ex.Data["Kod"] = 400;
+                throw ex;
+            }
+
+            else
+            {
+                WalletModel noviNovcanik = new WalletModel();
+
+                noviNovcanik.UserID = id;
+                noviNovcanik.WalletID = existingWallet.WalletID;
+                noviNovcanik.Balance = existingWallet.Balance;
+
+                return noviNovcanik;
+            }
+        }
+
+        public List<TransactionModel> getLastFiveTransactions(int id)
+        {
+            // Retrieve the last 5 transactions for the user with the specified id
+            List<Transaction> transakcije = _db.Transactions
+                .Where(t => t.UserID == id)
+                .Take(5)
+                .ToList();
+
+            if (transakcije.Count == 0)
+            {
+                Console.WriteLine("No transactions found for given user.");
+                var ex = new Exception();
+                ex.Data["Code"] = 400;
+                throw ex;
+            }
+
+            // Convert Transaction entities to TransactionModel (if necessary)
+            List<TransactionModel> transactionModels = transakcije.Select(t => new TransactionModel
+            {
+                ID = t.ID,
+                UserID = t.UserID,
+                Type = t.Type,
+                Amount = t.Amount
+            }).ToList();
+
+            return transactionModels;
+        }
+
+        public void newPayment(int id, float paymentAmount)
+        {
+            Wallet userWallet = _db.Wallets.FirstOrDefault(w => w.UserID == id);
+
+            if (userWallet == null)
+            {
+                Console.WriteLine("Wallet not found for the user.");
+                var ex = new Exception("Wallet not found for the user.");
+                ex.Data["Code"] = 400;
+                throw ex;
+            }
+
+            // Update the wallet balance
+            userWallet.Balance += paymentAmount;
+
+            // Create a new transaction
+            Transaction transaction = new Transaction
+            {
+                ID = new Random().Next(), // Generate a random ID for the transaction
+                UserID = id,
+                Type = 1,
+                Amount = paymentAmount,
+                TimeAndDate = DateTime.Now // Current date and time
+            };
+
+            // Add the new transaction to the DbSet
+            _db.Transactions.Add(transaction);
+
+            // Save the changes to the database
+            _db.SaveChanges();
         }
 
     }

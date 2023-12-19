@@ -18,5 +18,7 @@ namespace SpotPicker.EFCore
         public int Type { get; set; }
 
         public float Amount { get; set; }
+        public DateTime TimeAndDate { get; set; }
+
     }
 }
