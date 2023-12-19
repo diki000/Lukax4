@@ -350,7 +350,8 @@ namespace SpotPicker.Services
 
             if (userWallet == null)
             {
-                Console.WriteLine("Wallet not found for the user.");
+                Console.WriteLine("NE POSTOJI USER >> ");
+                Console.WriteLine(id);
                 var ex = new Exception("Wallet not found for the user.");
                 ex.Data["Code"] = 400;
                 throw ex;
@@ -366,7 +367,7 @@ namespace SpotPicker.Services
                 UserID = id,
                 Type = 1,
                 Amount = paymentAmount,
-                TimeAndDate = DateTime.Now // Current date and time
+                //TimeAndDate = DateTime.Now // Current date and time
             };
 
             // Add the new transaction to the DbSet

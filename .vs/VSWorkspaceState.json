@@ -11,6 +11,6 @@
     "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\Models",
     "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\Services"
   ],
-  "SelectedNode": "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\Services\\UserFunctions.cs",
+  "SelectedNode": "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\Controllers\\UserController.cs",
   "PreviewInSolutionExplorer": false
 }
