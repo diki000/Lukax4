@@ -10,7 +10,7 @@ export class UserService {
   url: string = "https://spotpicker.online/api/User";
   currentUser: User = new User("","","","","","",false,0,"");
   
-  private prijavljen:boolean = localStorage.getItem('jwt') != undefined && localStorage.getItem('jwt') != "";
+  
   private decodedPayload:any = 1;
   checkToken() {
     if(localStorage.getItem('jwt') != undefined) {
