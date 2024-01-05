@@ -43,7 +43,7 @@ namespace SpotPicker.Services
                 Body = emaildata
             };
 
-            _emailService.SendEmail(newEmail);
+            _emailService.SendEmail(newEmail);  
         }
 
         public int SendChangePasswordCode(string email)

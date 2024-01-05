@@ -7,10 +7,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class UserService {
-  url: string = "https://spotpicker.online/api/User";
-  currentUser: User = new User("","","","","","",false,0);
-  
-  private prijavljen:boolean = localStorage.getItem('jwt') != undefined && localStorage.getItem('jwt') != "";
+  url: string = "https://localhost:7020/api/User";
+  currentUser: User = new User("","","","","","",false,0,"");
   private decodedPayload:any = 1;
   checkToken() {
     if(localStorage.getItem('jwt') != undefined) {
@@ -18,20 +16,27 @@ export class UserService {
         const payload = token!.split('.')[1];
         const decodedToken = window.atob(payload);
         this.decodedPayload = JSON.parse(decodedToken);
-
+        let user = new User(this.decodedPayload.Username, "", this.decodedPayload.Name, this.decodedPayload.Surname, "", this.decodedPayload.Email, false, this.decodedPayload.RoleID, token!);
         this.updateLoggedInState(true);
-        if(this.decodedPayload.roleID == 3) this.updateAdminState(true);
-        this.setCurrentUser(this.decodedPayload);
+        if(this.decodedPayload.RoleID == 3) this.updateAdminState(true);
+        this.setCurrentUser(user);
     } else {
         this.updateLoggedInState(false);
         this.updateAdminState(false)
     }
   }
+  public getDecodedToken(){
+    if(this.decodedPayload != 1) {
+      let user = new User(this.decodedPayload.Username, "", this.decodedPayload.Name, this.decodedPayload.Surname, "", this.decodedPayload.Email, false, this.decodedPayload.RoleID, "");
+      return user;
+    }
+    return null;
+  }
   
   
   
-  private authSubject : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  private adminSubject : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private authSubject : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(localStorage.getItem('jwt') != null);
+  private adminSubject : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.getDecodedToken()?.RoleId == 3);
   
   isLoggedIn$ = this.authSubject.asObservable();
   isAdmin$ = this.authSubject.asObservable();
@@ -96,7 +101,7 @@ export class UserService {
   }
 
   public logout(){
-    this.currentUser = new User("","","","","","",false,0);
+    this.currentUser = new User("","","","","","",false,0,"");
     this.authSubject.next(false);
     this.adminSubject.next(false);
     if(localStorage.getItem('jwt') != null)
