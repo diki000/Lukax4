@@ -5,9 +5,10 @@
     "\\IzvorniKod\\Backend",
     "\\IzvorniKod\\Backend\\SpotPicker",
     "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker",
+    "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\EFCore",
     "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\Models",
     "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\Services"
   ],
-  "SelectedNode": "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\Models\\UserModel.cs",
+  "SelectedNode": "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\EFCore\\Parking.cs",
   "PreviewInSolutionExplorer": false
 }
