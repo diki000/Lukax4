@@ -8,9 +8,9 @@ export class User{
     Email: string;
     IsEmailConfirmed: boolean;
     RoleId: number;
-    AccessToken: string;
+    AccessToken?: string;
     //{{currentUser.name}} {{currentUser.surname}}
-    constructor(username: string, password: string, name: string, surname: string, iban: string, email: string, isEmailConfirmed: boolean, roleId: number, accessToken:string){
+    constructor(username: string, password: string, name: string, surname: string, iban: string, email: string, isEmailConfirmed: boolean, roleId: number, accessToken?: string){
         this.Username = username;
         this.Password = password;
         this.Name = name;
@@ -19,6 +19,6 @@ export class User{
         this.Email = email;
         this.IsEmailConfirmed = isEmailConfirmed;
         this.RoleId = roleId;
-        this.AccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imx1a2EiLCJwYXNzd29yZCI6Imxvemlua2ExIiwicm9sZUlEIjoiMSJ9.vLnJdDsQcYlWOf-Ng5Jw6DkAwPYM7PUb1x-Z-K3C1Uk";
+        this.AccessToken = accessToken;
     }
 }

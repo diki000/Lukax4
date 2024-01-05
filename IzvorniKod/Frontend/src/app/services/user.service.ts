@@ -8,7 +8,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class UserService {
   url: string = "https://spotpicker.online/api/User";
-  currentUser: User = new User("","","","","","",false,0,"");
+  currentUser: User = new User("","","","","","",false,0);
   
   private prijavljen:boolean = localStorage.getItem('jwt') != undefined && localStorage.getItem('jwt') != "";
   private decodedPayload:any = 1;
@@ -53,14 +53,14 @@ export class UserService {
     return this.http.post<any>(this.url + '/UploadImage', data);
   }
 
-  public login(username: string, password: string): Observable<User>{
+  public login(username: string, password: string){
     let httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
       })
     };
     let body = JSON.stringify({username, password});
-    return this.http.post<User>(this.url + "/Login", body, httpOptions);
+    return this.http.post(this.url + "/Login", body, httpOptions);
   }
 
   public getRecoveryEmail(email: string): Observable<number>{
@@ -96,7 +96,7 @@ export class UserService {
   }
 
   public logout(){
-    this.currentUser = new User("","","","","","",false,0,"");
+    this.currentUser = new User("","","","","","",false,0);
     this.authSubject.next(false);
     this.adminSubject.next(false);
     if(localStorage.getItem('jwt') != null)

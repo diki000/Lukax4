@@ -5,8 +5,9 @@
     "\\IzvorniKod\\Backend",
     "\\IzvorniKod\\Backend\\SpotPicker",
     "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker",
+    "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\Models",
     "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\Services"
   ],
-  "SelectedNode": "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker.sln",
+  "SelectedNode": "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\Models\\UserModel.cs",
   "PreviewInSolutionExplorer": false
 }

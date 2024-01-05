@@ -52,8 +52,7 @@ export class RegisterComponent implements OnInit{
       this.registrationForm.value.ibanRacun,
       this.registrationForm.value.email,
       false,
-      this.registrationForm.value.role,
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imx1a2EiLCJwYXNzd29yZCI6Imxvemlua2ExIiwicm9sZUlEIjoiMSJ9.vLnJdDsQcYlWOf-Ng5Jw6DkAwPYM7PUb1x-Z-K3C1Uk"
+      this.registrationForm.value.role
     );
      this.userService.register(newUser).subscribe({ next: (result) => {
       this.uploadImg(newUser.Username);
