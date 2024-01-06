@@ -9,6 +9,9 @@ using System;
 using System.Text.RegularExpressions;
 using SpotPicker.Models;
 using System.Runtime.InteropServices;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace SpotPicker.Services
 {
@@ -106,6 +109,7 @@ namespace SpotPicker.Services
                 korisnik.Email = existingUser.Email;
                 korisnik.IsEmailConfirmed = existingUser.IsEmailConfirmed;
                 korisnik.RoleID = existingUser.RoleID;
+                korisnik.AccessToken = GetToken(korisnik, existingUser.Id);
             }
 
             //povezi ga s manager tablicom
@@ -142,6 +146,35 @@ namespace SpotPicker.Services
                 throw ex;
             }
         }
+
+        private string GetToken(UserModel korisnik, int Id)
+        {
+            var claims = new[] {
+                        new Claim(JwtRegisteredClaimNames.Sub, _config["Jwt:Subject"]),
+                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                        new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
+                        new Claim("UserId", Id.ToString()),
+                        new Claim("Username", korisnik.Username),
+                        new Claim("Name", korisnik.Name),
+                        new Claim("Email", korisnik.Email),
+                        new Claim("RoleID", korisnik.RoleID.ToString()),
+                        new Claim("Surname", korisnik.Surname)
+                    };
+
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+            var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var token = new JwtSecurityToken(
+                _config["Jwt:Issuer"],
+                _config["Jwt:Audience"],
+                claims,
+                expires: DateTime.UtcNow.AddMinutes(10),
+                signingCredentials: signIn);
+
+            string Token = new JwtSecurityTokenHandler().WriteToken(token);
+            return Token;
+        }
+
         public bool checkPasswordRegex(string password)
         {
             var pattern = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$";
@@ -157,61 +190,68 @@ namespace SpotPicker.Services
         }
         public void register(UserModel user)
         {
-            bool usernameAvailable = !_db.User.Any(u => u.Username == user.Username);
-            bool emailAvailable = !_db.User.Any(u => u.Email == user.Email);
+            try {
+                bool usernameAvailable = !_db.User.Any(u => u.Username == user.Username);
+                bool emailAvailable = !_db.User.Any(u => u.Email == user.Email);
 
-            if (usernameAvailable && emailAvailable)
-            {
-                if (!checkPasswordRegex(user.Password))
+                if (usernameAvailable && emailAvailable)
                 {
-                    var ex = new Exception();
-                    ex.Data["Kod"] = 411; // 411 je slaba lozinka
-                    throw ex;
-                }
-
-                if (!CheckIban(user.IBAN))
-                {
-                    var ex = new Exception();
-                    ex.Data["Kod"] = 412; // 412 je neispravan IBAN
-                    throw ex;
-                }
-
-                string salt = BCrypt.Net.BCrypt.GenerateSalt(12);
-                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password, salt);
-                User newUser = new User()
-                {
-
-                    Username = user.Username,
-                    Password = hashedPassword,
-                    Name = user.Name,
-                    Surname = user.Surname,
-                    IBAN = user.IBAN,
-                    Email = user.Email,
-                    IsEmailConfirmed = false,
-                    RoleID = user.RoleID
-                };
-
-                _db.User.Add(newUser);
-
-                if (user.RoleID == 2) // ako je manager 
-                {
-                    Manager newManager = new Manager()
+                    if (!checkPasswordRegex(user.Password))
                     {
-                        User = newUser
+                        var ex = new Exception();
+                        ex.Data["Kod"] = 411; // 411 je slaba lozinka
+                        throw ex;
+                    }
+
+                    if (!CheckIban(user.IBAN))
+                    {
+                        var ex = new Exception();
+                        ex.Data["Kod"] = 412; // 412 je neispravan IBAN
+                        throw ex;
+                    }
+
+                    // TODO: provjeri ispravnost maila
+
+                    string salt = BCrypt.Net.BCrypt.GenerateSalt(12);
+                    string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password, salt);
+                    User newUser = new User()
+                    {
+
+                        Username = user.Username,
+                        Password = hashedPassword,
+                        Name = user.Name,
+                        Surname = user.Surname,
+                        IBAN = user.IBAN,
+                        Email = user.Email,
+                        IsEmailConfirmed = false,
+                        RoleID = user.RoleID
                     };
 
-                    _db.Manager.Add(newManager);
+                    _db.User.Add(newUser);
+
+                    if (user.RoleID == 2) // ako je manager 
+                    {
+                        Manager newManager = new Manager()
+                        {
+                            User = newUser
+                        };
+
+                        _db.Manager.Add(newManager);
+                    }
+                    _db.SaveChanges();
+                    var currentUser = _db.User.Where(u => u.Username == newUser.Username).FirstOrDefault();
+                    _emailSender.SendEmailConfirmation(currentUser.Id, currentUser.Email);
                 }
-                _db.SaveChanges();
-                var currentUser = _db.User.Where(u => u.Username == newUser.Username).FirstOrDefault();
-               _emailSender.SendEmailConfirmation(currentUser.Id, currentUser.Email);
+                else
+                {
+                    var ex = new Exception();
+                    ex.Data["Kod"] = !usernameAvailable ? 410 : 414; // 410 kad je nedostupno korisnicko ime, 414 kad je nedostupan mail
+                    throw ex;
+                }
+            } catch(Exception e) {
+                throw e;
             }
-            else
-            {
-                var ex = new Exception();
-                ex.Data["Kod"] = !usernameAvailable ? 410 : 414; // 410 kad je nedostupno korisnicko ime, 414 kad je nedostupan mail
-                throw ex;
-            }
+            
         }
 
         public async Task UpladImages(HttpRequest request)

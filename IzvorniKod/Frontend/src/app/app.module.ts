@@ -12,6 +12,7 @@ import { ForgotPasswordComponent } from './components/forgot-password/forgot-pas
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { NavigationBarComponent } from './components/navigation-bar/navigation-bar.component';
 import { AdminComponent } from './components/admin/admin.component';
+import { OwnerComponent } from './components/owner/owner.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { AdminComponent } from './components/admin/admin.component';
     RegisterComponent,
     DashboardComponent,
     NavigationBarComponent,
-    AdminComponent
+    AdminComponent,
+    OwnerComponent
   ],
   imports: [
     FormsModule,

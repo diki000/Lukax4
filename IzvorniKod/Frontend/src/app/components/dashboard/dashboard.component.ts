@@ -11,11 +11,16 @@ export class DashboardComponent implements OnInit{
 
   currentUser : any;
   
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService) {
+    let token = localStorage.getItem('jwt');
+    if(token != undefined){
+      this.userService.updateLoggedInState(true);
+    }
+  }
 
   ngOnInit(): void {
       this.userService.checkToken();
-      this.currentUser = this.userService.getCurrentUser();
+      this.currentUser = this.userService.getDecodedToken();
   }
 
 }
