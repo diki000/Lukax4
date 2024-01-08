@@ -128,7 +128,7 @@ namespace SpotPicker.Services
                 }
 
                 // ako je user vlasnik parkinga, provjeri je li potvrdjen od admina, ako nije returnaj error
-            if (existingUser.RoleID == 2 && !managerCheck.ConfirmedByAdmin != null && managerCheck.ConfirmedByAdmin == false)
+            if (existingUser.RoleID == 2 && managerCheck.ConfirmedByAdmin != null && managerCheck.ConfirmedByAdmin == false)
             {
                     var ex = new Exception();
                     ex.Data["Kod"] = 403;
