@@ -190,63 +190,68 @@ namespace SpotPicker.Services
         }
         public void register(UserModel user)
         {
-            bool usernameAvailable = !_db.User.Any(u => u.Username == user.Username);
-            bool emailAvailable = !_db.User.Any(u => u.Email == user.Email);
+            try {
+                bool usernameAvailable = !_db.User.Any(u => u.Username == user.Username);
+                bool emailAvailable = !_db.User.Any(u => u.Email == user.Email);
 
-            if (usernameAvailable && emailAvailable)
-            {
-                if (!checkPasswordRegex(user.Password))
+                if (usernameAvailable && emailAvailable)
                 {
-                    var ex = new Exception();
-                    ex.Data["Kod"] = 411; // 411 je slaba lozinka
-                    throw ex;
-                }
-
-                if (!CheckIban(user.IBAN))
-                {
-                    var ex = new Exception();
-                    ex.Data["Kod"] = 412; // 412 je neispravan IBAN
-                    throw ex;
-                }
-
-                // TODO: provjeri ispravnost maila
-
-                string salt = BCrypt.Net.BCrypt.GenerateSalt(12);
-                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password, salt);
-                User newUser = new User()
-                {
-
-                    Username = user.Username,
-                    Password = hashedPassword,
-                    Name = user.Name,
-                    Surname = user.Surname,
-                    IBAN = user.IBAN,
-                    Email = user.Email,
-                    IsEmailConfirmed = false,
-                    RoleID = user.RoleID
-                };
-
-                _db.User.Add(newUser);
-
-                if (user.RoleID == 2) // ako je manager 
-                {
-                    Manager newManager = new Manager()
+                    if (!checkPasswordRegex(user.Password))
                     {
-                        User = newUser
+                        var ex = new Exception();
+                        ex.Data["Kod"] = 411; // 411 je slaba lozinka
+                        throw ex;
+                    }
+
+                    if (!CheckIban(user.IBAN))
+                    {
+                        var ex = new Exception();
+                        ex.Data["Kod"] = 412; // 412 je neispravan IBAN
+                        throw ex;
+                    }
+
+                    // TODO: provjeri ispravnost maila
+
+                    string salt = BCrypt.Net.BCrypt.GenerateSalt(12);
+                    string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password, salt);
+                    User newUser = new User()
+                    {
+
+                        Username = user.Username,
+                        Password = hashedPassword,
+                        Name = user.Name,
+                        Surname = user.Surname,
+                        IBAN = user.IBAN,
+                        Email = user.Email,
+                        IsEmailConfirmed = false,
+                        RoleID = user.RoleID
                     };
 
-                    _db.Manager.Add(newManager);
+                    _db.User.Add(newUser);
+
+                    if (user.RoleID == 2) // ako je manager 
+                    {
+                        Manager newManager = new Manager()
+                        {
+                            User = newUser
+                        };
+
+                        _db.Manager.Add(newManager);
+                    }
+                    _db.SaveChanges();
+                    var currentUser = _db.User.Where(u => u.Username == newUser.Username).FirstOrDefault();
+                    _emailSender.SendEmailConfirmation(currentUser.Id, currentUser.Email);
                 }
-                _db.SaveChanges();
-                var currentUser = _db.User.Where(u => u.Username == newUser.Username).FirstOrDefault();
-               _emailSender.SendEmailConfirmation(currentUser.Id, currentUser.Email);
+                else
+                {
+                    var ex = new Exception();
+                    ex.Data["Kod"] = !usernameAvailable ? 410 : 414; // 410 kad je nedostupno korisnicko ime, 414 kad je nedostupan mail
+                    throw ex;
+                }
+            } catch(Exception e) {
+                throw e;
             }
-            else
-            {
-                var ex = new Exception();
-                ex.Data["Kod"] = !usernameAvailable ? 410 : 414; // 410 kad je nedostupno korisnicko ime, 414 kad je nedostupan mail
-                throw ex;
-            }
+            
         }
 
         public async Task UpladImages(HttpRequest request)
