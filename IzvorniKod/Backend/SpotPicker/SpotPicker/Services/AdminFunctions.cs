@@ -62,7 +62,7 @@ namespace SpotPicker.Services
             {
                 var userm = new UserModel()
                 {
-                    Id = data[i].Id,
+                    UserId = data[i].Id,
                     Username = data[i].Username,
                     Password = data[i].Password,
                     Name = data[i].Name,
@@ -82,7 +82,7 @@ namespace SpotPicker.Services
 
         public void UpdateUser(UserModel user)
         {
-            var userToUpdate = _db.User.Where(u => u.Id == user.Id).FirstOrDefault();
+            var userToUpdate = _db.User.Where(u => u.Id == user.UserId).FirstOrDefault();
             bool usernameAvailable = true;
             bool emailAvailable = true;
             bool roleChanged = false;
@@ -138,7 +138,7 @@ namespace SpotPicker.Services
                     _db.Manager.Add(newManager);
                 } else if(roleChanged == true && userToUpdate.RoleID == 1)
                 {
-                    var man = _db.Manager.Where(r => r.UserId == user.Id).FirstOrDefault();
+                    var man = _db.Manager.Where(r => r.UserId == user.UserId).FirstOrDefault();
                     _db.Manager.Remove(man);
                 }
 

@@ -5,11 +5,11 @@
     <div class="brand-name" [routerLink]="'/dashboard'" style="cursor: pointer;">
         <h2>Spot Picker</h2>
     </div>
-    <div class="right-container"> 
-        <div class="wallet" (click)="openWalletPreview()">
+    <div class="right-container" *ngIf="loggedIn$ | async"> 
+        <div class="wallet" (click)="openWalletPreview()" *ngIf="currentUser?.RoleId==1" style="cursor: pointer;">
             <img width="35px" src="../../../assets/wallet.png" alt="">
         </div>
-        <div class="log-out-wrapper" (click)="logOut()">
+        <div class="log-out-wrapper" (click)="logOut()" >
             <div class="log-out">
                 Odjavi se
             </div>
@@ -22,7 +22,7 @@
     </div>
 </div>
 
-<div class="walletPreview" [ngClass]="{'openPreview' : openPreview, 'closePreview' : !openPreview}" *ngIf="loggedIn$ | async">
+<div class="walletPreview" [ngClass]="{'openPreview' : openPreview, 'closePreview' : !openPreview}" *ngIf="(loggedIn$ | async) && currentUser?.RoleId == 1 " >
     <div class="header">Tvoj novčanik</div>
     <div>
         <div class="balance">
