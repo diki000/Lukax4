@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { User } from 'src/app/models/User';
+import { SidebarService } from 'src/app/services/sidebar.service';
 import { UserService } from 'src/app/services/user.service';
+import * as L from 'leaflet';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,18 +12,31 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class DashboardComponent implements OnInit{
 
-  currentUser : any;
-  
-  constructor(private userService: UserService) {
+  currentUser : User | null = null;
+  isLoggedIn$ : Observable<boolean> | undefined;
+  openCreateParking: Observable<boolean> = new Observable<false>;
+  openStatistics: Observable<boolean> = new Observable<false>;
+
+
+  constructor(private userService: UserService, private sidebarService: SidebarService) {
     let token = localStorage.getItem('jwt');
+    this.isLoggedIn$ = this.userService.isLoggedIn();
     if(token != undefined){
       this.userService.updateLoggedInState(true);
+      this.userService.checkToken();
+      this.currentUser = this.userService.getCurrentUser(); 
+    }
+    else{
+      this.userService.updateLoggedInState(false);
+      this.currentUser = null;
     }
   }
 
   ngOnInit(): void {
       this.userService.checkToken();
       this.currentUser = this.userService.getDecodedToken();
-  }
+      this.openCreateParking = this.sidebarService.openCreateParking$;
+      this.openStatistics = this.sidebarService.openStatistics$;
+    }
 
 }

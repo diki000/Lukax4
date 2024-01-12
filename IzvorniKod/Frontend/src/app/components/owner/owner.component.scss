@@ -12,115 +12,11 @@
     --primary-color-light:#F6F5FF;
     --toggle-color:#DDD;
     --text-color:#707070;
-
+    
     --tran02: all 0.2s ease;
     --tran03: all 0.3s ease;
     --tran04: all 0.4s ease;
     --tran05: all 0.5s ease;
-}
-
-body{
-    height: 100vh;
-    background: #E4E9F7;
-}
-
-.sidebar{
-    position: fixed;
-    top: 55px;
-    left: 0;
-    height: 100%;
-    width: 250px;
-    padding: 10px 14px;
-    background: #FFF;
-    transition: all 0.5s ease;
-    z-index: 100;
-}
-
-.sidebar.close{
-    width: 88px;
-}
-
-.sidebar .text{
-    font-size: 16px;
-    font-weight: 500;
-    color: black;
-    transition: all 0.4s ease;
-    white-space: nowrap;
-    opacity: 1;
-}
-
-.sidebar.close .text{
-    opacity: 0;
-}
-
-.sidebar.close li a{
-    width: 60px;
-}
-
-.sidebar header{
-    position: relative;
-}
-
-.sidebar header .toggle{
-    position: absolute;
-    top: 50px;
-    right: -27px;
-    transform: translateY(-50%) rotate(180deg);
-    height: 25px;
-    width: 25px;
-    background: rgba(238,0,134,255);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    color: #FFF;
-    font-size: 22px;
-}
-
-.sidebar.close header .toggle{
-    transform: translateY(-50%) ;
-}
-
-.sidebar li{
-    height: 50px;
-    margin-top: 10px;
-    list-style: none;
-    display: flex;
-    align-items: center;
-}
-
-.sidebar li .icon{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 60px;
-    font-size: 20px;
-    color: black;
-    transition: all 0.3s ease;
-}
-
-.sidebar li .text{
-    color: black;
-    transition: all 0.3s ease;
-}
-
-.sidebar li a{
-    height: 100%;
-    width: 220px;
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    border-radius: 6px;
-    transition: all 0.4s ease;
-}
-
-.sidebar li a:hover{
-    background: rgba(238,0,134,255);
-}
-
-.sidebar li a:hover .icon,
-.sidebar li a:hover .text{
-    color: white;
 }
 
 .menu-bar{
@@ -140,7 +36,7 @@ body{
     justify-content: center;
 }
 
-.sidebar.close ~ .create-parking{
+.create-parking{
     left: 88px;
     width: calc(100% - 88px);
 }
@@ -150,7 +46,7 @@ body{
     width: 50%;
     border-radius: 6px;
     margin: 0 20px;
-    box-shadow: 0 5px 10px rgba(0,0,0,1);
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
 }
 
 .container .content{
@@ -159,7 +55,14 @@ body{
     justify-content: center;
     padding: 25px 20px;
 }
-
+.closing-icon{
+    float: right;
+    margin-right: 10px;
+    margin-top: 10px;
+    font-size: 30px;
+    color: rgb(255, 0, 0);
+    cursor: pointer;
+}
 .content .topic{
     font-size: 22px;
     font-weight: 500;
@@ -255,17 +158,21 @@ body{
     transition: all 0.3s ease;
 }
 
-.content .input-box input[type="submit"]{
+.content .input-box .submit{
     font-size: 18px;
     font-weight: 500;
     background: rgba(238,0,134,255);
     color: white;
     cursor: pointer;
+    border-radius: 6px;
+    padding-left: 16px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
-.content .input-box input[type="submit"]:hover{
-    background: white;
-    color: black;
+.content .input-box .submit:hover{
+    background: rgb(242, 0, 255);
+    //color: black;
 }
 
 .content .img-box{
@@ -310,4 +217,24 @@ body{
     border-color: rgba(238,0,134,255);
     padding-left: 16px;
 }
-  
+.map{
+    border-radius: 6px;
+    padding-left: 16px;
+    font-size: 16px;
+    outline: none; 
+    background: #ff86ca;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.map-background{
+    height: 100%;
+    width: 150%;
+    opacity: 0.5;
+    position: absolute;
+    top: 0;
+    left: -50%;
+    z-index: 101;
+}

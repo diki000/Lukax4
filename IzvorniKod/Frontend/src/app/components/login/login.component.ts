@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit{
           this.router.navigate(['/dashboard']);
           localStorage.setItem('jwt', res.accessToken)
           this.userService.checkToken();     
-          let user = new User(res.username, "", res.name, res.surname, "", res.email, false, res.roleID, res.accessToken);
+          let user = new User(res.userID, res.username, "", res.name, res.surname, "", res.email, false, res.roleID, res.accessToken);
           this.userService.setCurrentUser(user);       
           if(this.userService.getCurrentUser().roleID == 3){
             this.userService.updateAdminState(true);

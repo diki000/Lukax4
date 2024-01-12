@@ -23,7 +23,6 @@ const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
-    canActivate: [IsAuthenicatedGuard]
   },
   {
     path: '', redirectTo: '/dashboard', pathMatch: 'full'

@@ -10,6 +10,7 @@ namespace SpotPicker.Models
         public string? idParkingImagePath { get; set; }
 
         // cjenik?
-        public int PricePerHour { get; set; }
+        public double PricePerHour { get; set; }
+        public ParkingSpaceModel[]? parkingSpaces { get; set; }
     }
 }

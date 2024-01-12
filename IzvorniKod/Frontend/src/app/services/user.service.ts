@@ -8,7 +8,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class UserService {
   url: string = "https://localhost:7020/api/User";
-  currentUser: User = new User("","","","","","",false,0,"");
+  currentUser: User = new User(0,"","","","","","",false,0,"");
   private decodedPayload:any = 1;
   checkToken() {
     if(localStorage.getItem('jwt') != undefined) {
@@ -16,7 +16,7 @@ export class UserService {
         const payload = token!.split('.')[1];
         const decodedToken = window.atob(payload);
         this.decodedPayload = JSON.parse(decodedToken);
-        let user = new User(this.decodedPayload.Username, "", this.decodedPayload.Name, this.decodedPayload.Surname, "", this.decodedPayload.Email, false, this.decodedPayload.RoleID, token!);
+        let user = new User(this.decodedPayload.UserId, this.decodedPayload.Username, "", this.decodedPayload.Name, this.decodedPayload.Surname, "", this.decodedPayload.Email, false, this.decodedPayload.RoleID, token!);
         this.updateLoggedInState(true);
         if(this.decodedPayload.RoleID == 3) this.updateAdminState(true);
         this.setCurrentUser(user);
@@ -27,7 +27,7 @@ export class UserService {
   }
   public getDecodedToken(){
     if(this.decodedPayload != 1) {
-      let user = new User(this.decodedPayload.Username, "", this.decodedPayload.Name, this.decodedPayload.Surname, "", this.decodedPayload.Email, false, this.decodedPayload.RoleID, "");
+      let user = new User(this.decodedPayload.UserId, this.decodedPayload.Username, "", this.decodedPayload.Name, this.decodedPayload.Surname, "", this.decodedPayload.Email, false, this.decodedPayload.RoleID, "");
       return user;
     }
     return null;
@@ -101,7 +101,7 @@ export class UserService {
   }
 
   public logout(){
-    this.currentUser = new User("","","","","","",false,0,"");
+    this.currentUser = new User(0,"","","","","","",false,0,"");
     this.authSubject.next(false);
     this.adminSubject.next(false);
     if(localStorage.getItem('jwt') != null)

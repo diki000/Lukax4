@@ -102,6 +102,7 @@ namespace SpotPicker.Services
 
             if (existingUser != null)
             {
+                korisnik.UserId = existingUser.Id;
                 korisnik.Username = existingUser.Username;
                 korisnik.Name = existingUser.Name;
                 korisnik.Surname = existingUser.Surname;
@@ -216,7 +217,7 @@ namespace SpotPicker.Services
                     string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password, salt);
                     User newUser = new User()
                     {
-
+                        
                         Username = user.Username,
                         Password = hashedPassword,
                         Name = user.Name,

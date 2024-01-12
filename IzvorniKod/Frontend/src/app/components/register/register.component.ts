@@ -45,6 +45,7 @@ export class RegisterComponent implements OnInit{
   proceedRegistration(){
 
     let newUser = new User(
+      0,
       this.registrationForm.value.username,
       this.registrationForm.value.password,
       this.registrationForm.value.firstname,

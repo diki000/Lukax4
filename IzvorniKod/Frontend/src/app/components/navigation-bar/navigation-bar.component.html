@@ -1,13 +1,18 @@
-<div class="navbar-wrapper" *ngIf="loggedIn$ | async">
+<div class="navbar-wrapper">
     <div class="logo">
-        <img src="../../../assets/logo.png" alt="logo">
+        <img src="../../../assets/logo.png" alt="logo" [routerLink]="'/dashboard'" style="cursor: pointer;">
     </div>
-    <div class="brand-name">
+    <div class="brand-name" [routerLink]="'/dashboard'" style="cursor: pointer;">
         <h2>Spot Picker</h2>
     </div>
-    <div class="log-out-wrapper" (click)="logOut()">
+    <div class="log-out-wrapper" (click)="logOut()"  *ngIf="loggedIn$ | async">
         <div class="log-out">
             Odjavi se
+        </div>
+    </div>
+    <div class="log-out-wrapper" [routerLink]="'/login'"  *ngIf="!(loggedIn$ | async)">
+        <div class="log-out">
+            Prijavi se
         </div>
     </div>
 </div>

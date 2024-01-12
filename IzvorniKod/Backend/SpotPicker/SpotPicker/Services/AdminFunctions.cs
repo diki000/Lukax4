@@ -22,6 +22,7 @@ namespace SpotPicker.Services
                 var u = _db.User.Where(x => x.Id == temp[i].UserId).FirstOrDefault();
                 var userm = new UserModel()
                 {
+                    UserId = u.Id,
                     Username = u.Username,
                     Password = u.Password,
                     Name = u.Name,

@@ -5,60 +5,47 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
-<body>
-    <nav class="sidebar close">
-        <header>
-            <i class='bx bx-chevron-right toggle' (click)="smanji()"></i>
-        </header>
-
-        <div class="menu-bar">
-            <div class="menu">
-                <ul class="menu-links">
-                    <li class="nav-link">
-                        <a (click)="otvoriStvoriParking()">
-                            <i class='bx bxs-car icon'></i>
-                            <span class="text nav-text">Dodaj parking</span>
-                        </a>
-                    </li>
-                    <li class="nav-link">
-                        <a (click)="otvoriStatistika()">
-                            <i class='bx bxs-bar-chart-alt-2 icon'></i>
-                            <span class="text nav-text">Statistika</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <div class="create-parking" *ngIf="otvoriParking">
+    <div class="create-parking">
         <div class="container">
+            <div class="closing-icon" (click)="closeCreateParking()">
+                <i class="bx bx-x icon"></i>
+            </div>
             <div class="content">
-                <form action="#" [formGroup]="createParkingForm" (ngSubmit)="onSubmit()">
+                <form [formGroup]="createParkingForm">
                     <div class="topic">Stvorite svoj novi parking</div>
                     <div class="input-box">
-                        <input type="text" [(ngModel)]="parkingData.ParkingName" required>
+                        <input type="text" formControlName="ParkingName" required>
                         <label>Upišite naziv parkinga</label>
                     </div>
                     <div class="input-box">
-                        <input type="text" [(ngModel)]="parkingData.Price" required>
+                        <input type="text" formControlName="Price" required>
                         <label>Upišite cijenu parkiranja po satu</label>
                     </div>
                     <div class="message-box">
-                        <textarea [(ngModel)]="parkingData.Description" required></textarea>
+                        <textarea formControlName="Description" required></textarea>
                         <label>Upišite opis parkinga</label>
                     </div>
                     <div class="img-box">
-                        <input type="file" accept="image/*" formControlName="file" required >
+                        <input type="file" accept="image/*" formControlName="File" required >
                         <label>Slika parkinga</label>
                     </div>
+                    <div class="map" id="map-wrapper">
+                        <div (click)="otvoriMapuParkinga()">
+                            Označi parking       
+                            <i class='bx bxs-check-circle icon' style="color:white; font-size: 25px; position: relative; bottom: -0.2rem;" *ngIf="parkingSpots.length!=0"></i>
+                        </div>
+                        <div *ngIf="otvoriMapu" >
+                            <div class="map-background" id="map-background">
+                            </div>
+                            <app-map *ngIf="otvoriMapu" [parkingName]="parkingData.ParkingName" [parkingSpots]="parkingSpots" (parkingSpotsChange)="updateParkingSpots($event)"></app-map>
+                        </div>
+                    </div>
                     <div class="input-box">
-                        <input type="submit" value="Stvori parking">
+                        <div class="submit" (click)="onSubmit()">Stvori parking</div>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-</body>
   

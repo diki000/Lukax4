@@ -13,6 +13,9 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { NavigationBarComponent } from './components/navigation-bar/navigation-bar.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { OwnerComponent } from './components/owner/owner.component';
+import { MapComponent } from './components/map/map.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { UnregisteredMapComponent } from './components/unregistered-map/unregistered-map.component';
 
 
 @NgModule({
@@ -24,7 +27,10 @@ import { OwnerComponent } from './components/owner/owner.component';
     DashboardComponent,
     NavigationBarComponent,
     AdminComponent,
-    OwnerComponent
+    OwnerComponent,
+    MapComponent,
+    SidebarComponent,
+    UnregisteredMapComponent
   ],
   imports: [
     FormsModule,

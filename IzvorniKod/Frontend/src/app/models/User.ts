@@ -1,4 +1,5 @@
 export class User{
+    UserId: number;
     Username: string;
     Password: string;
     Name: string;
@@ -10,7 +11,8 @@ export class User{
     RoleId: number;
     AccessToken?: string;
     //{{currentUser.name}} {{currentUser.surname}}
-    constructor(username: string, password: string, name: string, surname: string, iban: string, email: string, isEmailConfirmed: boolean, roleId: number, accessToken?: string){
+    constructor(UserId: number, username: string, password: string, name: string, surname: string, iban: string, email: string, isEmailConfirmed: boolean, roleId: number, accessToken?: string){
+        this.UserId = UserId;
         this.Username = username;
         this.Password = password;
         this.Name = name;

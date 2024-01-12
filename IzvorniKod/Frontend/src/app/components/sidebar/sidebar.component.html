@@ -1,0 +1,32 @@
+<head>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body *ngIf="currentUser != null">
+    <nav class="sidebar close">
+        <header>
+            <i class='bx bx-chevron-right toggle' (click)="smanji()"></i>
+        </header>
+    
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link" *ngIf="currentUser!= null && currentUser.RoleId == 2">
+                        <a (click)="otvoriStvoriParking()">
+                            <i class='bx bxs-car icon'></i>
+                            <span class="text nav-text">Dodaj parking</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a (click)="otvoriStatistika()" *ngIf="currentUser!= null && currentUser.RoleId == 2">
+                            <i class='bx bxs-bar-chart-alt-2 icon'></i>
+                            <span class="text nav-text">Statistika</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>    
+</body>
