@@ -24,12 +24,30 @@ export class NavigationBarComponent implements OnInit{
 
   constructor(private userService : UserService, private router: Router) { 
     let token = localStorage.getItem('jwt');
+    // console
     this.loggedIn$ = this.userService.isLoggedIn();
     if(token != undefined){
       this.userService.updateLoggedInState(true);
       this.userService.checkToken();
       this.currentUser = this.userService.getCurrentUser(); 
+      console.log(this.currentUser)
       this.loggedIn$ = this.userService.isLoggedIn();
+      if(this.currentUser!.RoleId == 3){
+        this.userService.updateAdminState(true);
+      }
+      else{
+        this.userService.getBalance(this.currentUser!.UserId).subscribe((data : any) => {
+          this.userService.balance = data.balance;
+          this.wallet = data.balance;
+        })
+
+        this.userService.getTransactions(this.currentUser!.UserId).subscribe((data) => {
+          this.transactions = data.sort((a, b) => {
+            return new Date(b.timeAndDate).getTime() - new Date(a.timeAndDate).getTime();
+          }
+          );
+        })
+      }
     }
     else{
       this.userService.updateLoggedInState(false);
@@ -39,29 +57,8 @@ export class NavigationBarComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.loggedIn$ = this.userService.isLoggedIn()
-
-    this.loggedIn$?.subscribe((data) => {
-      console.log(data)
-      if(data){
-        let user = JSON.parse(localStorage.getItem('currentUser')!);
-        if(user.roleID != 3){
-          this.userService.getBalance(user.id).subscribe((data : any) => {
-            this.userService.balance = data.balance;
-            this.wallet = data.balance;
-          })
-  
-          this.userService.getTransactions(user.id).subscribe((data) => {
-            this.transactions = data.sort((a, b) => {
-              return new Date(b.timeAndDate).getTime() - new Date(a.timeAndDate).getTime();
-            }
-            );
-          })
-        }
-
-      }
-    })
   }
+
   logOut(){
     this.userService.logout();
     this.router.navigate(['/login']);

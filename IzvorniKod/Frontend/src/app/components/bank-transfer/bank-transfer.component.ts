@@ -120,8 +120,8 @@ export class BankTransferComponent {
 
   pay() {
     if(this.isValidCardNumber && !this.isExpired && this.isValidCVC) {
-      let user = JSON.parse(localStorage.getItem('currentUser')!);
-      this.userService.addPayment(user.id, this.userService.moneyToTransfer).subscribe((data) => {
+      let user = this.userService.getDecodedToken()!;
+      this.userService.addPayment(user.UserId, this.userService.moneyToTransfer).subscribe((data) => {
         this.router.navigate(['/payment-success']);
       })
     } else {

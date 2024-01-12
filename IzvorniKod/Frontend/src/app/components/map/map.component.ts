@@ -119,7 +119,6 @@ export class MapComponent implements OnInit {
     var otherParkings : L.FeatureGroup = new L.FeatureGroup();
     var myOldParkings : L.FeatureGroup = new L.FeatureGroup();
     this.parkingService.getAllParkings().subscribe((parkings) => {
-      console.log(parkings)
       let userId = this.userService.getDecodedToken()?.UserId;
       parkings.forEach((parking : any) => {
         var points: LatLngExpression[] = [];
@@ -196,7 +195,6 @@ export class MapComponent implements OnInit {
   }
   enableSensorMode() {
     this.sensorModeEnabled = !this.sensorModeEnabled;
-    console.log(this.sensorModeEnabled);
   }
 }
 interface CustomPolygon extends L.Polygon {

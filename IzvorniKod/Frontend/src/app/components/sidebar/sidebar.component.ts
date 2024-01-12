@@ -16,7 +16,6 @@ export class SidebarComponent implements  OnInit{
 
   constructor(private sidebarService: SidebarService, private userService: UserService) {
     let token = localStorage.getItem('jwt');
-    console.log(token)
     if(token != undefined){
       this.userService.updateLoggedInState(true);
       this.userService.checkToken();

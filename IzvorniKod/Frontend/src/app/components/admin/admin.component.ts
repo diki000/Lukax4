@@ -26,7 +26,6 @@ export class AdminComponent implements OnInit{
     this.adminService.getAllUsers().subscribe((data: User[]) => {
       this.AllUsers = data;
       this.AllUsers = this.AllUsers.filter((user) => user.roleID != 3);
-      console.log(data)
     });
   }
 
@@ -55,7 +54,6 @@ export class AdminComponent implements OnInit{
   }
 
   saveChanges(user: any){
-    console.log(user);
     var u = new User(user.id ,user.username, user.password, user.name, user.surname, user.iban, user.email, user.isEmailConfirmed, user.roleID, user.idImagePath);
     this.adminService.updateUser(u).subscribe(() => {
       alert("Uspjesno aržuriranje");
