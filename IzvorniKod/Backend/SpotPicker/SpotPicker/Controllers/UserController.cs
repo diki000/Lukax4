@@ -57,9 +57,6 @@ namespace SpotPicker.Controllers
             }
             catch (Exception e)
             {
-                //return BadRequest(e.Message);
-                //var statusCode = exc.Data.Keys.Cast<string>().Single();  // retrieves "3"
-                //var statusMessage = exc.Data[statusCode].ToString();
                 var statusCode = (int)e.Data["Kod"];
                 return StatusCode(statusCode);
             }
@@ -142,5 +139,56 @@ namespace SpotPicker.Controllers
                 return StatusCode(statusCode);
             }
         }
+
+        [HttpGet]
+        [Route("api/[controller]/GetWallet")]
+        public IActionResult getWallet(int id)
+        {
+            try
+            { 
+                WalletModel wallet = _userFunctions.getWallet(id);
+                return Ok(wallet);
+
+            }
+            catch (Exception e)
+            {
+                var statusCode = (int)e.Data["Kod"];
+                return StatusCode(statusCode);
+            }
+        }
+
+        [HttpGet]
+        [Route("api/[controller]/GetLast5Transactions")]
+        public IActionResult GetLast5Transactions(int id)
+        {
+            try
+            {
+                List<TransactionModel> transactions = _userFunctions.getLastFiveTransactions(id);
+                return Ok(transactions);
+
+            }
+            catch (Exception e)
+            {
+                var statusCode = (int)e.Data["Kod"];
+                return StatusCode(statusCode);
+            }
+        }
+
+        [HttpPost]
+        [Route("api/[controller]/addPayment")]
+        public IActionResult addPayment(int id, float payment)
+        {
+            try
+            {
+                _userFunctions.newPayment(id, payment);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                var statusCode = (int)e.Data["Kod"];
+                return StatusCode(statusCode);
+            }
+        }
+
     }
 }
