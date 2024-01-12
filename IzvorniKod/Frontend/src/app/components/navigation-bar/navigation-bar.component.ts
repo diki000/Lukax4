@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { Transaction } from 'src/app/models/Transaction';
 import { User } from 'src/app/models/User';
 import { UserService } from 'src/app/services/user.service';
 
@@ -14,20 +15,12 @@ export class NavigationBarComponent implements OnInit{
   currentUser : User | null = null;
   openPreview: boolean = true;
 
-  wallet = 30;
+  wallet = 0;
   paymentPopup = false;
   amount = 0;
+  page = 0;
 
-  transactions = [{
-    date : "12.12.2020.",
-    amount : 100,
-    type : 0
-  },
-  {
-    date : "12.12.2020.",
-    amount : 100,
-    type : 1
-  }]
+  transactions : Transaction[] = [];
 
   constructor(private userService : UserService, private router: Router) { 
     let token = localStorage.getItem('jwt');
@@ -47,6 +40,27 @@ export class NavigationBarComponent implements OnInit{
 
   ngOnInit(): void {
     this.loggedIn$ = this.userService.isLoggedIn()
+
+    this.loggedIn$?.subscribe((data) => {
+      console.log(data)
+      if(data){
+        let user = JSON.parse(localStorage.getItem('currentUser')!);
+        if(user.roleID != 3){
+          this.userService.getBalance(user.id).subscribe((data : any) => {
+            this.userService.balance = data.balance;
+            this.wallet = data.balance;
+          })
+  
+          this.userService.getTransactions(user.id).subscribe((data) => {
+            this.transactions = data.sort((a, b) => {
+              return new Date(b.timeAndDate).getTime() - new Date(a.timeAndDate).getTime();
+            }
+            );
+          })
+        }
+
+      }
+    })
   }
   logOut(){
     this.userService.logout();
@@ -66,4 +80,13 @@ export class NavigationBarComponent implements OnInit{
     this.userService.moneyToTransfer = this.amount;
     this.openWalletPreview();
   }
+
+  pageChange(fwdOrBwd: number){
+    if(fwdOrBwd == 1){
+      this.page++;
+    } else {
+      this.page--;
+    }
+  }
+
 }

@@ -2,6 +2,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../models/User';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { Wallet } from '../models/Wallet';
+import { Transaction } from '../models/Transaction';
 
 @Injectable({
   providedIn: 'root'
@@ -41,6 +43,7 @@ export class UserService {
   isLoggedIn$ = this.authSubject.asObservable();
   isAdmin$ = this.authSubject.asObservable();
   moneyToTransfer: number = 0;
+  balance: number = 0;
 
   updateLoggedInState(status: boolean){
       this.authSubject.next(status);
@@ -85,8 +88,8 @@ export class UserService {
   }
 
 
-  public setCurrentUser(user: User){
-    this.currentUser = user;
+  public setCurrentUser(user: any){
+    this.currentUser = new User(user.id, user.username, user.password, user.name, user.surname, user.IBAN, user.email, user.isEmailConfirmed, user.roleID, user.idImagePath);
     this.authSubject.next(true);
   }
 

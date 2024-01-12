@@ -1,5 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-bank-transfer',
@@ -20,7 +21,7 @@ export class BankTransferComponent {
     this.initializeCardNumberInput();
   }
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private userService: UserService) { }
 
   initializeCardNumberInput() {
     this.cardNumberInput.nativeElement.addEventListener('input', this.formatCardNumber.bind(this));
@@ -119,7 +120,10 @@ export class BankTransferComponent {
 
   pay() {
     if(this.isValidCardNumber && !this.isExpired && this.isValidCVC) {
-      this.router.navigate(['/payment-success']);
+      let user = JSON.parse(localStorage.getItem('currentUser')!);
+      this.userService.addPayment(user.id, this.userService.moneyToTransfer).subscribe((data) => {
+        this.router.navigate(['/payment-success']);
+      })
     } else {
       alert("Sva polja moraju bit zelena");
     }
