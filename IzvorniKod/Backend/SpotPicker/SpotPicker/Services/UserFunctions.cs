@@ -100,6 +100,7 @@ namespace SpotPicker.Services
 
             if (existingUser != null)
             {
+                korisnik.Id = existingUser.Id;
                 korisnik.Username = existingUser.Username;
                 korisnik.Name = existingUser.Name;
                 korisnik.Surname = existingUser.Surname;
@@ -316,12 +317,11 @@ namespace SpotPicker.Services
             }
         }
 
-        public List<TransactionModel> getLastFiveTransactions(int id)
+        public List<TransactionModel> getTransactions(int id)
         {
             // Retrieve the last 5 transactions for the user with the specified id
             List<Transaction> transakcije = _db.Transactions
                 .Where(t => t.UserID == id)
-                .Take(5)
                 .ToList();
 
             if (transakcije.Count == 0)
@@ -338,7 +338,8 @@ namespace SpotPicker.Services
                 ID = t.ID,
                 UserID = t.UserID,
                 Type = t.Type,
-                Amount = t.Amount
+                Amount = t.Amount,
+                TimeAndDate = t.TimeAndDate
             }).ToList();
 
             return transactionModels;
@@ -362,18 +363,46 @@ namespace SpotPicker.Services
 
             // Create a new transaction
             Transaction transaction = new Transaction
-            {
-                ID = new Random().Next(), // Generate a random ID for the transaction
+            { // Generate a random ID for the transaction
                 UserID = id,
                 Type = 1,
                 Amount = paymentAmount,
-                //TimeAndDate = DateTime.Now // Current date and time
+                TimeAndDate = DateTime.UtcNow // Current date and time
             };
 
             // Add the new transaction to the DbSet
             _db.Transactions.Add(transaction);
 
             // Save the changes to the database
+            _db.SaveChanges();
+        }
+
+        public void payForReservation(int id, float amount)
+        {
+            Wallet userWallet = _db.Wallets.FirstOrDefault(w => w.UserID == id);
+
+            if (userWallet == null)
+            {
+                Console.WriteLine("NE POSTOJI USER >> ");
+                Console.WriteLine(id);
+                var ex = new Exception("Wallet not found for the user.");
+                ex.Data["Code"] = 400;
+                throw ex;
+            }
+
+
+            userWallet.Balance -= amount;
+
+            Transaction transaction = new Transaction
+            { 
+                UserID = id,
+                Type = 0,
+                Amount = amount,
+                TimeAndDate = DateTime.UtcNow 
+            };
+
+            _db.Transactions.Add(transaction);
+
             _db.SaveChanges();
         }
 

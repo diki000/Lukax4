@@ -163,7 +163,7 @@ namespace SpotPicker.Controllers
         {
             try
             {
-                List<TransactionModel> transactions = _userFunctions.getLastFiveTransactions(id);
+                List<TransactionModel> transactions = _userFunctions.getTransactions(id);
                 return Ok(transactions);
 
             }
@@ -176,11 +176,27 @@ namespace SpotPicker.Controllers
 
         [HttpPost]
         [Route("api/[controller]/addPayment")]
-        public IActionResult addPayment(int id, float payment)
+        public IActionResult addPayment([FromBody] PaymentModel payment)
         {
             try
             {
-                _userFunctions.newPayment(id, payment);
+                _userFunctions.newPayment(payment.Id, payment.Amount);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                var statusCode = (int)e.Data["Kod"];
+                return StatusCode(statusCode);
+            }
+        }
+
+        [HttpPost]
+        [Route("api/[controller]/payForReservation")]
+        public IActionResult payForReservation([FromBody] PaymentModel payment)
+        {
+            try
+            {
+                _userFunctions.payForReservation(payment.Id, payment.Amount);
                 return Ok();
             }
             catch (Exception e)

@@ -9,15 +9,20 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class SuccessPayComponent {
   userHasPaid: number = 0;
+  balance: number = 0;
 
   constructor(private userService : UserService, private router: Router) { }
 
   ngOnInit(): void {
     this.userHasPaid = this.userService.moneyToTransfer;
+    this.balance = this.userService.balance + this.userHasPaid;
   }
 
   reservation() {
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['/dashboard']).then(() => {
+      window.location.reload();
+    }
+    );
   }
 
 }

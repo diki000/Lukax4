@@ -10,8 +10,8 @@ export class User{
     IsEmailConfirmed: boolean;
     RoleId: number;
 
-    constructor(Id: number ,username: string, password: string, name: string, surname: string, iban: string, email: string, isEmailConfirmed: boolean, roleId: number, idImagePath: string){
-        this.Id = Id;
+    constructor(id: number ,username: string, password: string, name: string, surname: string, iban: string, email: string, isEmailConfirmed: boolean, roleId: number, idImagePath: string){
+        this.Id = id;
         this.Username = username;
         this.Password = password;
         this.Name = name;

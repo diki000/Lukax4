@@ -2,6 +2,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../models/User';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { Wallet } from '../models/Wallet';
+import { Transaction } from '../models/Transaction';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +16,7 @@ export class UserService {
   isLoggedIn$ = this.authSubject.asObservable();
   isAdmin$ = this.authSubject.asObservable();
   moneyToTransfer: number = 0;
+  balance: number = 0;
 
   updateLoggedInState(status: boolean){
       this.authSubject.next(status);
@@ -58,8 +61,8 @@ export class UserService {
   }
 
 
-  public setCurrentUser(user: User){
-    this.currentUser = user;
+  public setCurrentUser(user: any){
+    this.currentUser = new User(user.id, user.username, user.password, user.name, user.surname, user.IBAN, user.email, user.isEmailConfirmed, user.roleID, user.idImagePath);
     this.authSubject.next(true);
   }
 
@@ -80,6 +83,24 @@ export class UserService {
     this.adminSubject.next(false);
     if(localStorage.getItem('currentUser') != null)
       localStorage.removeItem('currentUser');
+  }
+
+  public getBalance(id: number): Observable<Wallet>{
+    return this.http.get<Wallet>(this.url + "/GetWallet?id=" + id);
+  }
+
+  public getTransactions(id: number): Observable<Transaction[]>{
+    return this.http.get<Transaction[]>(this.url + "/GetLast5Transactions?id=" + id);
+  }
+
+  public addPayment(Id: number, Amount: number): Observable<any>{
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+      })
+    };
+    let body = JSON.stringify({Id, Amount});
+    return this.http.post<any>(this.url + "/AddPayment", body, httpOptions);
   }
   
 }

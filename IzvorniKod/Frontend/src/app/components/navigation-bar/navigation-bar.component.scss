@@ -114,6 +114,20 @@
         cursor: pointer;
     }
 
+    .pagination {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        font-size: 24px;
+        
+        button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+        }
+    }
+
 }
 
 .openPreview {
