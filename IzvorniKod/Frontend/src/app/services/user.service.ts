@@ -40,6 +40,7 @@ export class UserService {
   
   isLoggedIn$ = this.authSubject.asObservable();
   isAdmin$ = this.authSubject.asObservable();
+  moneyToTransfer: number = 0;
 
   updateLoggedInState(status: boolean){
       this.authSubject.next(status);

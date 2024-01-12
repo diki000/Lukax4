@@ -5,6 +5,8 @@ import { ForgotPasswordComponent } from './components/forgot-password/forgot-pas
 import { RegisterComponent } from './components/register/register.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { IsAuthenicatedGuard } from './guards/is-authenicated.guard';
+import { BankTransferComponent } from './components/bank-transfer/bank-transfer.component';
+import { SuccessPayComponent } from './components/success-pay/success-pay.component';
 
 const routes: Routes = [
   {
@@ -25,8 +27,19 @@ const routes: Routes = [
     component: DashboardComponent,
   },
   {
+    path: 'bank-transfer', 
+    component: BankTransferComponent,
+    canActivate: [IsAuthenicatedGuard]
+  },
+  {
+    path: 'payment-success', 
+    component: SuccessPayComponent,
+    canActivate: [IsAuthenicatedGuard]
+  },
+  {
     path: '', redirectTo: '/dashboard', pathMatch: 'full'
   }
+  
 ];
 
 @NgModule({

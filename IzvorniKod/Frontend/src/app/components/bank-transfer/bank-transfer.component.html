@@ -1,0 +1,27 @@
+<div class="bankTransferForm">
+   <div class="paymentForm">
+      <div style="font-size: 24px; font-weight: bold; margin-bottom: 25px;">
+         Podaci o plaćanju
+      </div>
+      <div>
+         <div class="title">Broj kartice</div>
+         <input #cardNumberInput type="text" class="inputStyle" placeholder="4242 4242 4242 4242" maxlength="19" style="width: 100%;" [ngStyle]="{'border': isValidCardNumber === true ? '2px solid green' : (isValidCardNumber === false ? '2px solid red' : '2px solid gray')}">
+         <div class="invalid" [ngStyle]="{'opacity' : isValidCardNumber === false ? '1' : '0'}">*Broj kartice nije ispravan</div>
+      </div>
+      <div style="display: flex; flex-direction: row; gap: 20px;">
+         <div>
+            <div class="title">Datum isteka kartice</div>
+            <input #expirationInput class="inputStyle" maxlength="7" type="text" style="width: 150px;" placeholder="MM / YY" [ngStyle]="{'border': isExpired === false ? '2px solid green' : (isExpired === true ? '2px solid red' : '2px solid gray')}">
+            <div class="invalid" [ngStyle]="{'opacity' : isExpired === true ? '1' : '0'}">*Kartica je istekla</div>
+         </div>
+         <div>
+            <div class="title">CVC</div>
+            <input #cvcInput class="inputStyle" maxlength="3" type="text" placeholder="CVC" style="width: 150px;" [ngStyle]="{'border': isValidCVC === true ? '2px solid green' : (isValidCVC === false ? '2px solid red' : '2px solid gray')}">
+            <div class="invalid" [ngStyle]="{'opacity' : isValidCVC === false ? '1' : '0'}">*CVC nije ispravan</div>
+         </div>
+      </div>
+      <div>
+         <button class="payButton" (click)="pay()">Plati</button>
+      </div>
+   </div>
+</div>
