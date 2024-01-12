@@ -7,12 +7,13 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class UserService {
-  url: string = "https://spotpicker.online/api/User";
-  currentUser: User = new User("","","","","","",false,0);
+  url: string = "https://localhost:7020/api/User";
+  currentUser: User = new User( 0,"","","","","","",false,0, "");
   private authSubject : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(localStorage.getItem('currentUser') != null);
   private adminSubject : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(localStorage.getItem('currentUser') != null && JSON.parse(localStorage.getItem('currentUser')!).roleID == 3);
   isLoggedIn$ = this.authSubject.asObservable();
   isAdmin$ = this.authSubject.asObservable();
+  moneyToTransfer: number = 0;
 
   updateLoggedInState(status: boolean){
       this.authSubject.next(status);
@@ -74,7 +75,7 @@ export class UserService {
   }
 
   public logout(){
-    this.currentUser = new User("","","","","","",false,0);
+    this.currentUser = new User(0,"","","","","","",false,0, "");
     this.authSubject.next(false);
     this.adminSubject.next(false);
     if(localStorage.getItem('currentUser') != null)

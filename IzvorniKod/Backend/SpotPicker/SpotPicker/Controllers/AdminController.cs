@@ -45,5 +45,50 @@ namespace SpotPicker.Controllers
             _adminFunctions.DeclineManager(username);
             return Ok();
         }
+
+        [HttpGet]
+        [Route("api/[controller]/GetAllUsers")]
+        public IActionResult GetAllUsers()
+        {
+            try
+            {
+                var allUsers = _adminFunctions.GetAllUsers();
+                return Ok(allUsers);
+            } catch(Exception ex)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPost]
+        [Route("api/[controller]/UpdateUser")]
+        public IActionResult UpdateUser([FromBody] UserModel user) 
+        {
+            try
+            {
+                _adminFunctions.UpdateUser(user);
+                return Ok();
+            } catch(Exception e)
+            {
+                var statusCode = (int)e.Data["Kod"];
+                return StatusCode(statusCode);
+            }
+        }
+
+        [HttpDelete]
+        [Route("api/[controller]/DeleteUser")]
+        public IActionResult DeleteManager(string username)
+        {
+            try
+            {
+                _adminFunctions.DeleteUser(username);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                var statusCode = (int)e.Data["Kod"];
+                return StatusCode(statusCode);
+            }
+        }
     }
 }

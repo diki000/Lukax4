@@ -68,3 +68,130 @@
         }
     }
 }
+
+.title {
+    font-size: 25px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+
+}
+
+.allUsersContainer {
+    margin-top: 50px;
+    text-align: center;
+}
+
+.atributes {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 40px;
+
+    span {
+        font-size: 20px;
+        font-weight: bold;
+        display: inline-block;
+        width: 20%
+    }
+}
+
+.underline {
+    border-bottom: 2px solid black;
+}
+
+.container {
+    border-radius: 5px;
+    background-color: #f5f5f5;
+    box-shadow: 0 0 10px #ccc;
+    margin: 10px 40px;
+}
+
+.userValues {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 20px 0;
+
+    span {
+        font-size: 20px;
+        display: inline-block;
+        width: 20%
+    }
+}
+
+.showMoreButton {
+    display: flex;
+    justify-content: end;
+    padding-right: 10px;
+
+    button {
+        padding: 5px;
+        background-color: white;
+        border-radius: 5px;
+    }
+}
+
+.open {
+    max-height: 500px;
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out;
+}
+
+.close {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s;
+}
+
+.expandedViewAttributes {
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    justify-content: space-between;
+    padding: 10px 40px;
+}
+
+.keyValue {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
+    margin: 20px 0;
+}
+
+.title2 {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.value {
+    font-size: 20px;
+}
+
+.actionContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    margin-top: 20px;
+
+
+    .saveButton {
+        padding: 5px;
+        background-color: green;
+        border-radius: 5px;
+        font-size: 16px;
+        color: white;
+
+    }
+
+    .deleteButton {
+        padding: 5px;
+        background-color: red;
+        border-radius: 5px;
+        font-size: 16px;
+        color: white;
+    }
+}

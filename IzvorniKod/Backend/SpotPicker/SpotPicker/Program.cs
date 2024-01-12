@@ -1,6 +1,7 @@
 using SpotPicker.EFCore;
 using Microsoft.EntityFrameworkCore;
 using SpotPicker.Services;
+using Microsoft.Extensions.FileProviders;
 
 var corsorgin = "_mycorsorigin";
 var builder = WebApplication.CreateBuilder(args);
@@ -34,6 +35,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "assets2")),
+    RequestPath = "/assets2"
+});
 
 app.UseHttpsRedirection();
 
