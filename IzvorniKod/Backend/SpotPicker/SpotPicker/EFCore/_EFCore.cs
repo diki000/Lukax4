@@ -33,6 +33,18 @@ namespace SpotPicker.EFCore
                 .HasOne(wallet => wallet.User)
                 .WithOne(user => user.Wallet)
                 .HasForeignKey<Wallet>(wallet => wallet.UserID);
+
+            // One-to-many relationship between User and Reservation
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Reservations)
+                .WithOne(t => t.User)
+                .HasForeignKey(t => t.UserID);
+
+            // One-to-many relationship between ParkingSpace and Reservation
+            modelBuilder.Entity<ParkingSpace>()
+                .HasMany(u => u.Reservations)
+                .WithOne(t => t.ParkingSpace)
+                .HasForeignKey(t => t.ParkingSpaceID);
         }
     }
 }
