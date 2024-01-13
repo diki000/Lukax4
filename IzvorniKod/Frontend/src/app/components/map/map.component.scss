@@ -1,0 +1,39 @@
+.map-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 100px;
+    margin-bottom: 50px;
+    z-index: 102;
+  }
+  
+  .map-frame {
+    border: 2px solid black;
+    height: 100%;
+    position: relative;
+  }
+  
+  #map {
+    height: 100%;
+    position: relative;
+  }
+  .enableSensor{
+    background-color: white;
+    color: black;
+    border-radius: 5px;
+    font-size: 14px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    margin-left: 10px;
+    z-index: 1000;
+    position: absolute;
+    top: 35%;
+    width: 75px;
+  }
+  .enabledSensors{
+    background-color: rgb(255, 208, 0);
+    color: white;
+  }

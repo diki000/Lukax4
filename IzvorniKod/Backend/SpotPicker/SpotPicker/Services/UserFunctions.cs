@@ -12,6 +12,7 @@ using System.Runtime.InteropServices;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
 
 namespace SpotPicker.Services
 {
@@ -102,6 +103,7 @@ namespace SpotPicker.Services
 
             if (existingUser != null)
             {
+                korisnik.UserId = existingUser.Id;
                 korisnik.Username = existingUser.Username;
                 korisnik.Name = existingUser.Name;
                 korisnik.Surname = existingUser.Surname;
@@ -128,7 +130,7 @@ namespace SpotPicker.Services
                 }
 
                 // ako je user vlasnik parkinga, provjeri je li potvrdjen od admina, ako nije returnaj error
-            if (existingUser.RoleID == 2 && !managerCheck.ConfirmedByAdmin != null && managerCheck.ConfirmedByAdmin == false)
+            if (existingUser.RoleID == 2 && managerCheck.ConfirmedByAdmin != null && managerCheck.ConfirmedByAdmin == false)
             {
                     var ex = new Exception();
                     ex.Data["Kod"] = 403;
@@ -190,63 +192,78 @@ namespace SpotPicker.Services
         }
         public void register(UserModel user)
         {
-            bool usernameAvailable = !_db.User.Any(u => u.Username == user.Username);
-            bool emailAvailable = !_db.User.Any(u => u.Email == user.Email);
+            try {
+                bool usernameAvailable = !_db.User.Any(u => u.Username == user.Username);
+                bool emailAvailable = !_db.User.Any(u => u.Email == user.Email);
 
-            if (usernameAvailable && emailAvailable)
-            {
-                if (!checkPasswordRegex(user.Password))
+                if (usernameAvailable && emailAvailable)
                 {
-                    var ex = new Exception();
-                    ex.Data["Kod"] = 411; // 411 je slaba lozinka
-                    throw ex;
-                }
-
-                if (!CheckIban(user.IBAN))
-                {
-                    var ex = new Exception();
-                    ex.Data["Kod"] = 412; // 412 je neispravan IBAN
-                    throw ex;
-                }
-
-                // TODO: provjeri ispravnost maila
-
-                string salt = BCrypt.Net.BCrypt.GenerateSalt(12);
-                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password, salt);
-                User newUser = new User()
-                {
-
-                    Username = user.Username,
-                    Password = hashedPassword,
-                    Name = user.Name,
-                    Surname = user.Surname,
-                    IBAN = user.IBAN,
-                    Email = user.Email,
-                    IsEmailConfirmed = false,
-                    RoleID = user.RoleID
-                };
-
-                _db.User.Add(newUser);
-
-                if (user.RoleID == 2) // ako je manager 
-                {
-                    Manager newManager = new Manager()
+                    if (!checkPasswordRegex(user.Password))
                     {
-                        User = newUser
+                        var ex = new Exception();
+                        ex.Data["Kod"] = 411; // 411 je slaba lozinka
+                        throw ex;
+                    }
+
+                    if (!CheckIban(user.IBAN))
+                    {
+                        var ex = new Exception();
+                        ex.Data["Kod"] = 412; // 412 je neispravan IBAN
+                        throw ex;
+                    }
+
+                    // TODO: provjeri ispravnost maila
+
+                    string salt = BCrypt.Net.BCrypt.GenerateSalt(12);
+                    string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password, salt);
+                    User newUser = new User()
+                    {
+                        
+                        Username = user.Username,
+                        Password = hashedPassword,
+                        Name = user.Name,
+                        Surname = user.Surname,
+                        IBAN = user.IBAN,
+                        Email = user.Email,
+                        IsEmailConfirmed = false,
+                        RoleID = user.RoleID
                     };
 
-                    _db.Manager.Add(newManager);
+                    _db.User.Add(newUser);
+
+                    if (user.RoleID == 2) // ako je manager 
+                    {
+                        Manager newManager = new Manager()
+                        {
+                            User = newUser
+                        };
+
+                        _db.Manager.Add(newManager);
+                    }
+
+                    Wallet newWallet = new Wallet()
+                    {
+                        User = newUser,
+                        Balance = 0
+
+                    };
+
+                    _db.Wallets.Add(newWallet);
+
+                    _db.SaveChanges();
+                    var currentUser = _db.User.Where(u => u.Username == newUser.Username).FirstOrDefault();
+                    _emailSender.SendEmailConfirmation(currentUser.Id, currentUser.Email);
                 }
-                _db.SaveChanges();
-                var currentUser = _db.User.Where(u => u.Username == newUser.Username).FirstOrDefault();
-               _emailSender.SendEmailConfirmation(currentUser.Id, currentUser.Email);
+                else
+                {
+                    var ex = new Exception();
+                    ex.Data["Kod"] = !usernameAvailable ? 410 : 414; // 410 kad je nedostupno korisnicko ime, 414 kad je nedostupan mail
+                    throw ex;
+                }
+            } catch(Exception e) {
+                throw e;
             }
-            else
-            {
-                var ex = new Exception();
-                ex.Data["Kod"] = !usernameAvailable ? 410 : 414; // 410 kad je nedostupno korisnicko ime, 414 kad je nedostupan mail
-                throw ex;
-            }
+            
         }
 
         public async Task UpladImages(HttpRequest request)
@@ -324,6 +341,111 @@ namespace SpotPicker.Services
             };
 
             return model;
+        }
+
+        public WalletModel getWallet(int id)
+        {
+            Wallet existingWallet = _db.Wallets.FirstOrDefault(wallet => wallet.UserID == id);
+
+            if (existingWallet == null)
+            {
+                Console.Write("NEPOSTOJI OVAJ WALLET \n\n\n");
+                var ex = new Exception();
+                ex.Data["Kod"] = 400;
+                throw ex;
+            }
+
+            else
+            {
+                WalletModel noviNovcanik = new WalletModel();
+
+                noviNovcanik.UserID = id;
+                noviNovcanik.WalletID = existingWallet.WalletID;
+                noviNovcanik.Balance = existingWallet.Balance;
+
+                return noviNovcanik;
+            }
+        }
+
+        public List<TransactionModel> getTransactions(int id)
+        {
+            // Retrieve the last 5 transactions for the user with the specified id
+            List<Transaction> transakcije = _db.Transactions
+                .Where(t => t.UserID == id)
+                .ToList();
+
+            // Convert Transaction entities to TransactionModel (if necessary)
+            List<TransactionModel> transactionModels = transakcije.Select(t => new TransactionModel
+            {
+                ID = t.ID,
+                UserID = t.UserID,
+                Type = t.Type,
+                Amount = t.Amount,
+                TimeAndDate = t.TimeAndDate
+            }).ToList();
+
+            return transactionModels;
+        }
+
+        public void newPayment(int id, float paymentAmount)
+        {
+            Wallet userWallet = _db.Wallets.FirstOrDefault(w => w.UserID == id);
+
+            if (userWallet == null)
+            {
+                Console.WriteLine("NE POSTOJI USER >> ");
+                Console.WriteLine(id);
+                var ex = new Exception("Wallet not found for the user.");
+                ex.Data["Code"] = 400;
+                throw ex;
+            }
+
+            // Update the wallet balance
+            userWallet.Balance += paymentAmount;
+
+            // Create a new transaction
+            Transaction transaction = new Transaction
+            { // Generate a random ID for the transaction
+                UserID = id,
+                Type = 1,
+                Amount = paymentAmount,
+                TimeAndDate = DateTime.UtcNow // Current date and time
+            };
+
+            // Add the new transaction to the DbSet
+            _db.Transactions.Add(transaction);
+
+            // Save the changes to the database
+            _db.SaveChanges();
+        }
+
+        public void payForReservation(int id, float amount)
+        {
+            Wallet userWallet = _db.Wallets.FirstOrDefault(w => w.UserID == id);
+
+            if (userWallet == null)
+            {
+                Console.WriteLine("NE POSTOJI USER >> ");
+                Console.WriteLine(id);
+                var ex = new Exception("Wallet not found for the user.");
+                ex.Data["Code"] = 400;
+                throw ex;
+            }
+
+
+            userWallet.Balance -= amount;
+
+            Transaction transaction = new Transaction
+            { 
+                UserID = id,
+                Type = 0,
+                Amount = amount,
+                TimeAndDate = DateTime.UtcNow 
+            };
+
+            _db.Transactions.Add(transaction);
+
+            _db.SaveChanges();
         }
 
     }

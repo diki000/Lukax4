@@ -35,12 +35,13 @@ export class LoginComponent implements OnInit{
       let password = this.loginForm.value.password || "";
       this.userService.login(username, password).subscribe(
         (res : any) => {
-          this.userService.updateLoggedInState(true);
           this.router.navigate(['/dashboard']);
           localStorage.setItem('jwt', res.accessToken)
           this.userService.checkToken();     
-          let user = new User(res.username, "", res.name, res.surname, "", res.email, false, res.roleID, res.accessToken);
-          this.userService.setCurrentUser(user);       
+          let user = new User(res.userID, res.username, "", res.name, res.surname, "", res.email, false, res.roleID, res.accessToken);
+          this.userService.setCurrentUser(user); 
+          this.userService.updateLoggedInState(true);
+          console.log(this.userService.currentUser.RoleId)      
           if(this.userService.getCurrentUser().roleID == 3){
             this.userService.updateAdminState(true);
           }

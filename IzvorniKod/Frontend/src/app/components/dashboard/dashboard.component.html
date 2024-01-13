@@ -1,2 +1,23 @@
-<p>Dobro došao {{currentUser.Name}} {{currentUser.Surname}}</p>
-<app-admin></app-admin>
+<div class="dashboard-wrapper">
+    <app-admin></app-admin>
+    <app-sidebar></app-sidebar>
+    <app-owner *ngIf="openCreateParking |async"></app-owner>
+
+
+    <!--za neprijavljenog korisnika-->
+    <div *ngIf="!(isLoggedIn$ | async)" class="unregistered">
+        <div class="welcome">
+            <div class="title">
+                Dobro došao na <span style="color: #ff86ca;">SpotPicker™</span>!
+            </div>
+            <div class="text">
+                Prijavi se na račun i potraži najbliži parking već danas!
+            </div>
+            <div class="text">
+                <span>Imaš parking i želiš ga oglasiti na našoj aplikaciji?</span>
+                <span>Prijavi se kao vlasnik</span>
+            </div>
+        </div>
+        <app-unregistered-map></app-unregistered-map>
+    </div>
+</div>

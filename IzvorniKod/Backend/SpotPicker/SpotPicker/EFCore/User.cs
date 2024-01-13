@@ -32,5 +32,8 @@ namespace SpotPicker.EFCore
         public string? idImagePath { get; set; }
 
         public virtual Manager Manager { get; set; }
+
+        public virtual Wallet Wallet { get; set; }
+        public virtual List<Transaction> Transactions {  get; set; }    
     }
 }

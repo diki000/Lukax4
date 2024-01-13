@@ -16,6 +16,6 @@ namespace SpotPicker.EFCore
         public string Description {  get; set; }
         public string? idParkingImagePath { get; set; }
 
-        public int PricePerHour {  get; set; }
+        public double PricePerHour {  get; set; }
     }
 }

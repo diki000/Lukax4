@@ -1,0 +1,48 @@
+.bankTransferForm {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   height: 100vh;
+}
+
+.paymentForm {
+   border: 5px inset #f9a7d6;
+   border-radius: 5px;
+   padding: 20px;
+}
+
+.title {
+   padding: 10px 0;
+}
+
+.inputStyle {
+   padding: 8px;
+   font-size: 16px;
+   border: 3px solid #ccc;
+   border-radius: 5px;
+   box-sizing: border-box;
+   
+   .valid {
+      border-color: green;
+   }
+
+}
+
+.inputStyle:focus {
+   outline: none;
+}
+
+.invalid {
+   padding: 5px;
+   color: red;
+}
+
+.payButton {
+   background-color: #f9a7d6;
+   border: none;
+   border-radius: 5px;
+   padding: 10px;
+   font-size: 16px;
+   cursor: pointer;
+   width: 100%;
+}

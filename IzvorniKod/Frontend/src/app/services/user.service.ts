@@ -2,13 +2,15 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../models/User';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { Wallet } from '../models/Wallet';
+import { Transaction } from '../models/Transaction';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
   url: string = "https://localhost:7020/api/User";
-  currentUser: User = new User("","","","","","",false,0,"");
+  currentUser: User = new User(0,"","","","","","",false,0,"");
   private decodedPayload:any = 1;
   checkToken() {
     if(localStorage.getItem('jwt') != undefined) {
@@ -16,7 +18,7 @@ export class UserService {
         const payload = token!.split('.')[1];
         const decodedToken = window.atob(payload);
         this.decodedPayload = JSON.parse(decodedToken);
-        let user = new User(this.decodedPayload.Username, "", this.decodedPayload.Name, this.decodedPayload.Surname, "", this.decodedPayload.Email, false, this.decodedPayload.RoleID, token!);
+        let user = new User(this.decodedPayload.UserId, this.decodedPayload.Username, "", this.decodedPayload.Name, this.decodedPayload.Surname, "", this.decodedPayload.Email, false, this.decodedPayload.RoleID, token!);
         this.updateLoggedInState(true);
         if(this.decodedPayload.RoleID == 3) this.updateAdminState(true);
         this.setCurrentUser(user);
@@ -27,7 +29,7 @@ export class UserService {
   }
   public getDecodedToken(){
     if(this.decodedPayload != 1) {
-      let user = new User(this.decodedPayload.Username, "", this.decodedPayload.Name, this.decodedPayload.Surname, "", this.decodedPayload.Email, false, this.decodedPayload.RoleID, "");
+      let user = new User(this.decodedPayload.UserId, this.decodedPayload.Username, "", this.decodedPayload.Name, this.decodedPayload.Surname, "", this.decodedPayload.Email, false, this.decodedPayload.RoleID, "");
       return user;
     }
     return null;
@@ -40,6 +42,8 @@ export class UserService {
   
   isLoggedIn$ = this.authSubject.asObservable();
   isAdmin$ = this.authSubject.asObservable();
+  moneyToTransfer: number = 0;
+  balance: number = 0;
 
   updateLoggedInState(status: boolean){
       this.authSubject.next(status);
@@ -84,8 +88,8 @@ export class UserService {
   }
 
 
-  public setCurrentUser(user: User){
-    this.currentUser = user;
+  public setCurrentUser(user: any){
+    this.currentUser = new User(user.UserId, user.Username, user.Password, user.Name, user.Surname, user.IBAN, user.Email, user.isEmailConfirmed, user.RoleId, user.idImagePath);
     this.authSubject.next(true);
   }
 
@@ -101,11 +105,27 @@ export class UserService {
   }
 
   public logout(){
-    this.currentUser = new User("","","","","","",false,0,"");
+    this.currentUser = new User(0,"","","","","","",false,0,"");
     this.authSubject.next(false);
     this.adminSubject.next(false);
     if(localStorage.getItem('jwt') != null)
       localStorage.removeItem('jwt');
     }
+    public getBalance(id: number): Observable<Wallet>{
+      return this.http.get<Wallet>(this.url + "/GetWallet?id=" + id);
+    }
   
+    public getTransactions(id: number): Observable<Transaction[]>{
+      return this.http.get<Transaction[]>(this.url + "/GetLast5Transactions?id=" + id);
+    }
+  
+    public addPayment(Id: number, Amount: number): Observable<any>{
+      let httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type':  'application/json',
+        })
+      };
+      let body = JSON.stringify({Id, Amount});
+      return this.http.post<any>(this.url + "/AddPayment", body, httpOptions);
+    }
 }
