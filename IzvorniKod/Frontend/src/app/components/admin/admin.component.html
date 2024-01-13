@@ -35,35 +35,35 @@
     <div class="allUsers">
         <div class="container" *ngFor="let user of AllUsers">
             <div class="userValues">
-                <span>{{user.name}}</span>
-                <span>{{user.surname}}</span>
-                <span>{{user.roleID}}</span>
-                <span>{{user.email}}</span>
+                <span>{{user.Name}}</span>
+                <span>{{user.Surname}}</span>
+                <span>{{user.RoleId}}</span>
+                <span>{{user.Email}}</span>
                 <span >
                     <div class="showMoreButton">
-                        <button (click)="expandUser(user.id)">{{ isUserExpanded(user.id) ? 'Prikaži manje' : 'Prikaži više' }}</button>
+                        <button (click)="expandUser(user.UserId)">{{ isUserExpanded(user.UserId) ? 'Prikaži manje' : 'Prikaži više' }}</button>
                     </div>
                 </span>
             </div>
-            <div [ngClass]="{'open': isUserExpanded(user.id), 'close' : !isUserExpanded(user.id)}">
+            <div [ngClass]="{'open': isUserExpanded(user.UserId), 'close' : !isUserExpanded(user.UserId)}">
                 <div style="border: 1px solid gray;"></div>
                 <div class="expandedViewAttributes">
                     <div>
                         <div class="keyValue">
                             <div class="title2">Korisničko ime: </div>
-                            <input type="text" class="value" [(ngModel)]="user.username">
+                            <input type="text" class="value" [(ngModel)]="user.Username">
                         </div>
                         <div class="keyValue">
                             <div class="title2">Lozinka: </div>
-                            <input disabled type="text" class="value" [(ngModel)]="user.password">
+                            <input disabled type="text" class="value" [(ngModel)]="user.Password">
                         </div>
                         <div class="keyValue">
                             <div class="title2">Email: </div>
-                            <input type="text" class="value" [(ngModel)]="user.email">
+                            <input type="text" class="value" [(ngModel)]="user.Email">
                         </div>
                         <div class="keyValue">
                             <div class="title2">Vrsta računa: </div>
-                            <select [(ngModel)]="user.roleID" name="type" id="">
+                            <select [(ngModel)]="user.RoleId" name="type" id="">
                                 <option value="1">Klijent</option>
                                 <option value="2">Voditelj parkinga</option>
                             </select>
@@ -73,15 +73,15 @@
                     <div>
                         <div class="keyValue">
                             <div class="title2">Ime: </div>
-                            <input type="text" class="value" [(ngModel)]="user.name">
+                            <input type="text" class="value" [(ngModel)]="user.Name">
                         </div>
                         <div class="keyValue">
                             <div class="title2">Prezime: </div>
-                            <input type="text" class="value" [(ngModel)]="user.surname">
+                            <input type="text" class="value" [(ngModel)]="user.Surname">
                         </div>
                         <div class="keyValue">
                             <div class="title2">IBAN: </div>
-                            <input type="text" class="value" [(ngModel)]="user.iban">
+                            <input type="text" class="value" [(ngModel)]="user.IBAN">
                         </div>
                         <div class="keyValue">
                             <img width="100px" height="100px" [src]="'https://localhost:7020/' + user.idImagePath">
@@ -90,7 +90,7 @@
 
                     <div class="actionContainer">
                         <button class="saveButton"  (click)="saveChanges(user)">Pohrani promjene</button>
-                        <button class="deleteButton" (click)="deleteUser(user.username)">Izbriši korisnika</button>
+                        <button class="deleteButton" (click)="deleteUser(user.Username)">Izbriši korisnika</button>
                     </div>
                 </div>
             </div>

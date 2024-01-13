@@ -19,6 +19,7 @@ export class OwnerComponent implements OnInit{
     otvorStatistika : boolean = false;
     otvoriMapu : boolean = false;
     parkingSpots: ParkingSpace[] = [];
+    isOwner: boolean = false;
 
     createParkingForm: FormGroup = new FormGroup({});
 
@@ -30,6 +31,8 @@ export class OwnerComponent implements OnInit{
     };
 
     ngOnInit(): void {
+        this.isOwner = this.userservice.currentUser.RoleId == 2;
+        console.log(this.isOwner);
         this.createParkingForm = new FormGroup({
             ManagerId: new FormControl('', [Validators.required]),
             ParkingName: new FormControl('', [Validators.required]),

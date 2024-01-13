@@ -12,7 +12,7 @@ import { UserService } from 'src/app/services/user.service';
 export class AdminComponent implements OnInit{
   constructor(private adminService: AdminService, private userService: UserService) { }
   UnapprovedManagers: any[] = [];
-  AllUsers: any[] = [];
+  AllUsers: User[] = [];
   isAdmin$ : Observable<boolean> | undefined;
 
   expandedUsers: Set<number> = new Set<number>();
@@ -23,9 +23,12 @@ export class AdminComponent implements OnInit{
     });
     this.isAdmin$ = this.userService.isAdmin();
 
-    this.adminService.getAllUsers().subscribe((data: User[]) => {
-      this.AllUsers = data;
-      this.AllUsers = this.AllUsers.filter((user) => user.roleID != 3);
+    this.adminService.getAllUsers().subscribe((data: any[]) => {
+      data.forEach((user) => {
+        this.AllUsers.push(new User(user.userId, user.username, user.password, user.name, user.surname, user.iban, user.email, user.isEmailConfirmed, user.roleID, "",user.idImagePath));
+      });
+      console.log(this.AllUsers);
+      this.AllUsers = this.AllUsers.filter((user) => user.RoleId != 3);
     });
   }
 
@@ -53,9 +56,8 @@ export class AdminComponent implements OnInit{
     return this.expandedUsers.has(id);
   }
 
-  saveChanges(user: any){
-    var u = new User(user.id ,user.username, user.password, user.name, user.surname, user.iban, user.email, user.isEmailConfirmed, user.roleID, user.idImagePath);
-    this.adminService.updateUser(u).subscribe(() => {
+  saveChanges(user: User){
+    this.adminService.updateUser(user).subscribe(() => {
       alert("Uspjesno aržuriranje");
     },
     (error) => {
@@ -78,7 +80,7 @@ export class AdminComponent implements OnInit{
 
   deleteUser(username: string){
     this.adminService.deleteUser(username).subscribe(() => {
-      this.AllUsers = this.AllUsers.filter((user) => user.username != username);
+      this.AllUsers = this.AllUsers.filter((user) => user.Username != username);
     });
   }
 }

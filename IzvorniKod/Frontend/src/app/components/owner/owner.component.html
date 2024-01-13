@@ -5,7 +5,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
-    <div class="create-parking">
+    <div class="create-parking" *ngIf="isOwner">
         <div class="container">
             <div class="closing-icon" (click)="closeCreateParking()">
                 <i class="bx bx-x icon"></i>

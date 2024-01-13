@@ -1,6 +1,6 @@
 .unapproved-managers-wrapper{
     width: 50%;
-    margin: 0 auto;
+    margin: 70px auto;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -78,7 +78,7 @@
 }
 
 .allUsersContainer {
-    margin-top: 50px;
+    margin: 50px 100px;
     text-align: center;
 }
 
@@ -168,11 +168,12 @@
 
 .value {
     font-size: 20px;
+    width: 50%;
 }
 
 .actionContainer {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     gap: 20px;
     margin-top: 20px;
@@ -184,6 +185,7 @@
         border-radius: 5px;
         font-size: 16px;
         color: white;
+        width: 100%;
 
     }
 
@@ -193,5 +195,6 @@
         border-radius: 5px;
         font-size: 16px;
         color: white;
+        width: 100%;
     }
 }

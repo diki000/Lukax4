@@ -240,6 +240,16 @@ namespace SpotPicker.Services
 
                         _db.Manager.Add(newManager);
                     }
+
+                    Wallet newWallet = new Wallet()
+                    {
+                        User = newUser,
+                        Balance = 0
+
+                    };
+
+                    _db.Wallets.Add(newWallet);
+
                     _db.SaveChanges();
                     var currentUser = _db.User.Where(u => u.Username == newUser.Username).FirstOrDefault();
                     _emailSender.SendEmailConfirmation(currentUser.Id, currentUser.Email);
@@ -363,14 +373,6 @@ namespace SpotPicker.Services
             List<Transaction> transakcije = _db.Transactions
                 .Where(t => t.UserID == id)
                 .ToList();
-
-            if (transakcije.Count == 0)
-            {
-                Console.WriteLine("No transactions found for given user.");
-                var ex = new Exception();
-                ex.Data["Code"] = 400;
-                throw ex;
-            }
 
             // Convert Transaction entities to TransactionModel (if necessary)
             List<TransactionModel> transactionModels = transakcije.Select(t => new TransactionModel

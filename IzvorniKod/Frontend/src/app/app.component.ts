@@ -10,9 +10,10 @@ import { Observable, tap } from 'rxjs';
 })
 export class AppComponent {
   title = 'Programsko inženjerstvo';
-
+  loggedIn$ : Observable<boolean> | undefined;
   constructor(private http: HttpClient, private userService: UserService) { }
 
   ngOnInit(): void {
+    this.loggedIn$ = this.userService.isLoggedIn();
   }
 }
