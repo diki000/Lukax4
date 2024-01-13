@@ -13,3 +13,5 @@
 
 *.vs
 /IzvorniKod/Backend/SpotPicker/SpotPicker/Migrations/_EFCoreModelSnapshot.cs
+/.vs/slnx.sqlite
+/.vs/VSWorkspaceState.json
