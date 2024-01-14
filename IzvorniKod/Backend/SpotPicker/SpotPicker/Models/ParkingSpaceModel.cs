@@ -2,6 +2,7 @@
 {
     public class ParkingSpaceModel
     {
+        public int ParkingSpaceId { get; set; } 
         public int ParkingId { get; set; }
 
         public int ParkingSpaceType { get; set; }

@@ -96,7 +96,7 @@ export class MapComponent implements OnInit {
       for(var i = 0; i < markedSpots[0].length; i++){
         points!.push(new Point(markedSpots[0][i].lat, markedSpots[0][i].lng, 0));
       }
-      var newSpot = new ParkingSpace(0, 1, 0,0, points);
+      var newSpot = new ParkingSpace(0, 0, 1, 0,0, points);
       this.parkingSpots.push(newSpot);
       this.parkingSpotsChange.emit(this.parkingSpots);
     });
@@ -111,7 +111,7 @@ export class MapComponent implements OnInit {
           }
           );
         });
-        var newSpot = new ParkingSpace(0, 1, 0, 0, points);
+        var newSpot = new ParkingSpace(0, 0, 1, 0, 0, points);
         this.parkingSpots = this.parkingSpots.filter((spot: ParkingSpace) => !spot.equals(newSpot));
         this.parkingSpotsChange.emit(this.parkingSpots);
       });
@@ -172,13 +172,13 @@ export class MapComponent implements OnInit {
               }
               );
             });
-            let selectedParkingSpot = new ParkingSpace(0, 0, 0, 0, points);
+            let selectedParkingSpot = new ParkingSpace(0,0, 0, 0, 0, points);
             if(layer.options.color == 'green'){
-              let selectedParkingSpot = new ParkingSpace(0, 0, 0, 0, points);
+              let selectedParkingSpot = new ParkingSpace(0,0, 0, 0, 0, points);
               layer.setStyle({ color: 'yellow' });
             }
             else{
-              let selectedParkingSpot = new ParkingSpace(0, 0, 1, 0, points);
+              let selectedParkingSpot = new ParkingSpace(0,0, 0, 1, 0, points);
               layer.setStyle({ color: 'green' });
             }
             this.parkingSpots.forEach((spot: ParkingSpace) => {

@@ -18,6 +18,7 @@ import { OwnerComponent } from './components/owner/owner.component';
 import { MapComponent } from './components/map/map.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { UnregisteredMapComponent } from './components/unregistered-map/unregistered-map.component';
+import { ReservationComponent } from './components/reservation/reservation.component';
 
 
 @NgModule({
@@ -34,7 +35,8 @@ import { UnregisteredMapComponent } from './components/unregistered-map/unregist
     OwnerComponent,
     MapComponent,
     SidebarComponent,
-    UnregisteredMapComponent
+    UnregisteredMapComponent,
+    ReservationComponent
   ],
   imports: [
     FormsModule,

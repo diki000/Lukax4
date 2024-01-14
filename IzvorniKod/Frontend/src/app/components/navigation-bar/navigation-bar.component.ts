@@ -13,7 +13,7 @@ import { UserService } from 'src/app/services/user.service';
 export class NavigationBarComponent implements OnInit{
   loggedIn$ : Observable<boolean> | undefined;
   currentUser : User | null = null;
-  openPreview: boolean = true;
+  openPreview: boolean = false;
 
   wallet = 0;
   paymentPopup = false;
