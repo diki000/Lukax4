@@ -206,5 +206,22 @@ namespace SpotPicker.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("api/[controller]/getAllReservationsForChosenPlaces")]
+        public IActionResult getReservations(List<int> ids)
+        {
+            try
+            {
+                List <Tuple<DateTime, DateTime>> reservationsForCalendar = _userFunctions.checkReservations(ids);
+                return Ok(reservationsForCalendar);
+            }
+            catch (Exception e)
+            {
+                var statusCode = (int)e.Data["Kod"];
+                return StatusCode(statusCode);
+            }
+        }
+
+
     }
 }

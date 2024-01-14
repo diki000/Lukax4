@@ -448,5 +448,42 @@ namespace SpotPicker.Services
             _db.SaveChanges();
         }
 
+        public List<Tuple<DateTime, DateTime>> checkReservations(List<int> ids)
+        {
+            try
+            {
+                // Validate input
+                if (ids == null || !ids.Any())
+                {
+                    throw new ArgumentException("List of parking space IDs is required.");
+                }
+
+                // Get reserved dates and druation times for each parking space from frontend
+                List<Tuple<DateTime, DateTime>> reservedTimes = new List<Tuple<DateTime, DateTime>>();
+
+                foreach (var parkingSpaceId in ids)
+                {
+                    // Find reservations for the parking space
+                    var reservations = _db.Reservations
+                        .Where(r => r.ParkingSpaceID == parkingSpaceId/* &&
+                                    r.ReservationDate >= DateTime.Now/* &&
+                                    DateTime.Now >= r.ReservationDuration*/)
+                        .Select(r => Tuple.Create(r.ReservationDate, r.ReservationDuration))
+                        .ToList();
+
+                    // Add reservations to the reservedTimes list
+                    reservedTimes.AddRange(reservations);
+                }
+
+                return reservedTimes;
+            }
+            catch (Exception e)
+            {
+                // Handle exceptions or log errors
+                Console.WriteLine($"An error occurred: {e.Message}");
+                throw; // Rethrow the exception to propagate it further
+            }
+        }
+
     }
 }
