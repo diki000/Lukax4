@@ -212,7 +212,7 @@ namespace SpotPicker.Controllers
         {
             try
             {
-                List <Tuple<DateTime, DateTime>> reservationsForCalendar = _userFunctions.checkReservations(ids);
+                List<Tuple<int, DateTime, DateTime>> reservationsForCalendar = _userFunctions.checkReservations(ids);
                 return Ok(reservationsForCalendar);
             }
             catch (Exception e)
@@ -222,6 +222,36 @@ namespace SpotPicker.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("api/[controller]/getAllFreePlacesForGivenTime")]
+        public IActionResult getAllFreePlacesForGivenTime(DateTime reservationDate, DateTime reservationDuration)
+        {
+            try
+            {
+                List<int> freePlaces = _userFunctions.getAllAvailableSpots(reservationDate, reservationDuration);
+                return Ok(freePlaces);
+            }
+            catch (Exception e)
+            {
+                var statusCode = (int)e.Data["Kod"];
+                return StatusCode(statusCode);
+            }
+        }
 
+        [HttpPost]
+        [Route("api/[controller]/makeReservation")]
+        public IActionResult makeReservation(int userId, int psId, DateTime rDate, DateTime rDuration, bool repeat)
+        {
+            try
+            {
+                _userFunctions.makeReservation(userId, psId, rDate, rDuration, repeat);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                var statusCode = (int)e.Data["Kod"];
+                return StatusCode(statusCode);
+            }
+        }
     }
 }
