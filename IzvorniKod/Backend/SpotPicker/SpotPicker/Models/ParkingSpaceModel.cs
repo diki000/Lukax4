@@ -8,7 +8,7 @@
         public int ParkingSpaceType { get; set; }
         public int hasSensor { get; set; }
         public int isOccupied { get; set; }
-
+        public int reservationPossible { get; set; }
         public PointModel[]? points { get; set; }
     }
 }

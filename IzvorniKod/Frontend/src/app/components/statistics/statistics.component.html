@@ -1,0 +1,45 @@
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+<div class="statistics-wrapper">
+    <div class="chart1">
+        <!-- <div class="title">
+            Moja parkirališta
+        </div> -->
+        <div class="parkings-header">
+            <div class="parking-line">
+                <div class="parking-name-header">
+                    Ime Parkinga
+                </div>
+                <div class="parking-occupancy-header">
+                    Zauzeta Mjesta / Kapacitet
+                </div>
+                <div class="placeholder-for-delete">
+                </div>
+            </div>
+        </div>
+        <div *ngFor="let parking of Parkings; index as i" class="parkings">
+            <div class="parking">
+                <div class="parking-name">
+                    {{parking.Name}}
+                </div>
+                <div class="parking-occupancy">
+                    {{parkingOccupancy[i]}}/{{parking.parkingSpaces.length}}
+                </div>
+                <div class="delete-parking" (click)="deleteParking(i)" >
+                    <i class="bx bx-x icon" aria-label="obriši parking"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="chart2">
+        <div class="chart-container">
+            <canvas  id="MyChart" >{{ chart }}</canvas>
+      </div>
+    </div>
+    <div class="chart3">
+
+    </div>
+    <div class="chart4">
+
+    </div>
+</div>

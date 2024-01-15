@@ -19,6 +19,7 @@ import { MapComponent } from './components/map/map.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { UnregisteredMapComponent } from './components/unregistered-map/unregistered-map.component';
 import { ReservationComponent } from './components/reservation/reservation.component';
+import { StatisticsComponent } from './components/statistics/statistics.component';
 
 import { CalendarModule } from 'primeng/calendar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -41,7 +42,8 @@ import { RadioButtonModule } from 'primeng/radiobutton';
     UnregisteredMapComponent,
     ReservationComponent,
     
-
+,
+    StatisticsComponent
   ],
   imports: [
     FormsModule,

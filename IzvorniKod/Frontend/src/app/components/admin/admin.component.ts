@@ -27,7 +27,6 @@ export class AdminComponent implements OnInit{
       data.forEach((user) => {
         this.AllUsers.push(new User(user.userId, user.username, user.password, user.name, user.surname, user.iban, user.email, user.isEmailConfirmed, user.roleID, "",user.idImagePath));
       });
-      console.log(this.AllUsers);
       this.AllUsers = this.AllUsers.filter((user) => user.RoleId != 3);
     });
   }

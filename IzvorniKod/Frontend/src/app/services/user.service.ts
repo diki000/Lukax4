@@ -111,23 +111,24 @@ export class UserService {
     if(localStorage.getItem('jwt') != null)
       localStorage.removeItem('jwt');
     }
-    public getBalance(id: number): Observable<Wallet>{
-      return this.http.get<Wallet>(this.url + "/GetWallet?id=" + id);
-    }
-  
-    public getTransactions(id: number): Observable<Transaction[]>{
-      return this.http.get<Transaction[]>(this.url + "/GetLast5Transactions?id=" + id);
-    }
-  
-    public addPayment(Id: number, Amount: number): Observable<any>{
-      let httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type':  'application/json',
-        })
-      };
-      let body = JSON.stringify({Id, Amount});
-      return this.http.post<any>(this.url + "/AddPayment", body, httpOptions);
-    }
+
+  public getBalance(id: number): Observable<Wallet>{
+    return this.http.get<Wallet>(this.url + "/GetWallet?id=" + id);
+  }
+
+  public getTransactions(id: number): Observable<Transaction[]>{
+    return this.http.get<Transaction[]>(this.url + "/GetLast5Transactions?id=" + id);
+  }
+
+  public addPayment(Id: number, Amount: number): Observable<any>{
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+      })
+    };
+    let body = JSON.stringify({Id, Amount});
+    return this.http.post<any>(this.url + "/AddPayment", body, httpOptions);
+  }
 
     public payForReservation(Id: number, Amount: number): Observable<any>{
       let httpOptions = {

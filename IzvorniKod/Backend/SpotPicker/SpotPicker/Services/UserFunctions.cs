@@ -28,6 +28,12 @@ namespace SpotPicker.Services
             _emailSender = new EmailSender(_config, service,  database);
         }
 
+        public UserFunctions(_EFCore database, IConfiguration config)
+        {
+            _db = database;
+            _config = config;
+        }
+
         // funkcija za provjeru validnosti IBAN-a
         public static bool CheckIban(string iban)
         {
@@ -433,7 +439,15 @@ namespace SpotPicker.Services
             }
 
 
-            userWallet.Balance -= amount;
+            if (userWallet.Balance >= amount)
+            {
+                userWallet.Balance -= amount;
+            } else
+            {
+                var ex = new Exception();
+                ex.Data["Kod"] = 421; // nedovoljno na racunu
+                throw ex;
+            }
 
             Transaction transaction = new Transaction
             { 
