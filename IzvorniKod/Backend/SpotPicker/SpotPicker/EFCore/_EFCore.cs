@@ -16,6 +16,7 @@ namespace SpotPicker.EFCore
         public DbSet<Point> Points { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Wallet> Wallets { get; set; }
+        public DbSet<InstantReservation> InstantReservations { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Manager>()
