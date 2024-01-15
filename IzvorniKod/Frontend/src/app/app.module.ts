@@ -41,8 +41,6 @@ import { RadioButtonModule } from 'primeng/radiobutton';
     SidebarComponent,
     UnregisteredMapComponent,
     ReservationComponent,
-    
-,
     StatisticsComponent
   ],
   imports: [
