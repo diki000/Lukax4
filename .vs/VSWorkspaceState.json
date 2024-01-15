@@ -10,6 +10,6 @@
     "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\Models",
     "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\Services"
   ],
-  "SelectedNode": "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\EFCore\\_EFCore.cs",
+  "SelectedNode": "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\Services\\UserFunctions.cs",
   "PreviewInSolutionExplorer": false
 }

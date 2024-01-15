@@ -548,6 +548,37 @@ namespace SpotPicker.Services
                     IsRepeating = repeat
                 };
 
+
+                // Check if a reservation with the given criteria exists in the database
+                bool reservationExists = _db.Reservations.Any(r =>
+                    r.ParkingSpaceID == reservation.ParkingSpaceID &&
+                    r.ReservationDate == reservation.ReservationDate &&
+                    r.ReservationDuration == reservation.ReservationDuration
+                );
+
+                if (reservationExists)
+                {
+                    var ex = new Exception("Reservation already exists.");
+                    ex.Data["Code"] = 405;
+                    throw ex;
+                }
+
+                // Check if there are overlapping reservations for the given parking space
+                bool hasOverlappingReservations = _db.Reservations.Any(r =>
+                        r.ParkingSpaceID == reservation.ParkingSpaceID &&
+                        ((r.ReservationDate <= reservation.ReservationDate && r.ReservationDuration >= reservation.ReservationDate) ||
+                        (r.ReservationDate <= reservation.ReservationDuration && r.ReservationDuration >= reservation.ReservationDuration) ||
+                        (r.ReservationDate >= reservation.ReservationDate && r.ReservationDuration <= reservation.ReservationDuration))
+                    );
+
+                // Check if there are overlapping reservations for the parking space
+                if (hasOverlappingReservations)
+                {
+                    var ex = new Exception("Overlapping reservations exist for the selected time period.");
+                    ex.Data["Code"] = 406;
+                    throw ex;
+                }
+
                 // Add the reservation to the database
                 _db.Reservations.Add(reservation);
 
