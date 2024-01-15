@@ -30,7 +30,6 @@ export class NavigationBarComponent implements OnInit{
       this.userService.updateLoggedInState(true);
       this.userService.checkToken();
       this.currentUser = this.userService.getCurrentUser(); 
-      console.log(this.currentUser)
       this.loggedIn$ = this.userService.isLoggedIn();
       if(this.currentUser!.RoleId == 3){
         this.userService.updateAdminState(true);
@@ -62,6 +61,7 @@ export class NavigationBarComponent implements OnInit{
   logOut(){
     this.userService.logout();
     this.router.navigate(['/login']);
+    this.userService.updateLoggedInState(false);
   }
 
   openWalletPreview() {

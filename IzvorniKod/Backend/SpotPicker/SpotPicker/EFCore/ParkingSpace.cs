@@ -15,6 +15,7 @@ namespace SpotPicker.EFCore
         public int ParkingSpaceType { get; set; }
         public int hasSensor { get; set; }
         public int isOccupied { get; set; }
+        public int reservationPossible { get; set; }
 
     }
 }

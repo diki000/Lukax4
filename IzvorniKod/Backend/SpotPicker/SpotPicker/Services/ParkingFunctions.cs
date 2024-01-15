@@ -21,7 +21,8 @@ namespace SpotPicker.Services
                 PricePerHour= parking.PricePerHour,
                 ManagerId= parking.ManagerId,
                 Name = parking.Name,
-                Description= parking.Description
+                Description= parking.Description,
+                NumberOfBikePS= parking.NumberOfBikePS,
             };
             _db.Parkings.Add(dbParking);
             _db.SaveChanges();
@@ -33,7 +34,8 @@ namespace SpotPicker.Services
                     ParkingId = currentParkingId,
                     ParkingSpaceType = parking.parkingSpaces[i].ParkingSpaceType,
                     hasSensor = parking.parkingSpaces[i].hasSensor,
-                    isOccupied = parking.parkingSpaces[i].isOccupied
+                    isOccupied = parking.parkingSpaces[i].isOccupied,
+                    reservationPossible = parking.parkingSpaces[i].reservationPossible,
                 };
 
                 _db.ParkingSpaces.Add(parkingSpace);
@@ -65,11 +67,13 @@ namespace SpotPicker.Services
             {
                 List<ParkingSpaceModel> parkingSpacesResult = new List<ParkingSpaceModel>();
                 ParkingModel currentParking = new ParkingModel() { 
+                    ParkingId = parkings[i].Id,
                     ManagerId = parkings[i].ManagerId,
                     Name = parkings[i].Name,
                     Description= parkings[i].Description,
                     idParkingImagePath = parkings[i].idParkingImagePath,
-                    PricePerHour = parkings[i].PricePerHour
+                    PricePerHour = parkings[i].PricePerHour,
+                    NumberOfBikePS = parkings[i].NumberOfBikePS,
                 };
 
                 clearInstantReservations(parkings[i].Id);
@@ -81,7 +85,8 @@ namespace SpotPicker.Services
                         ParkingSpaceType = currentParkingSpaces[j].ParkingSpaceType,
                         ParkingId = currentParkingSpaces[j].ParkingId,
                         hasSensor = currentParkingSpaces[j].hasSensor,
-                        isOccupied = currentParkingSpaces[j].isOccupied
+                        isOccupied = currentParkingSpaces[j].isOccupied,
+                        reservationPossible = currentParkingSpaces[j].reservationPossible,
                     };
                     Point[] currentPoints = points.Where(p => p.ParkingSpaceId == currentParkingSpaces[j].Id).ToArray();
                     List<PointModel> pointsResult = new List<PointModel>();
@@ -207,6 +212,24 @@ namespace SpotPicker.Services
             }
 
             return nearestParkingSpaceCoordinates;
+        }
+        public void deleteParking(int parkingId)
+        {
+            Parking parkingToDelete = _db.Parkings.Find(parkingId);
+            _db.Parkings.Remove(parkingToDelete);
+            _db.SaveChanges();
+            var parkingSpaces = _db.ParkingSpaces.Where(p => p.ParkingId == parkingId).ToList();
+            parkingSpaces.ForEach(parkingSpace =>
+            {
+                var points = _db.Points.Where(p => p.ParkingSpaceId == parkingSpace.Id).ToList();
+                points.ForEach(point =>
+                {
+                    _db.Points.Remove(point);
+                });
+                _db.ParkingSpaces.Remove(parkingSpace);
+            });
+            _db.SaveChanges();
+
         }
     }
 }

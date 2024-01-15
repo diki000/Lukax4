@@ -66,8 +66,7 @@ export class BankTransferComponent {
         let year1 = "20" + value.slice(5, 7);
         const currentDate = new Date();
         const expirationDate = new Date(Number(year1), Number(month) - 1, 1);
-        console.log(expirationDate);
-        console.log(currentDate);
+
         this.isExpired = expirationDate < currentDate;
         if(!this.isExpired) {
           this.cvcInput.nativeElement.focus();
@@ -79,7 +78,6 @@ export class BankTransferComponent {
     inputElement.value = value;
 
     
-    console.log(this.isExpired);
   }
 
   formatCVC(event: Event) {

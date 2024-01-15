@@ -12,7 +12,6 @@ export class ParkingService {
   constructor(private http: HttpClient) { }
 
   public addNewParking(parking: Parking): Observable<any>{
-    console.log(parking)
     let httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -23,6 +22,9 @@ export class ParkingService {
   }
   public getAllParkings(): Observable<Parking[]>{
     return this.http.get<Parking[]>(this.url + "/GetAllParkings");
+  }
+  public deleteParking(id: number): Observable<any>{
+    return this.http.get<any>(this.url + "/DeleteParking?parkingId=" + id);
   }
 
 }

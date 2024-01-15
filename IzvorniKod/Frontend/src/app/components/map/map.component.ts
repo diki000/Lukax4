@@ -23,6 +23,7 @@ export class MapComponent implements OnInit {
   private map!: L.Map;
   private drawnItems: L.FeatureGroup = new L.FeatureGroup() ;
   sensorModeEnabled = false;
+  reservationModeEnabled = false;
   private centroid: L.LatLngExpression = [45.79704, 15.85911];
 
   private initMap(): void {
@@ -96,7 +97,7 @@ export class MapComponent implements OnInit {
       for(var i = 0; i < markedSpots[0].length; i++){
         points!.push(new Point(markedSpots[0][i].lat, markedSpots[0][i].lng, 0));
       }
-      var newSpot = new ParkingSpace(0, 1, 0,0, points);
+      var newSpot = new ParkingSpace(0, 1, 0,0,0, points);
       this.parkingSpots.push(newSpot);
       this.parkingSpotsChange.emit(this.parkingSpots);
     });
@@ -111,7 +112,7 @@ export class MapComponent implements OnInit {
           }
           );
         });
-        var newSpot = new ParkingSpace(0, 1, 0, 0, points);
+        var newSpot = new ParkingSpace(0, 1, 0, 0,0, points);
         this.parkingSpots = this.parkingSpots.filter((spot: ParkingSpace) => !spot.equals(newSpot));
         this.parkingSpotsChange.emit(this.parkingSpots);
       });
@@ -121,18 +122,27 @@ export class MapComponent implements OnInit {
     this.parkingService.getAllParkings().subscribe((parkings) => {
       let userId = this.userService.getDecodedToken()?.UserId;
       parkings.forEach((parking : any) => {
-        var points: LatLngExpression[] = [];
+        console.log(parking);
         parking.parkingSpaces.forEach((spot: any) => {
+          var points: LatLngExpression[] = [];
           spot.points.forEach((point: any) => {
             points.push([point.latitude, point.longitude]);
           });
           var polygon = L.polygon(points);
-          if(spot.hasSensor){
-            polygon.setStyle({ color: 'green' });
+
+          if(spot.hasSensor && spot.reservationPossible){
+            polygon.setStyle({ fillColor: 'green', color: 'blue' });
+          }
+          else if(spot.hasSensor){
+            polygon.setStyle({ fillColor: 'green', color: 'yellow' });
+          }
+          else if(spot.reservationPossible){
+            polygon.setStyle({ color: 'blue', fillColor: 'yellow' });
           }
           else{
             polygon.setStyle({ color: 'yellow' });
           }
+
           if(parking.managerId == userId){
             polygon.addTo(myOldParkings);
           }
@@ -172,14 +182,12 @@ export class MapComponent implements OnInit {
               }
               );
             });
-            let selectedParkingSpot = new ParkingSpace(0, 0, 0, 0, points);
-            if(layer.options.color == 'green'){
-              let selectedParkingSpot = new ParkingSpace(0, 0, 0, 0, points);
-              layer.setStyle({ color: 'yellow' });
+            let selectedParkingSpot = new ParkingSpace(0, 0, 0, 0, 0,points);
+            if(layer.options.fillColor == 'green'){
+              layer.setStyle({ fillColor: 'yellow'});
             }
             else{
-              let selectedParkingSpot = new ParkingSpace(0, 0, 1, 0, points);
-              layer.setStyle({ color: 'green' });
+              layer.setStyle({ fillColor: 'green' });
             }
             this.parkingSpots.forEach((spot: ParkingSpace) => {
               if(spot.equals(selectedParkingSpot)){
@@ -191,10 +199,50 @@ export class MapComponent implements OnInit {
           }
         });
       }
+      if(this.reservationModeEnabled){
+        this.drawnItems.eachLayer((layer: L.Layer) => {
+          if (layer instanceof L.Polygon && layer.getBounds().contains(event.latlng)) {
+            var points: Point[] | undefined = [];
+            layer.getLatLngs().forEach((point: any) => {
+              point.forEach((point: any) => {
+                points!.push(new Point(point.lat, point.lng, 0));
+              }
+              );
+            });
+            let selectedParkingSpot = new ParkingSpace(0, 0, 0, 0, 0,points);
+            if(layer.options.color == 'blue'){
+              if(layer.options.fillColor == 'green'){
+                layer.setStyle({ color: 'yellow', fillColor: 'green'});
+              }
+              else{
+                layer.setStyle({ color: 'yellow'});
+              }
+            }
+            else{
+              if(layer.options.fillColor == 'green'){
+                layer.setStyle({ color: 'blue', fillColor: 'green'});
+              }
+              else{
+                layer.setStyle({ color: 'blue', fillColor: 'yellow'});
+              }
+            }
+            this.parkingSpots.forEach((spot: ParkingSpace) => {
+              if(spot.equals(selectedParkingSpot)){
+                spot.reservationPossible = 1 - spot.reservationPossible;
+              }
+            });
+            this.parkingSpotsChange.emit(this.parkingSpots);
+            
+          }
+        });
+      }
     });
   }
   enableSensorMode() {
     this.sensorModeEnabled = !this.sensorModeEnabled;
+  }
+  enableReservationMode(){
+    this.reservationModeEnabled = !this.reservationModeEnabled;
   }
 }
 interface CustomPolygon extends L.Polygon {

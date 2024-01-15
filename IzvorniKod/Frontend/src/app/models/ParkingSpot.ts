@@ -20,12 +20,14 @@ export class ParkingSpace{
     ParkingSpaceType : number;
     hasSensor : number;
     isOccupied : number;
+    reservationPossible : number = 0;
     points : Point[] = [];
-    constructor(parkingId:number, parkingSpaceType:number, hasSensor:number, isOccupied:number, points: Point[] = []) {
+    constructor(parkingId:number, parkingSpaceType:number, hasSensor:number, isOccupied:number,reservationPossible: number, points: Point[] = []) {
         this.ParkingId = parkingId;
         this.ParkingSpaceType = parkingSpaceType;
         this.hasSensor = hasSensor;
         this.isOccupied = isOccupied;
+        this.reservationPossible = reservationPossible;
         this.points = points;
     }
 }

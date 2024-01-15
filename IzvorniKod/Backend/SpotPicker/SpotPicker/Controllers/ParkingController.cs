@@ -75,5 +75,18 @@ namespace SpotPicker.Controllers
                 return StatusCode(statusCode);
             }
         }
+        [HttpGet]
+        [Route("api/[controller]/DeleteParking")]
+        public IActionResult deleteParking([FromQuery] int parkingId)
+        {
+            try
+            {
+                _parkingFunctions.deleteParking(parkingId);
+                return Ok();
+            }catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

@@ -1,0 +1,117 @@
+.statistics-wrapper{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 75%;
+    height: 75%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: 'chart1' 'chart2';
+}
+.chart1{
+    grid-area: chart1;
+    border: 1px solid black;
+    border-left: none;
+    border-top: none;
+    .parkings-header{
+        .parking-line{
+            width:95%;
+            margin: auto;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid black;
+            .parking-name-header{
+                font-size: 12px;
+                font-weight: bold;
+                width: 200px;
+            }
+            .parking-occupancy-header{
+                font-size: 12px;
+                font-weight: bold;
+                width: 160px;
+                text-align: center;
+            }
+            .placeholder-for-delete{
+                width: 50px;
+            }
+        }
+    }
+    .parkings{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+        width: 95%;
+        margin: auto;
+        overflow: auto;
+        .parking{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid black;
+            .parking-name{
+                font-size: 20px;
+                width: 200px;
+            }
+            .parking-occupancy{
+                font-size: 20px;
+                width: 160px;
+                text-align: center;
+
+            }
+            .delete-parking{
+                background-color: rgb(255, 0, 170);
+                color: white;
+                border: none;
+                border-radius: 50%;
+                padding: 5px;
+                font-size: 15px;
+                font-weight: bold;
+                cursor: pointer;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+    
+    }
+
+}
+.chart2{
+    grid-area: chart2;
+    border: 1px solid black;
+    border-right: none;
+    border-top: none;
+
+}
+.chart3{
+    grid-area: chart3;
+    border: 1px solid black;
+    border-left: none;
+    border-bottom: none;
+
+}
+.chart4{
+    grid-area: chart4;
+    border: 1px solid black;
+    border-right: none;
+    border-bottom: none;
+}
+.title{
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+}
