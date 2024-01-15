@@ -8,17 +8,9 @@
 }
 
 .map-container {
-   // position: absolute;
-   // top: 0;
-   // left: 0;
-   // right: 0;
-   // bottom: 0;
-   // margin: 100px;
-   // margin-bottom: 50px;
-   // z-index: 102;
    width: 65%;
    height: calc(100vh - 90px);
-   margin-left: 10px;
+   margin-left: 102px;
 }
 
 .map-frame {
@@ -128,4 +120,63 @@ position: relative;
 .goBack:hover {
    color: black;
    text-decoration: underline;
+}
+
+.zauzetoPopup {
+   z-index: 10000;
+   position: absolute;
+   top: 100px;
+   left: 100px;
+   width: 600px;
+   max-height: 500px;
+   background-color: white;
+   overflow-y: auto;
+   padding: 20px;
+   border-radius: 10px;
+   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+}
+
+.reserved {
+   display: flex;
+   gap: 10px;
+}
+
+.close {
+   cursor: pointer;
+}
+
+.radio {
+   margin: 10px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   gap: 10px;
+}
+
+.fini {
+   border: none;
+   background-color: #ff86ca;
+   font-size: 1.2rem;
+   color: white;
+   cursor: pointer;
+   display: block;
+   margin: 10px auto 0 auto;
+   border-radius: 10px;
+   padding: 10px 20px;
+}
+
+.step3 {
+   padding: 10px;
+
+   label {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin: 10px 0;
+   }
+}
+
+.prompt {
+   font-size: 1.2rem;
+   font-weight: 600;
+   margin: 10px 0;
 }

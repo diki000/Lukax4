@@ -514,7 +514,7 @@ namespace SpotPicker.Services
                 throw ex;
             }
         }
-        public void makeReservation(int userId, int psId, DateTime rDate, DateTime rDuration, bool repeat)
+        public void makeReservation(int userId, int psId, DateTime rDate, DateTime rDuration, bool repeat, bool payedWithCard)
         {
             try
             {
@@ -540,12 +540,12 @@ namespace SpotPicker.Services
                 // Create a new ReservationModel
                 Reservation reservation = new Reservation
                 {
-                    ReservationID = reservationId,
                     UserID = userId,
                     ParkingSpaceID = psId,
                     ReservationDate = rDate,
                     ReservationDuration = rDuration,
-                    IsRepeating = repeat
+                    IsRepeating = repeat,
+                    PayedWithCard = payedWithCard
                 };
 
                 // Add the reservation to the database

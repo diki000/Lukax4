@@ -5,7 +5,7 @@
     </div>
   </div>
   <div class="reservationForm">
-    <div class="wizardContainer">
+    <div  *ngIf="!step3" class="wizardContainer">
       <div class="title">
         {{user.Username}} {{user.Surname}}, rezervaciju možeš izvršiti na dva načina:
       </div>
@@ -22,8 +22,22 @@
             1
           </div>
           <div class="goBack" (click)="stepBack(1)">Idi nazad</div>
-          Označi na  željena parkirna mjesta i zatim klikni na gumb
-          <button (click)="showAvailableTimes()">Prikaži slobodne termine</button>
+          Odaberi od slobodnih termina kada želiš rezervirati parkirno mjesto
+          <div  (click)="togglePopup()" class="goBack close" style="text-align: center; margin-top: 10px;">
+            Prikaži zauzeta vremena
+          </div>
+          <div class="calendarContainer">
+            <span class="p-float-label">
+              <p-calendar [(ngModel)]="startDate1" inputId="od" [touchUI]="true" dateFormat="dd.mm.yy" [showTime]="true" [minDate]="currentDate"></p-calendar>
+              <label for="od">Od:</label>
+            </span>
+            <span style="margin: 0 5px;">-</span>
+            <span class="p-float-label">
+              <p-calendar [(ngModel)]="endDate1" inputId="do" [touchUI]="true" dateFormat="dd.mm.yy" [showTime]="true" [minDate]="startDate1 == undefined ? currentDate : startDate1" [disabled]="startDate1 == undefined"></p-calendar>
+              <label for="do">Do:</label>
+            </span>
+          </div>
+          <button (click)="fistWayFini()">Dovrši</button>
         </div>
         <div class="or">
           &nbsp; ili &nbsp;
@@ -36,12 +50,12 @@
           mi ćemo ti na mapi označiti dostupna parkirna mjesta.
           <div class="calendarContainer">
             <span class="p-float-label">
-              <p-calendar [(ngModel)]="startDate" inputId="od" [touchUI]="true" dateFormat="dd.mm.yy" [showTime]="true"></p-calendar>
+              <p-calendar [(ngModel)]="startDate2" inputId="od" [touchUI]="true" dateFormat="dd.mm.yy" [showTime]="true" [minDate]="currentDate"></p-calendar>
               <label for="od">Od:</label>
             </span>
             <span style="margin: 0 5px;">-</span>
             <span class="p-float-label">
-              <p-calendar [(ngModel)]="endDate" inputId="do" [touchUI]="true" dateFormat="dd.mm.yy" [showTime]="true" [minDate]="startDate == undefined ? currentDate : startDate" [disabled]="startDate == undefined"></p-calendar>
+              <p-calendar [(ngModel)]="endDate2" inputId="do" [touchUI]="true" dateFormat="dd.mm.yy" [showTime]="true" [minDate]="startDate2 == undefined ? currentDate : startDate2" [disabled]="startDate2 == undefined"></p-calendar>
               <label for="do">Do:</label>
             </span>
           </div>
@@ -53,6 +67,63 @@
           </div>
           <div class="goBack" (click)="stepBack(2)">Idi nazad</div>
           Odaberi parkirno mjesto na karti označeno zelenom bojom
+        </div>
+      </div>
+    </div>
+    <div *ngIf="step3 && !final" class="step3">
+      <div class="goBack" (click)="lastStep()">Idi nazad</div>
+      <div class="title">
+        Dovrši rezervaciju za parkirno mjesto {{selectedParkingSpace}} u terminu od {{(startDate1 ? startDate1 : startDate2) | date: 'dd.MM.yy, HH:mm'}} do {{(endDate1 ? endDate1 :endDate2) | date: 'dd.MM.yy, HH:mm'}}
+      </div>
+      <div class="prompt">
+        Cijena po satu: {{payUp | number:'1.2-2'}}
+        Ukupna cijena: {{payUpTotal | number:'1.2-2'}}
+      </div>
+      <div class="prompt">Odaberi naćin plaćanja</div>
+      <div class="radio">
+        <div>
+          <p-radioButton name="payment" value="Na mjestu" [(ngModel)]="selectedPaymentMethod" inputId="payment"></p-radioButton>
+          <label for="payment" class="ml-2">Na mjestu</label>
+        </div>
+        <div>
+          <p-radioButton name="payment" value="wallet" [(ngModel)]="selectedPaymentMethod" inputId="payment"></p-radioButton>
+          <label for="payment" class="ml-2">Iz walleta</label>
+        </div>
+      </div>
+      <div class="prompt">
+        Je li rezervacija ponavljajuća?
+      </div>
+      <div class="radio">
+        <div>
+          <p-radioButton name="pon" value="da" [(ngModel)]="ponavljanje" inputId="pon"></p-radioButton>
+          <label for="payment" class="ml-2">Da</label>
+        </div>
+        <div>
+          <p-radioButton name="pon" value="ne" [(ngModel)]="ponavljanje" inputId="pon"></p-radioButton>
+          <label for="payment" class="ml-2">Ne</label>
+        </div>
+      </div>
+      <button class="fini" (click)="finilize()">{{selectedPaymentMethod == 'wallet' ? "Plati i " : ""}}Rezerviraj</button>
+    </div>
+    <div *ngIf="final" class="title">
+      Rezervacija je uspješno izvršena!
+      Hvala!
+    </div>
+  </div>
+
+</div>
+
+<div class="zauzetoPopup" *ngIf="showPopup">
+  <div class="title">Zauzeti termini</div>
+  <div class="close" style="text-align: end; font-size: 24px;" (click)="togglePopup()">x</div>
+  <div style="border-bottom: 1px solid black;" *ngFor="let zauzeto of reservations">
+    <div class="reserved">
+      <div>
+        Za parkirno mjesto {{zauzeto.space}}, rezervirani termini su:
+      </div>
+      <div>
+        <div *ngFor="let res of zauzeto.reservedDates">
+          {{res.item2 | date: 'dd.MM.yy, HH:mm'}} - {{res.item3 | date: 'dd.MM.yy, HH:mm'}}
         </div>
       </div>
     </div>

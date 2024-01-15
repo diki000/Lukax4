@@ -20,5 +20,6 @@ namespace SpotPicker.EFCore
         public DateTime ReservationDate { get; set; }
         public DateTime ReservationDuration { get; set; }
         public bool IsRepeating { get; set; }    
+        public bool PayedWithCard { get; set; }
     }
 }

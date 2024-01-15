@@ -16,6 +16,7 @@ export class DashboardComponent implements OnInit{
   isLoggedIn$ : Observable<boolean> | undefined;
   openCreateParking: Observable<boolean> = new Observable<false>;
   openStatistics: Observable<boolean> = new Observable<false>;
+  openReservation: Observable<boolean> = new Observable<false>;
 
 
   constructor(private userService: UserService, private sidebarService: SidebarService) {
@@ -37,6 +38,7 @@ export class DashboardComponent implements OnInit{
       this.currentUser = this.userService.getDecodedToken();
       this.openCreateParking = this.sidebarService.openCreateParking$;
       this.openStatistics = this.sidebarService.openStatistics$;
+      this.openReservation = this.sidebarService.openReservation$;
     }
 
 }

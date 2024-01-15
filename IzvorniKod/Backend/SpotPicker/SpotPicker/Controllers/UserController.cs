@@ -208,11 +208,11 @@ namespace SpotPicker.Controllers
 
         [HttpGet]
         [Route("api/[controller]/getAllReservationsForChosenPlaces")]
-        public IActionResult getReservations(List<int> ids)
+        public IActionResult getReservations([FromQuery] List<int> numbers)
         {
             try
             {
-                List<Tuple<int, DateTime, DateTime>> reservationsForCalendar = _userFunctions.checkReservations(ids);
+                List<Tuple<int, DateTime, DateTime>> reservationsForCalendar = _userFunctions.checkReservations(numbers);
                 return Ok(reservationsForCalendar);
             }
             catch (Exception e)
@@ -222,13 +222,17 @@ namespace SpotPicker.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("api/[controller]/getAllFreePlacesForGivenTime")]
-        public IActionResult getAllFreePlacesForGivenTime(DateTime reservationDate, DateTime reservationDuration)
+        public IActionResult getAllFreePlacesForGivenTime([FromBody] JsonObject obj)
         {
             try
             {
+                DateTime reservationDate = DateTimeOffset.Parse( JObject.Parse(obj.ToString())["start"].ToString()).UtcDateTime;
+                DateTime reservationDuration = DateTimeOffset.Parse(JObject.Parse(obj.ToString())["end"].ToString()).UtcDateTime;
+                
                 List<int> freePlaces = _userFunctions.getAllAvailableSpots(reservationDate, reservationDuration);
+                
                 return Ok(freePlaces);
             }
             catch (Exception e)
@@ -240,11 +244,17 @@ namespace SpotPicker.Controllers
 
         [HttpPost]
         [Route("api/[controller]/makeReservation")]
-        public IActionResult makeReservation(int userId, int psId, DateTime rDate, DateTime rDuration, bool repeat)
+        public IActionResult makeReservation([FromBody] JsonObject obj)
         {
             try
             {
-                _userFunctions.makeReservation(userId, psId, rDate, rDuration, repeat);
+                int userId = int.Parse( JObject.Parse(obj.ToString())["userId"].ToString());
+                int psId = int.Parse(JObject.Parse(obj.ToString())["psId"].ToString());
+                DateTime rDate = DateTimeOffset.Parse(JObject.Parse(obj.ToString())["rDate"].ToString()).UtcDateTime;
+                DateTime rDuration = DateTimeOffset.Parse(JObject.Parse(obj.ToString())["rDuration"].ToString()).UtcDateTime;
+                bool repeat = bool.Parse(JObject.Parse(obj.ToString())["repeat"].ToString());
+                bool payedWithCard = bool.Parse(JObject.Parse(obj.ToString())["payedWithCard"].ToString());
+                _userFunctions.makeReservation(userId, psId, rDate, rDuration, repeat, payedWithCard);
                 return Ok();
             }
             catch (Exception e)

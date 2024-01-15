@@ -22,7 +22,7 @@ import { ReservationComponent } from './components/reservation/reservation.compo
 
 import { CalendarModule } from 'primeng/calendar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import { RadioButtonModule } from 'primeng/radiobutton';
 
 @NgModule({
   declarations: [
@@ -52,7 +52,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ReactiveFormsModule,
     CommonModule,
     CalendarModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    RadioButtonModule 
     ],
   providers: [],
   bootstrap: [AppComponent]
