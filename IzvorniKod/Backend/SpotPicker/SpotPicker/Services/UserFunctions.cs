@@ -448,5 +448,118 @@ namespace SpotPicker.Services
             _db.SaveChanges();
         }
 
+        public List<Tuple<int, DateTime, DateTime>> checkReservations(List<int> ids)
+        {
+            try
+            {
+                // Validate input
+                if (ids == null || !ids.Any())
+                {
+                    var ex = new Exception("Given dataset isn't a list of IDs.");
+                    ex.Data["Code"] = 400;
+                    throw ex;
+                }
+
+                // Get reserved dates and duration times for each parking space from frontend
+                List<Tuple<int, DateTime, DateTime>> reservedTimes = new List<Tuple<int, DateTime, DateTime>>();
+
+                foreach (var parkingSpaceId in ids)
+                {
+                    // Find reservations for the parking space
+                    var reservations = _db.Reservations
+                        .Where(r => r.ParkingSpaceID == parkingSpaceId &&
+                                    r.ReservationDate >= DateTimeOffset.UtcNow)
+                        .Select(r => Tuple.Create(parkingSpaceId, r.ReservationDate, r.ReservationDuration))
+                        .ToList();
+
+                    // Add reservations to the reservedTimes list
+                    reservedTimes.AddRange(reservations);
+                }
+
+                return reservedTimes;
+            }
+            catch (Exception e)
+            {
+                var ex = new Exception("Something went wrong.");
+                ex.Data["Code"] = 401;
+                throw ex;
+            }
+        }
+
+
+        public List<int> getAllAvailableSpots(DateTime reservationDate, DateTime reservationDuration)
+        {
+            try
+            {
+                // Find all reservations that overlap with the specified period
+                var overlappingReservations = _db.Reservations
+                    .Where(r => (r.ReservationDate <= reservationDate && r.ReservationDuration >= reservationDate) ||
+                                (r.ReservationDate <= reservationDuration && r.ReservationDuration >= reservationDuration) ||
+                                (r.ReservationDate >= reservationDate && r.ReservationDuration <= reservationDuration))
+                    .Select(r => r.ParkingSpaceID)
+                    .ToList();
+
+                // Find all parking spaces that are NOT in the list of overlapping reservations
+                var availableSpots = _db.ParkingSpaces
+                    .Where(ps => !overlappingReservations.Contains(ps.Id))
+                    .Select(ps => ps.Id)
+                    .ToList();
+
+                return availableSpots;
+            }
+            catch (Exception e)
+            {
+                var ex = new Exception("Something went wrong.");
+                ex.Data["Code"] = 401;
+                throw ex;
+            }
+        }
+        public void makeReservation(int userId, int psId, DateTime rDate, DateTime rDuration, bool repeat)
+        {
+            try
+            {
+                // Check if the given userId exists in the database
+                if (!_db.User.Any(u => u.Id == userId))
+                {
+                    var ex = new Exception("User with the given ID does not exist.");
+                    ex.Data["Code"] = 402;
+                    throw ex;
+                }
+
+                // Check if the given psId exists in the database
+                if (!_db.ParkingSpaces.Any(ps => ps.Id == psId))
+                {
+                    var ex = new Exception("Parking space with the given ID does not exist.");
+                    ex.Data["Code"] = 403;
+                    throw ex;
+                }
+
+                // Generate a unique reservation ID
+                int reservationId = Math.Abs((int)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds.GetHashCode());
+
+                // Create a new ReservationModel
+                Reservation reservation = new Reservation
+                {
+                    ReservationID = reservationId,
+                    UserID = userId,
+                    ParkingSpaceID = psId,
+                    ReservationDate = rDate,
+                    ReservationDuration = rDuration,
+                    IsRepeating = repeat
+                };
+
+                // Add the reservation to the database
+                _db.Reservations.Add(reservation);
+
+                // Save changes to the database
+                _db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                var ex = new Exception("Something went wrong.");
+                ex.Data["Code"] = 401;
+                throw ex;
+            }
+        }
     }
 }

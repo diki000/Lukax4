@@ -16,6 +16,7 @@ namespace SpotPicker.EFCore
         public DbSet<Point> Points { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Wallet> Wallets { get; set; }
+        public DbSet<Reservation> Reservations { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Manager>()
@@ -32,6 +33,18 @@ namespace SpotPicker.EFCore
                 .HasOne(wallet => wallet.User)
                 .WithOne(user => user.Wallet)
                 .HasForeignKey<Wallet>(wallet => wallet.UserID);
+
+            // One-to-many relationship between User and Reservation
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Reservations)
+                .WithOne(t => t.User)
+                .HasForeignKey(t => t.UserID);
+
+            // One-to-many relationship between ParkingSpace and Reservation
+            modelBuilder.Entity<ParkingSpace>()
+                .HasMany(u => u.Reservations)
+                .WithOne(t => t.ParkingSpace)
+                .HasForeignKey(t => t.ParkingSpaceID);
         }
     }
 }
