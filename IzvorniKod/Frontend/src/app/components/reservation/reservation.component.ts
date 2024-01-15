@@ -15,8 +15,19 @@ export class ReservationComponent {
   private map!: L.Map;
   private centroid: L.LatLngExpression = [45.79704, 15.85911]; 
   private selectedParkingSpaces: ParkingSpace[] = [];
+  
+  allParkings: L.FeatureGroup = new L.FeatureGroup();
+  availableParkings: L.FeatureGroup = new L.FeatureGroup();
+
+  testing : any;
+  secondStep2 : boolean = false;
+  secondStep1 : boolean = false;
+
   user : any;
 
+  startDate: Date | undefined;
+  endDate: Date | undefined;
+  currentDate = new Date();
 
   constructor(private parkingService: ParkingService, private userService: UserService) { }
 
@@ -31,8 +42,12 @@ export class ReservationComponent {
       maxZoom: 22,
       minZoom: 12
     });
-    var otherParkings : L.FeatureGroup = new L.FeatureGroup();
+    // var otherParkings : L.FeatureGroup = new L.FeatureGroup();
     this.parkingService.getAllParkings().subscribe((parkings) => {
+      console.log(parkings);
+      this.testing = []
+      this.testing.push(parkings[0].parkingSpaces[0]);
+      this.testing.push(parkings[1].parkingSpaces[0]);
       parkings.forEach((parking : any) => {
         var points: L.LatLngExpression[] = [];
         parking.parkingSpaces.forEach((spot: any) => {
@@ -51,10 +66,10 @@ export class ReservationComponent {
             }
           });
           polygon.setStyle({ color: 'yellow' });
-          polygon.addTo(otherParkings);
+          polygon.addTo(this.allParkings);
         });
       });
-      otherParkings.addTo(this.map);
+      this.allParkings.addTo(this.map);
     tiles.addTo(this.map);
   });}
 
@@ -72,5 +87,44 @@ export class ReservationComponent {
       .openOn(this.map);
       this.map.openPopup(popup);
     });
+  }
+
+  showAvailableSpots() {
+    this.map.removeLayer(this.allParkings);
+    this.secondStep2 = true;
+    this.testing.forEach((spot: any) => {
+      var points: L.LatLngExpression[] = [];
+      spot.points.forEach((point: any) => {
+        points.push([point.latitude, point.longitude]);
+      });
+      var polygon = L.polygon(points);
+      polygon.setStyle({ color: 'green' });
+
+      polygon.on('click', (e : L.LeafletMouseEvent) => {
+        polygon.setStyle({ color: 'blue' });
+        console.log(spot)
+      });
+
+      polygon.addTo(this.availableParkings);
+    }
+    );
+    this.availableParkings.addTo(this.map);
+
+  }
+
+  stepBack(numb: number) {
+    if(numb == 2) {
+      this.secondStep2 = false;
+      this.map.removeLayer(this.availableParkings);
+      this.allParkings.addTo(this.map);
+    } else if(numb == 1) {
+      this.secondStep1 = false;
+    }
+
+  }
+
+
+  showAvailableTimes() {
+    this.secondStep1 = true;
   }
 }

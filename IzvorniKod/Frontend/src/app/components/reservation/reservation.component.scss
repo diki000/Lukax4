@@ -92,10 +92,10 @@ position: relative;
    }
 }
 
-.reservationWays:hover {
-   transform: scale(1.02);
-   transition: transform 0.2s ease-in-out;
-}
+// .reservationWays:hover {
+//    transform: scale(1.02);
+//    transition: transform 0.2s ease-in-out;
+// }
 
 .or {
    display: flex;
@@ -110,4 +110,22 @@ position: relative;
    content: "";
    flex: 1;
    border-bottom: 1px solid #bdbdbd;
+}
+
+
+.calendarContainer {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   margin-top: 30px;
+}
+
+.goBack {
+   color: gray;
+   cursor: pointer;
+}
+
+.goBack:hover {
+   color: black;
+   text-decoration: underline;
 }

@@ -1,33 +1,60 @@
 <div id="reservationContainer">
   <div class="map-container">
-     <div class="map-frame">
-       <div id="map"></div>
-     </div>
-   </div>
-   <div class="reservationForm">
+    <div class="map-frame">
+      <div id="map"></div>
+    </div>
+  </div>
+  <div class="reservationForm">
     <div class="wizardContainer">
       <div class="title">
         {{user.Username}} {{user.Surname}}, rezervaciju možeš izvršiti na dva načina:
       </div>
       <div class="differentWays">
-        <div class="reservationWays">
+        <div class="reservationWays" *ngIf="!secondStep1">
           <div class="point">
             1
           </div>
-          Označi na mapi željena parkirna mjesta i zatim klikni na gumb 
-          <button>Rezerviraj</button>
+          Označi na mapi željena parkirna mjesta i zatim klikni na gumb
+          <button (click)="showAvailableTimes()">Prikaži slobodne termine</button>
+        </div>
+        <div class="reservationWays" *ngIf="secondStep1">
+          <div class="point">
+            1
+          </div>
+          <div class="goBack" (click)="stepBack(1)">Idi nazad</div>
+          Označi na  željena parkirna mjesta i zatim klikni na gumb
+          <button (click)="showAvailableTimes()">Prikaži slobodne termine</button>
         </div>
         <div class="or">
           &nbsp; ili &nbsp;
         </div>
-        <div class="reservationWays">
+        <div class="reservationWays" *ngIf="!secondStep2">
           <div class="point">
             2
           </div>
-          Odaberi na kalendaru željeni datum i vrijeme rezervacije, a 
+          Odaberi na kalendaru željeni datum i vrijeme rezervacije, a
           mi ćemo ti na mapi označiti dostupna parkirna mjesta.
+          <div class="calendarContainer">
+            <span class="p-float-label">
+              <p-calendar [(ngModel)]="startDate" inputId="od" [touchUI]="true" dateFormat="dd.mm.yy" [showTime]="true"></p-calendar>
+              <label for="od">Od:</label>
+            </span>
+            <span style="margin: 0 5px;">-</span>
+            <span class="p-float-label">
+              <p-calendar [(ngModel)]="endDate" inputId="do" [touchUI]="true" dateFormat="dd.mm.yy" [showTime]="true" [minDate]="startDate == undefined ? currentDate : startDate" [disabled]="startDate == undefined"></p-calendar>
+              <label for="do">Do:</label>
+            </span>
+          </div>
+          <button (click)="showAvailableSpots()">Rezerviraj</button>
+        </div>
+        <div class="reservationWays" *ngIf="secondStep2">
+          <div class="point">
+            2
+          </div>
+          <div class="goBack" (click)="stepBack(2)">Idi nazad</div>
+          Odaberi parkirno mjesto na karti označeno zelenom bojom
         </div>
       </div>
     </div>
-   </div>
+  </div>
 </div>

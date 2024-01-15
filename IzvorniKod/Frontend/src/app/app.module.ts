@@ -20,6 +20,9 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { UnregisteredMapComponent } from './components/unregistered-map/unregistered-map.component';
 import { ReservationComponent } from './components/reservation/reservation.component';
 
+import { CalendarModule } from 'primeng/calendar';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 @NgModule({
   declarations: [
@@ -36,7 +39,9 @@ import { ReservationComponent } from './components/reservation/reservation.compo
     MapComponent,
     SidebarComponent,
     UnregisteredMapComponent,
-    ReservationComponent
+    ReservationComponent,
+    
+
   ],
   imports: [
     FormsModule,
@@ -45,7 +50,10 @@ import { ReservationComponent } from './components/reservation/reservation.compo
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    CommonModule],
+    CommonModule,
+    CalendarModule,
+    BrowserAnimationsModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })
