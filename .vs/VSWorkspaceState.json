@@ -5,13 +5,11 @@
     "\\IzvorniKod\\Backend",
     "\\IzvorniKod\\Backend\\SpotPicker",
     "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker",
-    "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\assets2",
-    "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\assets2\\images",
     "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\Controllers",
     "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\EFCore",
+    "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\Migrations",
     "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\Models",
     "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\Services"
   ],
-  "SelectedNode": "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\EFCore\\_EFCore.cs",
   "PreviewInSolutionExplorer": false
 }
