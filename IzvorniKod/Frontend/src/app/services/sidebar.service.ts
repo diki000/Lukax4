@@ -7,7 +7,9 @@ import { BehaviorSubject } from 'rxjs';
 export class SidebarService {
   private openCreateParking: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   private openStatistics: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  private openReservation: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private openReserve: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
+ 
 
   get openCreateParking$() {
     return this.openCreateParking.asObservable();
@@ -31,5 +33,14 @@ export class SidebarService {
   setOpenStatistics(value: boolean) {
     this.openStatistics.next(value);
   }
+  get openReserve$() {
+    return this.openReserve.asObservable();
+  }
+  setOpenReserve(value: boolean) {
+    this.openReserve.next(value);
+  }
+
+
+  
   constructor() { }
 }

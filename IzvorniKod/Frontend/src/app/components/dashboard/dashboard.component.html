@@ -20,4 +20,46 @@
         </div>
         <app-unregistered-map></app-unregistered-map>
     </div>
+    <!-- za prijavljenog korisnika -->
+    <div *ngIf="openReserve | async" class="registered">
+        <div class="create-reserve">
+            <div class="container">
+                <div class="content">
+                    <form [formGroup]="createReserveForm">
+                        <div class="topic">Izaberite parkirno mjesto</div>
+                        <div class="input-box">
+                            <input type="text" id="start" formControlName="StartDest" required>
+                            <label>Na karti odaberite početnu adresu</label>
+                        </div>
+                        <div class="input-box">
+                            <input type="text" id="end" formControlName="EndDest" required>
+                            <label>Na karti odaberite završnu adresu</label>
+                        </div>
+                        <div class="input-box">
+                            <input type="number" formControlName="Duration" required>
+                            <label>Odaberite duljinu trajanja parkiranja (sati)</label>
+                        </div>
+                        <div class="placanje">
+                            <a class="opcija prva" id="prva" (click)="odaberiPlacanje('prva')">
+                                <i class='bx bx-wallet icon'></i>
+                                <label>Plaćanje odmah aplikacijom</label>
+                            </a>
+                            <a class="opcija druga" id="druga" (click)="odaberiPlacanje('druga')">
+                                <i class='bx bx-money icon'></i>
+                                <label>Plaćanje prilikom dolaska</label>
+                            </a>
+                        </div>
+                        <div class="input-box">
+                            <div class="submit" (click)="rezerviraj()">Pronađi parking</div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        
+        <app-registered-map (childEvent)="finalAddress($event)"></app-registered-map>
+        
+    </div>
+    
 </div>

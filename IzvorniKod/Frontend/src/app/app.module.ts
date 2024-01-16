@@ -18,6 +18,7 @@ import { OwnerComponent } from './components/owner/owner.component';
 import { MapComponent } from './components/map/map.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { UnregisteredMapComponent } from './components/unregistered-map/unregistered-map.component';
+import { RegisteredMapComponent } from './components/registered-map/registered-map.component';
 import { ReservationComponent } from './components/reservation/reservation.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 
@@ -40,6 +41,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
     MapComponent,
     SidebarComponent,
     UnregisteredMapComponent,
+    RegisteredMapComponent,
     ReservationComponent,
     StatisticsComponent
   ],
