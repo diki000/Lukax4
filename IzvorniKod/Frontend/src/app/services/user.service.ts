@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../models/User';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -39,9 +39,11 @@ export class UserService {
   
   private authSubject : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(localStorage.getItem('jwt') != null);
   private adminSubject : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.getDecodedToken()?.RoleId == 3);
-  
+  private klijentSubject : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.getDecodedToken()?.RoleId == 1);
+
   isLoggedIn$ = this.authSubject.asObservable();
   isAdmin$ = this.authSubject.asObservable();
+  isKlijent$ = this.authSubject.asObservable();
   moneyToTransfer: number = 0;
   balance: number = 0;
 
@@ -50,6 +52,9 @@ export class UserService {
   }
   updateAdminState(status: boolean){
     this.adminSubject.next(status);
+  }
+  updateKlijentState(status: boolean){
+    this.klijentSubject.next(status);
   }
 
   constructor(private http: HttpClient) { }
@@ -103,7 +108,9 @@ export class UserService {
   public isAdmin(){
     return this.adminSubject.asObservable();
   }
-
+  public isKlijent(){
+    return this.klijentSubject.asObservable();
+  }
   public logout(){
     this.currentUser = new User(0,"","","","","","",false,0,"");
     this.authSubject.next(false);
@@ -111,21 +118,70 @@ export class UserService {
     if(localStorage.getItem('jwt') != null)
       localStorage.removeItem('jwt');
     }
-    public getBalance(id: number): Observable<Wallet>{
-      return this.http.get<Wallet>(this.url + "/GetWallet?id=" + id);
-    }
-  
-    public getTransactions(id: number): Observable<Transaction[]>{
-      return this.http.get<Transaction[]>(this.url + "/GetLast5Transactions?id=" + id);
-    }
-  
-    public addPayment(Id: number, Amount: number): Observable<any>{
+
+  public getBalance(id: number): Observable<Wallet>{
+    return this.http.get<Wallet>(this.url + "/GetWallet?id=" + id);
+  }
+
+  public getTransactions(id: number): Observable<Transaction[]>{
+    return this.http.get<Transaction[]>(this.url + "/GetLast5Transactions?id=" + id);
+  }
+
+  public addPayment(Id: number, Amount: number): Observable<any>{
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+      })
+    };
+    let body = JSON.stringify({Id, Amount});
+    return this.http.post<any>(this.url + "/AddPayment", body, httpOptions);
+  }
+
+    public payForReservation(Id: number, Amount: number): Observable<any>{
       let httpOptions = {
         headers: new HttpHeaders({
           'Content-Type':  'application/json',
         })
       };
       let body = JSON.stringify({Id, Amount});
-      return this.http.post<any>(this.url + "/AddPayment", body, httpOptions);
+      return this.http.post<any>(this.url + "/payForReservation", body, httpOptions);
+    }
+
+    public getAllFreePlacesForGivenTime(start: Date, end: Date): Observable<number[]> {
+      const formattedStart = start.toISOString();
+      const formattedEnd = end.toISOString();
+
+      var body = JSON.stringify({start: formattedStart, end: formattedEnd});
+
+      let httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type':  'application/json',
+        })
+      };
+      return this.http.post<number[]>(this.url + "/getAllFreePlacesForGivenTime", body, httpOptions);
+    }
+
+    public getAllReservationsForChosenPlaces(ids: number[]) {
+      var query = "?"
+      ids.forEach((item, index) => {
+        if(index == ids.length - 1) {
+          query += "numbers=" + item;
+        } else {
+          query += "numbers=" + item + "&";
+        }
+      });
+      console.log(query);
+      return this.http.get<any>(this.url + "/GetAllReservationsForChosenPlaces" + query);
+    }
+
+    public makeReservation(userId: number, psId:number, rDate: Date, rDuration: Date, repeat: boolean, payedWithCard: boolean, pmID: number) {
+      let httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type':  'application/json',
+        })
+      };
+      let body = JSON.stringify({userId : userId, psId : psId, rDate, rDuration, repeat, payedWithCard, pmID});
+      console.log(body);
+      return this.http.post<any>(this.url + "/makeReservation", body, httpOptions);
     }
 }

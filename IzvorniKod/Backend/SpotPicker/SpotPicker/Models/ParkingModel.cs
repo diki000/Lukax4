@@ -4,6 +4,7 @@ namespace SpotPicker.Models
 {
     public class ParkingModel
     {
+        public int ParkingId { get; set; }
         public int ManagerId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -11,6 +12,8 @@ namespace SpotPicker.Models
 
         // cjenik?
         public double PricePerHour { get; set; }
+        public int NumberOfBikePS { get; set; }
+
         public ParkingSpaceModel[]? parkingSpaces { get; set; }
     }
 }

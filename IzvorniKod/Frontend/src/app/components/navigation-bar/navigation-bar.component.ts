@@ -12,8 +12,9 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class NavigationBarComponent implements OnInit{
   loggedIn$ : Observable<boolean> | undefined;
+  isKlijent$ : Observable<boolean> | undefined;
   currentUser : User | null = null;
-  openPreview: boolean = true;
+  openPreview: boolean = false;
 
   wallet = 0;
   paymentPopup = false;
@@ -24,18 +25,19 @@ export class NavigationBarComponent implements OnInit{
 
   constructor(private userService : UserService, private router: Router) { 
     let token = localStorage.getItem('jwt');
-    // console
     this.loggedIn$ = this.userService.isLoggedIn();
-    if(token != undefined){
+    this.isKlijent$ = this.userService.isKlijent();
+    if(token != undefined){ 
       this.userService.updateLoggedInState(true);
       this.userService.checkToken();
       this.currentUser = this.userService.getCurrentUser(); 
-      console.log(this.currentUser)
       this.loggedIn$ = this.userService.isLoggedIn();
       if(this.currentUser!.RoleId == 3){
         this.userService.updateAdminState(true);
       }
-      else{
+      else if(this.currentUser!.RoleId == 1){
+        this.userService.updateKlijentState(true);
+        this.isKlijent$ = this.userService.isKlijent();
         this.userService.getBalance(this.currentUser!.UserId).subscribe((data : any) => {
           this.userService.balance = data.balance;
           this.wallet = data.balance;
@@ -62,6 +64,9 @@ export class NavigationBarComponent implements OnInit{
   logOut(){
     this.userService.logout();
     this.router.navigate(['/login']);
+    this.userService.updateLoggedInState(false);
+    this.userService.updateAdminState(false);
+    this.userService.updateKlijentState(false);
   }
 
   openWalletPreview() {

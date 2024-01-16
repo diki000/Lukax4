@@ -7,6 +7,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { IsAuthenicatedGuard } from './guards/is-authenicated.guard';
 import { BankTransferComponent } from './components/bank-transfer/bank-transfer.component';
 import { SuccessPayComponent } from './components/success-pay/success-pay.component';
+import { ReservationComponent } from './components/reservation/reservation.component';
 
 const routes: Routes = [
   {
@@ -34,6 +35,11 @@ const routes: Routes = [
   {
     path: 'payment-success', 
     component: SuccessPayComponent,
+    canActivate: [IsAuthenicatedGuard]
+  },
+  {
+    path: 'reservation',
+    component: ReservationComponent,
     canActivate: [IsAuthenicatedGuard]
   },
   {

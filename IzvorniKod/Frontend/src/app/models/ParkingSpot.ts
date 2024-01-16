@@ -16,16 +16,22 @@ export class ParkingSpace{
         }
         return equals;
     }
+    ParkingSpaceId: number;
     ParkingId : number;
+    ParkingManagerId: number;
     ParkingSpaceType : number;
     hasSensor : number;
     isOccupied : number;
+    reservationPossible : number = 0;
     points : Point[] = [];
-    constructor(parkingId:number, parkingSpaceType:number, hasSensor:number, isOccupied:number, points: Point[] = []) {
+    constructor(parkingSpaceId:number, parkingId:number, parkingSpaceType:number, hasSensor:number, isOccupied:number, reservationPossible: number, points: Point[] = [], parkingManagerId: number) {
+        this.ParkingSpaceId = parkingSpaceId;
         this.ParkingId = parkingId;
         this.ParkingSpaceType = parkingSpaceType;
         this.hasSensor = hasSensor;
         this.isOccupied = isOccupied;
+        this.reservationPossible = reservationPossible;
         this.points = points;
+        this.ParkingManagerId = parkingManagerId;
     }
 }

@@ -41,7 +41,6 @@ export class LoginComponent implements OnInit{
           let user = new User(res.userID, res.username, "", res.name, res.surname, "", res.email, false, res.roleID, res.accessToken);
           this.userService.setCurrentUser(user); 
           this.userService.updateLoggedInState(true);
-          console.log(this.userService.currentUser.RoleId)      
           if(this.userService.getCurrentUser().roleID == 3){
             this.userService.updateAdminState(true);
           }

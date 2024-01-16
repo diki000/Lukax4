@@ -25,6 +25,12 @@
                             <span class="text nav-text">Statistika</span>
                         </a>
                     </li>
+                    <li class="nav-link">
+                        <a (click)="otvoriRezervacija()" *ngIf="currentUser!= null && currentUser.RoleId == 1">
+                            <i class='bx bxs-car-garage icon'></i>
+                            <span class="text nav-text">Rezervacija</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

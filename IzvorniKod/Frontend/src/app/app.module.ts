@@ -18,7 +18,12 @@ import { OwnerComponent } from './components/owner/owner.component';
 import { MapComponent } from './components/map/map.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { UnregisteredMapComponent } from './components/unregistered-map/unregistered-map.component';
+import { ReservationComponent } from './components/reservation/reservation.component';
+import { StatisticsComponent } from './components/statistics/statistics.component';
 
+import { CalendarModule } from 'primeng/calendar';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RadioButtonModule } from 'primeng/radiobutton';
 
 @NgModule({
   declarations: [
@@ -34,7 +39,9 @@ import { UnregisteredMapComponent } from './components/unregistered-map/unregist
     OwnerComponent,
     MapComponent,
     SidebarComponent,
-    UnregisteredMapComponent
+    UnregisteredMapComponent,
+    ReservationComponent,
+    StatisticsComponent
   ],
   imports: [
     FormsModule,
@@ -43,7 +50,11 @@ import { UnregisteredMapComponent } from './components/unregistered-map/unregist
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    CommonModule],
+    CommonModule,
+    CalendarModule,
+    BrowserAnimationsModule,
+    RadioButtonModule 
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })
