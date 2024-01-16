@@ -27,7 +27,7 @@ export class UserService {
         this.updateAdminState(false)
     }
   }
-  public getDecodedToken(){
+  public getDecodedToken():any{
     if(this.decodedPayload != 1) {
       let user = new User(this.decodedPayload.UserId, this.decodedPayload.Username, "", this.decodedPayload.Name, this.decodedPayload.Surname, "", this.decodedPayload.Email, false, this.decodedPayload.RoleID, "");
       return user;
@@ -95,6 +95,10 @@ export class UserService {
 
   public getCurrentUser(): any{
     return this.currentUser;
+  }
+
+  public getCurrentUserId():any {
+    return this.currentUser.UserId;
   }
 
   public isLoggedIn(){

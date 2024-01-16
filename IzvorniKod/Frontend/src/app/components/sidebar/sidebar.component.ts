@@ -4,6 +4,7 @@ import { User } from 'src/app/models/User';
 import { SidebarService } from 'src/app/services/sidebar.service';
 import { UserService } from 'src/app/services/user.service';
 
+
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -24,6 +25,11 @@ export class SidebarComponent implements  OnInit{
         this.sidebarService.setOpenCreateParking(true);
         this.sidebarService.setOpenStatistics(false);
       }
+      if(this.currentUser!.RoleId == 1) {
+        this.sidebarService.setOpenReserve(true);
+        this.sidebarService.setOpenCreateParking(false);
+        this.sidebarService.setOpenStatistics(false);
+      }
 
     }else{
       this.userService.updateLoggedInState(false);
@@ -39,6 +45,7 @@ export class SidebarComponent implements  OnInit{
     const body = document.querySelector("body");
     const sidebar = body?.querySelector(".sidebar");
     sidebar?.classList.toggle("close");
+    
   }
 
   otvoriStvoriParking():void {
@@ -48,7 +55,14 @@ export class SidebarComponent implements  OnInit{
   }
 
   otvoriStatistika():void {
-    this.sidebarService.setOpenCreateParking(false);
     this.sidebarService.setOpenStatistics(true);
+    this.sidebarService.setOpenCreateParking(false);
+    this.sidebarService.setOpenReserve(false);
+  }
+
+  otvoriRezerviraj():void {
+    this.sidebarService.setOpenReserve(true);
+    this.sidebarService.setOpenCreateParking(false);
+    this.sidebarService.setOpenStatistics(false);
   }
 }

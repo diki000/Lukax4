@@ -25,6 +25,12 @@
                             <span class="text nav-text">Statistika</span>
                         </a>
                     </li>
+                    <li class="nav-link">
+                        <a (click)="otvoriRezerviraj()" *ngIf="currentUser!= null && currentUser.RoleId == 1">
+                            <i class='bx bx-trip icon'></i>
+                            <span class="text nav-text">Rezerviraj</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
