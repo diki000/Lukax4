@@ -51,4 +51,8 @@ export class SidebarComponent implements  OnInit{
     this.sidebarService.setOpenCreateParking(false);
     this.sidebarService.setOpenStatistics(true);
   }
+
+  otvoriRezervacija():void {
+    this.sidebarService.setOpenReservation(true);
+  }
 }

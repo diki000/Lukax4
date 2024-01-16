@@ -17,5 +17,6 @@ namespace SpotPicker.EFCore
         public int isOccupied { get; set; }
         public int reservationPossible { get; set; }
 
+        public virtual List<Reservation> Reservations { get; set; }
     }
 }

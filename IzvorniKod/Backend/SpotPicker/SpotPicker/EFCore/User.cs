@@ -35,5 +35,7 @@ namespace SpotPicker.EFCore
 
         public virtual Wallet Wallet { get; set; }
         public virtual List<Transaction> Transactions {  get; set; }    
+
+        public virtual List<Reservation> Reservations { get; set; }
     }
 }

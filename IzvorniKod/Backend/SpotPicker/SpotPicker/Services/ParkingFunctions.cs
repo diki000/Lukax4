@@ -82,6 +82,7 @@ namespace SpotPicker.Services
                 {
                     ParkingSpaceModel currentParkingSpace = new ParkingSpaceModel()
                     {
+                        ParkingSpaceId = currentParkingSpaces[j].Id,
                         ParkingSpaceType = currentParkingSpaces[j].ParkingSpaceType,
                         ParkingId = currentParkingSpaces[j].ParkingId,
                         hasSensor = currentParkingSpaces[j].hasSensor,
