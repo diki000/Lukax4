@@ -39,9 +39,11 @@ export class UserService {
   
   private authSubject : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(localStorage.getItem('jwt') != null);
   private adminSubject : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.getDecodedToken()?.RoleId == 3);
-  
+  private klijentSubject : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.getDecodedToken()?.RoleId == 1);
+
   isLoggedIn$ = this.authSubject.asObservable();
   isAdmin$ = this.authSubject.asObservable();
+  isKlijent$ = this.authSubject.asObservable();
   moneyToTransfer: number = 0;
   balance: number = 0;
 
@@ -50,6 +52,9 @@ export class UserService {
   }
   updateAdminState(status: boolean){
     this.adminSubject.next(status);
+  }
+  updateKlijentState(status: boolean){
+    this.klijentSubject.next(status);
   }
 
   constructor(private http: HttpClient) { }
@@ -103,7 +108,9 @@ export class UserService {
   public isAdmin(){
     return this.adminSubject.asObservable();
   }
-
+  public isKlijent(){
+    return this.klijentSubject.asObservable();
+  }
   public logout(){
     this.currentUser = new User(0,"","","","","","",false,0,"");
     this.authSubject.next(false);
