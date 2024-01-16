@@ -1,6 +1,6 @@
 .statistics-wrapper{
     position: absolute;
-    top: 50%;
+    top: calc(50% + 90px);
     left: 50%;
     transform: translate(-50%, -50%);
     width: 75%;
@@ -15,6 +15,7 @@
     border: 1px solid black;
     border-left: none;
     border-top: none;
+    border-right: none;
     .parkings-header{
         .parking-line{
             width:95%;
@@ -93,6 +94,7 @@
     border: 1px solid black;
     border-right: none;
     border-top: none;
+    border-left: none;
 
 }
 .chart3{

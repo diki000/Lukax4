@@ -46,6 +46,7 @@ namespace SpotPicker.EFCore
                 .HasMany(u => u.Reservations)
                 .WithOne(t => t.ParkingSpace)
                 .HasForeignKey(t => t.ParkingSpaceID);
+
         }
     }
 }

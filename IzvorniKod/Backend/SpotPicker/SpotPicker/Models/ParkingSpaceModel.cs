@@ -4,7 +4,7 @@
     {
         public int ParkingSpaceId { get; set; } 
         public int ParkingId { get; set; }
-
+        public int ParkingManagerId { get; set; }
         public int ParkingSpaceType { get; set; }
         public int hasSensor { get; set; }
         public int isOccupied { get; set; }

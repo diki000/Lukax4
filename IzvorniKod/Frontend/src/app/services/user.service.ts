@@ -174,13 +174,13 @@ export class UserService {
       return this.http.get<any>(this.url + "/GetAllReservationsForChosenPlaces" + query);
     }
 
-    public makeReservation(userId: number, psId:number, rDate: Date, rDuration: Date, repeat: boolean, payedWithCard: boolean) {
+    public makeReservation(userId: number, psId:number, rDate: Date, rDuration: Date, repeat: boolean, payedWithCard: boolean, pmID: number) {
       let httpOptions = {
         headers: new HttpHeaders({
           'Content-Type':  'application/json',
         })
       };
-      let body = JSON.stringify({userId : userId, psId : psId, rDate, rDuration, repeat, payedWithCard});
+      let body = JSON.stringify({userId : userId, psId : psId, rDate, rDuration, repeat, payedWithCard, pmID});
       console.log(body);
       return this.http.post<any>(this.url + "/makeReservation", body, httpOptions);
     }

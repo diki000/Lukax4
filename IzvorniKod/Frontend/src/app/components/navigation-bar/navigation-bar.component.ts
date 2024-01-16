@@ -25,7 +25,6 @@ export class NavigationBarComponent implements OnInit{
 
   constructor(private userService : UserService, private router: Router) { 
     let token = localStorage.getItem('jwt');
-    this.isAdmin$ = this.userService.isAdmin();
     this.loggedIn$ = this.userService.isLoggedIn();
     this.isKlijent$ = this.userService.isKlijent();
     if(token != undefined){ 

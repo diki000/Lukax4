@@ -58,13 +58,6 @@ namespace SpotPicker.Controllers
             {
                 PointModel nearest = _parkingFunctions.GetNearestParkingSpaceCoordinates(userId, startLongitude, startLatitude, endLongitude, endLatitude, profile, duration, paymentType);
                 
-                if (paymentType == 1) // 1 je placanje odma racunom u aplikaciji
-                {
-                    var parkingSpace = _db.ParkingSpaces.FirstOrDefault(ps => ps.Id == nearest.ParkingSpaceId);
-                    var pricePerHour = _db.Parkings.FirstOrDefault(p => p.Id == parkingSpace.ParkingId).PricePerHour;
-
-                    _userFunctions.payForReservation(userId, (float)(pricePerHour * duration));
-                }
 
                 //_parkingFunctions.
                 return Ok(nearest);

@@ -425,8 +425,9 @@ namespace SpotPicker.Services
             _db.SaveChanges();
         }
 
-        public void payForReservation(int id, float amount)
+        public int payForReservation(int id, float amount)
         {
+            int transactionId = 0;
             Wallet userWallet = _db.Wallets.FirstOrDefault(w => w.UserID == id);
 
             if (userWallet == null)
@@ -460,6 +461,9 @@ namespace SpotPicker.Services
             _db.Transactions.Add(transaction);
 
             _db.SaveChanges();
+            transactionId = transaction.ID;
+            return transactionId;
+
         }
 
         public List<Tuple<int, DateTime, DateTime>> checkReservations(List<int> ids)
@@ -528,7 +532,7 @@ namespace SpotPicker.Services
                 throw ex;
             }
         }
-        public void makeReservation(int userId, int psId, DateTime rDate, DateTime rDuration, bool repeat, bool payedWithCard)
+        public void makeReservation(int userId, int psId, DateTime rDate, DateTime rDuration, bool repeat, bool payedWithCard, int pmID)
         {
             try
             {
@@ -556,6 +560,7 @@ namespace SpotPicker.Services
                 {
                     UserID = userId,
                     ParkingSpaceID = psId,
+                    ParkingManagerID = pmID,
                     ReservationDate = rDate,
                     ReservationDuration = rDuration,
                     IsRepeating = repeat,

@@ -1,4 +1,5 @@
-﻿using SpotPicker.EFCore;
+﻿using Microsoft.EntityFrameworkCore;
+using SpotPicker.EFCore;
 using SpotPicker.Models;
 
 
@@ -8,10 +9,12 @@ namespace SpotPicker.Services
     {
         private readonly _EFCore _db;
         private readonly IConfiguration _config;
+        private UserFunctions _userFunctions;
         public ParkingFunctions(_EFCore database, IConfiguration config)
         {
             _db = database;
             _config = config;
+            _userFunctions = new UserFunctions(database, config);
         }
 
         public void addNewParking(ParkingModel parking)
@@ -33,6 +36,7 @@ namespace SpotPicker.Services
                 {
                     ParkingId = currentParkingId,
                     ParkingSpaceType = parking.parkingSpaces[i].ParkingSpaceType,
+                    ParkingManagerId = parking.ManagerId,
                     hasSensor = parking.parkingSpaces[i].hasSensor,
                     isOccupied = parking.parkingSpaces[i].isOccupied,
                     reservationPossible = parking.parkingSpaces[i].reservationPossible,
@@ -84,6 +88,7 @@ namespace SpotPicker.Services
                     {
                         ParkingSpaceId = currentParkingSpaces[j].Id,
                         ParkingSpaceType = currentParkingSpaces[j].ParkingSpaceType,
+                        ParkingManagerId = parkings[i].ManagerId,
                         ParkingId = currentParkingSpaces[j].ParkingId,
                         hasSensor = currentParkingSpaces[j].hasSensor,
                         isOccupied = currentParkingSpaces[j].isOccupied,
@@ -203,11 +208,18 @@ namespace SpotPicker.Services
                 {
                     UserId = userId,
                     ParkingSpaceId = parkingSpace.Id,
+                    ParkingManagerId = parkingSpace.ParkingManagerId,
                     Duration = duration,
                     Time = DateTime.Now,
                     PaymentType = paymentType
                 };
+                if (paymentType == 1) // 1 je placanje odma racunom u aplikaciji
+                {
+                    var pricePerHour = _db.Parkings.FirstOrDefault(p => p.Id == parkingSpace.ParkingId).PricePerHour;
 
+                    var transactionID = _userFunctions.payForReservation(userId, (float)(pricePerHour * duration));
+                    reservation.TransactionId= transactionID;
+                }
                 _db.InstantReservations.Add(reservation);
                 _db.SaveChanges();
             }
@@ -231,6 +243,31 @@ namespace SpotPicker.Services
             });
             _db.SaveChanges();
 
+        }
+        public StatisticsInformation[] getStatistics(int ownerId)
+        {
+            List<StatisticsInformation> result = new List<StatisticsInformation>();
+            DateTime[] last10Days = new DateTime[10];
+
+            for(int i = 0; i < 10; i++)
+            {
+                last10Days[i] = DateTime.UtcNow.AddDays(-i);
+
+                StatisticsInformation statisticsForTheDay = new StatisticsInformation();
+                statisticsForTheDay.day = last10Days[i];
+                statisticsForTheDay.reservations = 0;
+                statisticsForTheDay.moneyAmount = 0;
+
+                List<InstantReservation> instatReservations = _db.InstantReservations.Where(ir => ir.Time.Date == last10Days[i].Date && ir.ParkingManagerId == ownerId).ToList();
+                statisticsForTheDay.reservations += instatReservations.Count();
+                var amount = 0;
+                
+
+
+            }
+
+
+            return result.ToArray();
         }
     }
 }

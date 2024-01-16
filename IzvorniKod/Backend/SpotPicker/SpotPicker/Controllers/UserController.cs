@@ -254,7 +254,8 @@ namespace SpotPicker.Controllers
                 DateTime rDuration = DateTimeOffset.Parse(JObject.Parse(obj.ToString())["rDuration"].ToString()).UtcDateTime;
                 bool repeat = bool.Parse(JObject.Parse(obj.ToString())["repeat"].ToString());
                 bool payedWithCard = bool.Parse(JObject.Parse(obj.ToString())["payedWithCard"].ToString());
-                _userFunctions.makeReservation(userId, psId, rDate, rDuration, repeat, payedWithCard);
+                int pmID = int.Parse(JObject.Parse(obj.ToString())["pmID"].ToString());
+                _userFunctions.makeReservation(userId, psId, rDate, rDuration, repeat, payedWithCard, pmID);
                 return Ok();
             }
             catch (Exception e)

@@ -18,12 +18,13 @@ export class ParkingSpace{
     }
     ParkingSpaceId: number;
     ParkingId : number;
+    ParkingManagerId: number;
     ParkingSpaceType : number;
     hasSensor : number;
     isOccupied : number;
     reservationPossible : number = 0;
     points : Point[] = [];
-    constructor(parkingSpaceId:number, parkingId:number, parkingSpaceType:number, hasSensor:number, isOccupied:number, reservationPossible: number,points: Point[] = []) {
+    constructor(parkingSpaceId:number, parkingId:number, parkingSpaceType:number, hasSensor:number, isOccupied:number, reservationPossible: number, points: Point[] = [], parkingManagerId: number) {
         this.ParkingSpaceId = parkingSpaceId;
         this.ParkingId = parkingId;
         this.ParkingSpaceType = parkingSpaceType;
@@ -31,5 +32,6 @@ export class ParkingSpace{
         this.isOccupied = isOccupied;
         this.reservationPossible = reservationPossible;
         this.points = points;
+        this.ParkingManagerId = parkingManagerId;
     }
 }

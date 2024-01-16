@@ -15,6 +15,7 @@ export class ReservationComponent {
   private map!: L.Map;
   private centroid: L.LatLngExpression = [45.79704, 15.85911]; 
   private selectedParkingSpaces: ParkingSpace[] = [];
+
   private allParkingSpaces: any[] = [];
   
   allParkings: L.FeatureGroup = new L.FeatureGroup();
@@ -30,6 +31,7 @@ export class ReservationComponent {
   final: boolean = false;
   chosenWay = 1;
   selectedParkingSpace: number = 0;
+  selectedParkingSpaceManager: number = 0;
 
   selectedTime: string = '';
   days: number[] = [0, 1, 2, 3, 4, 5, 6];
@@ -132,6 +134,7 @@ export class ReservationComponent {
         polygon.on('click', (e : L.LeafletMouseEvent) => {
         polygon.setStyle({ color: 'blue' });
         this.selectedParkingSpace = spot.parkingSpaceId;
+        this.selectedParkingSpaceManager = spot.parkingManagerId;
         this.findPrice();
         this.lastStep();
       });
@@ -165,6 +168,7 @@ export class ReservationComponent {
     this.secondStep1 = true;
     var array = this.selectedParkingSpaces.map((item : any) => item.parkingSpaceId);
     this.userService.getAllReservationsForChosenPlaces(array).subscribe((reservations) => {
+      console.log(array)
       this.reservations = reservations.reduce((acc : any, currentValue : any) => {
         const existingGroup = acc.find((item : any) => item.space === currentValue.item1);
   
@@ -199,7 +203,8 @@ export class ReservationComponent {
     let endFinal = this.endDate1 ? this.endDate1 : this.endDate2;
     let r = this.ponavljanje.toLocaleLowerCase() == 'da' ? true : false;
     let p = this.selectedPaymentMethod.toLocaleLowerCase() == 'wallet' ? true : false;
-    this.userService.makeReservation(this.userService.currentUser.UserId, this.selectedParkingSpace, startFinal!, endFinal!, r, p).subscribe((data) => {
+    
+    this.userService.makeReservation(this.userService.currentUser.UserId, this.selectedParkingSpace, startFinal!, endFinal!, r, p, this.selectedParkingSpaceManager).subscribe((data) => {
       if(this.selectedPaymentMethod == 'wallet') {
         if(this.userService.balance < this.payUpTotal) {
           alert("Nemate dovoljno novaca na računu");

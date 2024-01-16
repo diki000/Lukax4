@@ -16,6 +16,7 @@ namespace SpotPicker.EFCore
 
         [ForeignKey("ParkingSpace")]
         public int ParkingSpaceID { get; set; }
+        public int ParkingManagerID { get; set; }
         public virtual ParkingSpace ParkingSpace { get; set; } //JEL TREBA OVO?
         public DateTime ReservationDate { get; set; }
         public DateTime ReservationDuration { get; set; }

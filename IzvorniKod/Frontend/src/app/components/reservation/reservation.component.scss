@@ -9,7 +9,7 @@
 
 .map-container {
    width: 65%;
-   height: calc(100vh - 90px);
+   height: calc(100vh - 150px);
    margin-left: 102px;
 }
 
@@ -28,7 +28,7 @@ position: relative;
 
 .reservationForm {
    width: 30%;
-   height: calc(100vh - 90px);
+   height: calc(100vh - 150px);
    padding-right: 20px;
 }
 
@@ -37,6 +37,7 @@ position: relative;
    flex-direction: column;
    align-items: flex-start;
    justify-content: flex-start;
+   
 }
 
 .title {
@@ -65,8 +66,8 @@ position: relative;
 
 .reservationWays {
    position: relative;
-   font-size: 1.2rem;
-   padding: 30px;
+   font-size: 1.1rem;
+   padding: 20px;
    border-radius: 10px;
    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
    margin-top: 20px;
@@ -74,7 +75,7 @@ position: relative;
    button {
       border: none;
       background-color: #ff86ca;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       color: white;
       cursor: pointer;
       display: block;
@@ -156,7 +157,7 @@ position: relative;
 .fini {
    border: none;
    background-color: #ff86ca;
-   font-size: 1.2rem;
+   font-size: 1.1rem;
    color: white;
    cursor: pointer;
    display: block;
@@ -169,14 +170,14 @@ position: relative;
    padding: 10px;
 
    label {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: 600;
       margin: 10px 0;
    }
 }
 
 .prompt {
-   font-size: 1.2rem;
+   font-size: 1.1rem;
    font-weight: 600;
    margin: 10px 0;
 }
