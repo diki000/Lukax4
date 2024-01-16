@@ -7,12 +7,9 @@
     "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker",
     "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\Controllers",
     "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\EFCore",
-    "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\EFCore",
     "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\Migrations",
     "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\Models",
-    "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\Services",
     "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\Services"
   ],
-  "SelectedNode": "\\IzvorniKod\\Backend\\SpotPicker\\SpotPicker\\Services\\UserFunctions.cs",
   "PreviewInSolutionExplorer": false
 }

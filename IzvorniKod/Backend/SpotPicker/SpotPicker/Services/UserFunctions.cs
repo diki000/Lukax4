@@ -558,6 +558,7 @@ namespace SpotPicker.Services
                 // Create a new ReservationModel
                 Reservation reservation = new Reservation
                 {
+                    ReservationID = reservationId,
                     UserID = userId,
                     ParkingSpaceID = psId,
                     ParkingManagerID = pmID,
@@ -566,6 +567,66 @@ namespace SpotPicker.Services
                     IsRepeating = repeat,
                     PayedWithCard = payedWithCard
                 };
+
+
+                // Check if a reservation with the given criteria exists in the database
+                bool reservationExists = _db.Reservations.Any(r =>
+                    r.ParkingSpaceID == psId &&
+                    r.ReservationDate == rDate &&
+                    r.ReservationDuration == rDuration
+                );
+
+                if (reservationExists)
+                {
+                    var ex = new Exception("Reservation already exists.");
+                    ex.Data["Code"] = 405;
+                    throw ex;
+                }
+
+                // Check if there are overlapping reservations for the given parking space
+                bool hasOverlappingReservations = _db.Reservations.Any(r =>
+                        r.ParkingSpaceID == reservation.ParkingSpaceID &&
+                        ((r.ReservationDate <= reservation.ReservationDate && r.ReservationDuration >= reservation.ReservationDate) ||
+                        (r.ReservationDate <= reservation.ReservationDuration && r.ReservationDuration >= reservation.ReservationDuration) ||
+                        (r.ReservationDate >= reservation.ReservationDate && r.ReservationDuration <= reservation.ReservationDuration))
+                    );
+
+                // Check if there are overlapping reservations for the parking space
+                if (hasOverlappingReservations)
+                {
+                    var ex = new Exception("Overlapping reservations exist for the selected time period.");
+                    ex.Data["Code"] = 406;
+                    throw ex;
+                }
+
+                // Calculate the total parking price
+                double userHours = (rDuration - rDate).TotalMinutes / 60.0;
+                Console.WriteLine("userHours " + userHours);
+                int parkingId = _db.ParkingSpaces.FirstOrDefault(p => p.Id == psId)?.Id ?? 0;
+                Console.WriteLine("parkingId " + parkingId);
+                double pricePerHour = _db.Parkings.FirstOrDefault(p => p.Id == parkingId)?.PricePerHour ?? 0;
+                Console.WriteLine("pricePerHour " + pricePerHour);
+                double parkingPrice = userHours * pricePerHour;
+                Console.WriteLine("parkingPrice " + parkingPrice);
+                double totalParkingPrice = Math.Round(parkingPrice, 2);
+                Console.WriteLine("totalParkingPrice" + totalParkingPrice);
+
+
+                // Check if the user has enough money in the wallet
+                Wallet userWallet = _db.Wallets.FirstOrDefault(w => w.UserID == userId);
+                if (userWallet == null || userWallet.Balance < totalParkingPrice)
+                {
+                    var ex = new Exception("Not enough money in the wallet.");
+                    ex.Data["Code"] = 406;
+                    throw ex;
+                }
+
+                // Pay for the reservation
+                Console.WriteLine(totalParkingPrice);
+                int transactionId = payForReservation(userId, (float)totalParkingPrice);
+
+                // Add the transaction ID to the reservation
+                //reservation.TransactionID = transactionId;
 
                 // Add the reservation to the database
                 _db.Reservations.Add(reservation);
@@ -580,5 +641,6 @@ namespace SpotPicker.Services
                 throw ex;
             }
         }
+
     }
 }

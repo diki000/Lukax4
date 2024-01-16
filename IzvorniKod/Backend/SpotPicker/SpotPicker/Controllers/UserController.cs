@@ -248,7 +248,7 @@ namespace SpotPicker.Controllers
         {
             try
             {
-                int userId = int.Parse( JObject.Parse(obj.ToString())["userId"].ToString());
+                int userId = int.Parse(JObject.Parse(obj.ToString())["userId"].ToString());
                 int psId = int.Parse(JObject.Parse(obj.ToString())["psId"].ToString());
                 DateTime rDate = DateTimeOffset.Parse(JObject.Parse(obj.ToString())["rDate"].ToString()).UtcDateTime;
                 DateTime rDuration = DateTimeOffset.Parse(JObject.Parse(obj.ToString())["rDuration"].ToString()).UtcDateTime;
@@ -260,7 +260,7 @@ namespace SpotPicker.Controllers
             }
             catch (Exception e)
             {
-                var statusCode = (int)e.Data["Kod"];
+                 var statusCode = (int)e.Data["Kod"];
                 return StatusCode(statusCode);
             }
         }
