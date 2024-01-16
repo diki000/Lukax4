@@ -81,5 +81,18 @@ namespace SpotPicker.Controllers
                 return BadRequest(e.Message);
             }
         }
+        [HttpGet]
+        [Route("api/[controller]/GetParkingStatistics")]
+        public IActionResult getParkingResults([FromQuery] int ownerId)
+        {
+            try
+            {
+                StatisticsInformation[] result = _parkingFunctions.getStatistics(ownerId);
+                return Ok(result);
+            }catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

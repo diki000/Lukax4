@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SpotPicker.EFCore;
+using SpotPicker.Migrations;
 using SpotPicker.Models;
 
 
@@ -254,16 +255,37 @@ namespace SpotPicker.Services
                 last10Days[i] = DateTime.UtcNow.AddDays(-i);
 
                 StatisticsInformation statisticsForTheDay = new StatisticsInformation();
-                statisticsForTheDay.day = last10Days[i];
+                statisticsForTheDay.day = last10Days[i].Date;
                 statisticsForTheDay.reservations = 0;
                 statisticsForTheDay.moneyAmount = 0;
 
                 List<InstantReservation> instatReservations = _db.InstantReservations.Where(ir => ir.Time.Date == last10Days[i].Date && ir.ParkingManagerId == ownerId).ToList();
                 statisticsForTheDay.reservations += instatReservations.Count();
-                var amount = 0;
-                
+                double amount = 0;
+                instatReservations.ForEach(reservation =>
+                {
+                    ParkingSpace parkingSpace = _db.ParkingSpaces.FirstOrDefault(ps => ps.Id == reservation.ParkingSpaceId);
+                    Parking parking = _db.Parkings.FirstOrDefault(p => p.Id == parkingSpace.ParkingId);
+                    if (parking != null)
+                    {
+                        amount += parking!.PricePerHour * reservation.Duration;
+                    }
+                });
 
+                Reservation[] reservations = _db.Reservations.Where(r => r.ReservationDate.Date == last10Days[i].Date && r.ParkingManagerID == ownerId).ToArray();
+                statisticsForTheDay.reservations += reservations.Count();
+                for(int j = 0; j < reservations.Count(); j++)
+                {
 
+                    ParkingSpace parkingSpace = _db.ParkingSpaces.FirstOrDefault(ps => ps.Id == reservations[j].ParkingSpaceID);
+                    Parking parking = _db.Parkings.FirstOrDefault(p => p.Id == parkingSpace.ParkingId);
+                    if (parking != null)
+                    {
+                        amount += parking!.PricePerHour * ((reservations[j].ReservationDuration - reservations[j].ReservationDate).Minutes/60.0);
+                    }
+                }
+                statisticsForTheDay.moneyAmount += amount;
+                result.Add(statisticsForTheDay);
             }
 
 

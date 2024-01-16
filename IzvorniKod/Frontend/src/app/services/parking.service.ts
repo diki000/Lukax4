@@ -26,5 +26,7 @@ export class ParkingService {
   public deleteParking(id: number): Observable<any>{
     return this.http.get<any>(this.url + "/DeleteParking?parkingId=" + id);
   }
-
+  public getParkingStatistics(ownerId: number) : Observable<any[]>{
+    return this.http.get<any[]>(this.url + "/GetParkingStatistics?ownerId=" + ownerId);
+  }
 }

@@ -12,9 +12,13 @@ import Chart from 'chart.js/auto';
 })
 export class StatisticsComponent implements OnInit{
   lastTenDates: string[] = [];
+  reservations: string[] = [];
+  moneyAmount: string[] = [];
   Parkings : Parking[] = [];
   currentUser : User | null = null;
-  public chart: any;
+  public chartReservation: any;
+  public chartAmount: any;
+
   parkingOccupancy: any[] = [];
   constructor(private parkingService: ParkingService, private userService: UserService) {
     let token = localStorage.getItem('jwt');
@@ -41,8 +45,18 @@ export class StatisticsComponent implements OnInit{
       console.log(this.Parkings);
     }
   );
-  this.getLastTenDates();
-  this.createChart()
+  this.parkingService.getParkingStatistics(this.currentUser!.UserId).subscribe((data: any[]) => {
+    data = data.reverse();
+    data.forEach((stat) => {
+
+      this.reservations.push(stat.reservations);
+      this.moneyAmount.push(stat.moneyAmount);
+    });
+    this.getLastTenDates();
+    this.createChartReservations();
+    this.CreateChartAmount();
+  });
+
 }
 formatDate(date: Date): string {
   const day = date.getDate();
@@ -61,24 +75,17 @@ getLastTenDates() {
   }
   this.lastTenDates.reverse();
 }
-createChart(){
+createChartReservations(){
   
-  this.chart = new Chart("MyChart", {
+  this.chartReservation = new Chart("MyChart1", {
     type: 'line', //this denotes tha type of chart
 
     data: {// values on X-Axis
       labels: this.lastTenDates, 
        datasets: [
         {
-          label: "Zarada",
-          data: ['467','576', '572', '79', '92',
-               '574', '573', '576', '574', '573'],
-          backgroundColor: 'pink'
-        },
-        {
           label: "Broj rezervacija",
-          data: ['542', '542', '536', '327', '17',
-                 '0.00', '538', '541', '541', '541'],
+          data: this.reservations,
           backgroundColor: '#FF00FF'
         }  
       ]
@@ -88,6 +95,26 @@ createChart(){
     }
     
     });
+  }
+  CreateChartAmount(){
+    this.chartReservation = new Chart("MyChart2", {
+      type: 'line', //this denotes tha type of chart
+  
+      data: {// values on X-Axis
+        labels: this.lastTenDates, 
+         datasets: [
+          {
+            label: "Zarada",
+            data: this.moneyAmount,
+            backgroundColor: 'pink'
+          }
+        ]
+      },
+      options: {
+        aspectRatio:2.5
+      }
+      
+      });
   }
   deleteParking(parkingIndex: number){
     this.parkingService.deleteParking(this.Parkings[parkingIndex].parkingId).subscribe(
