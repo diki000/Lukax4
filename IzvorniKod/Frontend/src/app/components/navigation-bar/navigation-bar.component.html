@@ -22,7 +22,7 @@
     </div>
 </div>
 
-<div class="walletPreview" [ngClass]="{'openPreview' : openPreview, 'closePreview' : !openPreview}" *ngIf="(loggedIn$ | async) && currentUser?.RoleId == 1 " >
+<div class="walletPreview" [ngClass]="{'openPreview' : openPreview, 'closePreview' : !openPreview}" *ngIf="(loggedIn$ | async) && currentUser?.RoleId == 1 && !(isAdmin$ |async)" >
     <div class="header">Tvoj novčanik</div>
     <div>
         <div class="balance">

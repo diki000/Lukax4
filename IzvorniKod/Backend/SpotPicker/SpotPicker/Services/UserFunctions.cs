@@ -509,13 +509,13 @@ namespace SpotPicker.Services
                 var overlappingReservations = _db.Reservations
                     .Where(r => (r.ReservationDate <= reservationDate && r.ReservationDuration >= reservationDate) ||
                                 (r.ReservationDate <= reservationDuration && r.ReservationDuration >= reservationDuration) ||
-                                (r.ReservationDate >= reservationDate && r.ReservationDuration <= reservationDuration))
+                                (r.ReservationDate >= reservationDate && r.ReservationDuration <= reservationDuration)) 
                     .Select(r => r.ParkingSpaceID)
                     .ToList();
 
                 // Find all parking spaces that are NOT in the list of overlapping reservations
                 var availableSpots = _db.ParkingSpaces
-                    .Where(ps => !overlappingReservations.Contains(ps.Id))
+                    .Where(ps => !overlappingReservations.Contains(ps.Id) && ps.reservationPossible == 1)
                     .Select(ps => ps.Id)
                     .ToList();
 

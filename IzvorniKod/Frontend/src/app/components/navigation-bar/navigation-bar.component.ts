@@ -12,6 +12,7 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class NavigationBarComponent implements OnInit{
   loggedIn$ : Observable<boolean> | undefined;
+  isAdmin$ : Observable<boolean> | undefined;
   currentUser : User | null = null;
   openPreview: boolean = false;
 
@@ -24,7 +25,7 @@ export class NavigationBarComponent implements OnInit{
 
   constructor(private userService : UserService, private router: Router) { 
     let token = localStorage.getItem('jwt');
-    // console
+    this.isAdmin$ = this.userService.isAdmin();
     this.loggedIn$ = this.userService.isLoggedIn();
     if(token != undefined){
       this.userService.updateLoggedInState(true);

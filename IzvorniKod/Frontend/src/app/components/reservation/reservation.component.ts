@@ -64,27 +64,31 @@ export class ReservationComponent {
     // var otherParkings : L.FeatureGroup = new L.FeatureGroup();
     this.parkingService.getAllParkings().subscribe((parkings) => {
       this.allParkingData = parkings;
+
       console.log(this.allParkingData)
       parkings.forEach((parking : any) => {
-        var points: L.LatLngExpression[] = [];
         parking.parkingSpaces.forEach((spot: any) => {
-          this.allParkingSpaces.push(spot);
-          spot.points.forEach((point: any) => {
-            points.push([point.latitude, point.longitude]);
-          });
-          var polygon = L.polygon(points);
-        
-          polygon.on('click', (e : L.LeafletMouseEvent) => {
-            if(this.selectedParkingSpaces.includes(spot)){
-              this.selectedParkingSpaces.splice(this.selectedParkingSpaces.indexOf(spot), 1);
-              polygon.setStyle({ color: 'yellow' });
-            } else {
-              this.selectedParkingSpaces.push(spot);
-              polygon.setStyle({ color: 'red' });
-            }
-          });
-          polygon.setStyle({ color: 'yellow' });
-          polygon.addTo(this.allParkings);
+          var points: L.LatLngExpression[] = [];
+          if(spot.reservationPossible == 1) {
+            this.allParkingSpaces.push(spot);
+  
+            spot.points.forEach((point: any) => {
+              points.push([point.latitude, point.longitude]);
+            });
+            var polygon = L.polygon(points);
+          
+            polygon.on('click', (e : L.LeafletMouseEvent) => {
+              if(this.selectedParkingSpaces.includes(spot)){
+                this.selectedParkingSpaces.splice(this.selectedParkingSpaces.indexOf(spot), 1);
+                polygon.setStyle({ color: 'yellow' });
+              } else {
+                this.selectedParkingSpaces.push(spot);
+                polygon.setStyle({ color: 'red' });
+              }
+            });
+            polygon.setStyle({ color: 'yellow' });
+            polygon.addTo(this.allParkings);
+          }
         });
       });
       this.allParkings.addTo(this.map);
@@ -115,11 +119,9 @@ export class ReservationComponent {
     this.secondStep2 = true;
     this.showPopup = false;
     this.userService.getAllFreePlacesForGivenTime(this.startDate2!, this.endDate2!).subscribe((parkingsSpaces : any) => {
+      console.log(parkingsSpaces);
       parkingsSpaces.forEach((parkingSpace : any) => {
-        console.log(parkingSpace)
-        console.log(this.allParkingSpaces)
         var spot = this.allParkingSpaces.find((item) => item.parkingSpaceId == parkingSpace)
-        console.log(spot)
         var points: L.LatLngExpression[] = [];
         spot.points.forEach((point: any) => {
           points.push([point.latitude, point.longitude]);
@@ -140,24 +142,6 @@ export class ReservationComponent {
     }
     );
 
-    // this.map.removeLayer(this.allParkings);
-    // this.secondStep2 = true;
-    // this.testing.forEach((spot: any) => {
-    //   var points: L.LatLngExpression[] = [];
-    //   spot.points.forEach((point: any) => {
-    //     points.push([point.latitude, point.longitude]);
-    //   });
-    //   var polygon = L.polygon(points);
-    //   polygon.setStyle({ color: 'green' });
-
-    //   polygon.on('click', (e : L.LeafletMouseEvent) => {
-    //     polygon.setStyle({ color: 'blue' });
-    //     console.log(spot)
-    //   });
-
-    //   polygon.addTo(this.availableParkings);
-    // }
-    // );
     this.availableParkings.addTo(this.map);
 
   }

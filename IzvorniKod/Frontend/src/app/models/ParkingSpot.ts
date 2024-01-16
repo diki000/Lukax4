@@ -23,7 +23,7 @@ export class ParkingSpace{
     isOccupied : number;
     reservationPossible : number = 0;
     points : Point[] = [];
-    constructor(parkingSpaceId:number, parkingId:number, parkingSpaceType:number, hasSensor:number, isOccupied:number, points: Point[] = []) {
+    constructor(parkingSpaceId:number, parkingId:number, parkingSpaceType:number, hasSensor:number, isOccupied:number, reservationPossible: number,points: Point[] = []) {
         this.ParkingSpaceId = parkingSpaceId;
         this.ParkingId = parkingId;
         this.ParkingSpaceType = parkingSpaceType;
