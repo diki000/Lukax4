@@ -9,7 +9,7 @@ import { Transaction } from '../models/Transaction';
   providedIn: 'root'
 })
 export class UserService {
-  url: string = "https://localhost:7020/api/User";
+  url: string = "https://spotpicker.online/api/User";
   currentUser: User = new User(0,"","","","","","",false,0,"");
   private decodedPayload:any = 1;
   checkToken() {
@@ -130,7 +130,6 @@ export class UserService {
   }
 
   public updateBalance(wallet : Wallet) {
-    console.log(wallet);
     this.walletSource.next(wallet);
   }
 
@@ -189,7 +188,6 @@ export class UserService {
           query += "numbers=" + item + "&";
         }
       });
-      console.log(query);
       return this.http.get<any>(this.url + "/GetAllReservationsForChosenPlaces" + query);
     }
 
@@ -200,7 +198,6 @@ export class UserService {
         })
       };
       let body = JSON.stringify({userId : userId, psId : psId, rDate, rDuration, repeat, payedWithCard, pmID});
-      console.log(body);
       return this.http.post<any>(this.url + "/makeReservation", body, httpOptions);
     }
 }

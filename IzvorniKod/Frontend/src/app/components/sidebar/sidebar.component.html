@@ -4,7 +4,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body *ngIf="currentUser != null">
+<body *ngIf="currentUser != null && !(isAdmin$ |async)">
     <nav class="sidebar close">
         <header>
             <i class='bx bx-chevron-right toggle' (click)="smanji()"></i>
@@ -29,6 +29,12 @@
                         <a (click)="otvoriRezervacija()" *ngIf="currentUser!= null && currentUser.RoleId == 1">
                             <i class='bx bxs-car-garage icon'></i>
                             <span class="text nav-text">Rezervacija</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a (click)="otvoriFindParking()" *ngIf="currentUser!= null && currentUser.RoleId == 1">
+                            <i class='bx bxs-map icon'></i>
+                            <span class="text nav-text">Pronađi parking</span>
                         </a>
                     </li>
                 </ul>

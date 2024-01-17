@@ -1,6 +1,6 @@
 <div id="reservationContainer">
   <div class="map-container">
-    <div class="map-frame">
+    <div class="map-frame" id="map-frame">
       <div id="map"></div>
     </div>
   </div>
@@ -94,7 +94,7 @@
           <span>Ukupna cijena: </span> <span>{{payUpTotal | number:'1.2-2'}} €</span>
         </div>
       </div>
-      <div class="prompt">Odaberi naćin plaćanja</div>
+      <div class="prompt">Odaberi način plaćanja</div>
       <div class="radio">
         <div>
           <p-radioButton name="payment" value="Na mjestu" [(ngModel)]="selectedPaymentMethod" inputId="payment"></p-radioButton>
@@ -102,7 +102,7 @@
         </div>
         <div>
           <p-radioButton name="payment" value="wallet" [(ngModel)]="selectedPaymentMethod" inputId="payment"></p-radioButton>
-          <label for="payment" class="ml-2">Iz walleta</label>
+          <label for="payment" class="ml-2">Iz aplikacije</label>
         </div>
       </div>
       <div class="prompt">

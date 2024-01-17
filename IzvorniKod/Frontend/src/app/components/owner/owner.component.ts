@@ -74,7 +74,6 @@ export class OwnerComponent implements OnInit{
 
     onFileSelected(event: any){
         this.fileToUpload = event.target.files;
-        console.log("hej");
       }
 
     smanji():void {

@@ -16,51 +16,58 @@ import { ParkingService } from 'src/app/services/parking.service';
 export class DashboardComponent implements OnInit{
 
   currentUser : User | null = null;
-  isLoggedIn$ : Observable<boolean> | undefined;
+  isLoggedIn$ : Observable<boolean> = new Observable<false>;
+  isAdmin$ : Observable<boolean> = new Observable<false>;
   openCreateParking: Observable<boolean> = new Observable<false>;
   openStatistics: Observable<boolean> = new Observable<false>;
-  openReserve: Observable<boolean> = new Observable<false>;
+  openReservation: Observable<boolean> = new Observable<false>;
+  openFindParking: Observable<boolean> = new Observable<false>;
   placanje : number = 1;
   pocetak : string = "";
   kraj : string = "";
   reservations: any[] = [];
   parking : any[] = [];
-  loaded = false;
-  
-  
-  createReserveForm: FormGroup = new FormGroup({});
-  
-  //@ViewChild('childComponentRef', { static: false }) childComponent! : RegisteredMapComponent;
+  loaded = false;  
 
   constructor(private userService: UserService, private sidebarService: SidebarService, private parkingService:ParkingService) {
     let token = localStorage.getItem('jwt');
     this.isLoggedIn$ = this.userService.isLoggedIn();
-    
+    this.isAdmin$ = this.userService.isAdmin();
 
     if(token != undefined){
       this.userService.updateLoggedInState(true);
       this.userService.checkToken();
+      this.isLoggedIn$ = this.userService.isLoggedIn();
       this.currentUser = this.userService.getCurrentUser(); 
       if(this.currentUser?.RoleId == 1){
         this.userService.updateKlijentState(true);
+        this.userService.updateAdminState(false);
+        this.isAdmin$ = this.userService.isAdmin();
+      }
+      else if(this.currentUser?.RoleId == 3){
+        this.userService.updateAdminState(true);
+        this.isAdmin$ = this.userService.isAdmin();
       }
       else{
         this.userService.updateKlijentState(false);
       }
     }
     else{
+      this.isLoggedIn$ = this.userService.isLoggedIn();
       this.userService.updateLoggedInState(false);
+      this.userService.updateKlijentState(false);
+      this.userService.updateAdminState(false);
       this.currentUser = null;
-    }
-    
+    }   
   }
 
     ngOnInit(): void {
       
       this.userService.checkToken();
+      this.isLoggedIn$ = this.userService.isLoggedIn();
       this.currentUser = this.userService.getDecodedToken();
       if(this.currentUser != null){
-        this.userService.updateLoggedInState(true);
+        //this.userService.updateLoggedInState(true);
         if(this.currentUser.RoleId == 1){
           this.sidebarService.setOpenCreateParking(false);
           this.sidebarService.setOpenStatistics(false);
@@ -69,14 +76,9 @@ export class DashboardComponent implements OnInit{
       }
       this.openCreateParking = this.sidebarService.openCreateParking$;
       this.openStatistics = this.sidebarService.openStatistics$;
-      this.openReserve = this.sidebarService.openReserve$;
+      this.openReservation = this.sidebarService.openReservation$;
+      this.openFindParking = this.sidebarService.openFindParking$;
       
-      this.createReserveForm = new FormGroup({
-        Duration: new FormControl('', [Validators.required]),
-        StartDest: new FormControl('', [Validators.required]),
-        EndDest: new FormControl('', [Validators.required]),
-        Payement: new FormControl('', [Validators.required])
-    });
     
     }
 
@@ -102,86 +104,5 @@ export class DashboardComponent implements OnInit{
         }
     }
 
-    rezerviraj():void {
-        //console.log(this.userService.getCurrentUserId());
-        //console.log(this.createReserveForm.value.Duration);
-
-        this.createReserveForm.value.StartDest = this.pocetak;
-        this.createReserveForm.value.EndDest = this.kraj;
-        //console.log(this.createReserveForm.value.StartDest);
-        //console.log(this.createReserveForm.value.EndDest);
-
-        this.createReserveForm.value.Payement = this.placanje;
-        //console.log(this.createReserveForm.value.Payement);
-
-        let poljePocetak = this.pocetak.split(" ")
-        let poljeKraj = this.kraj.split(" ")
-        this.parkingService.lat1 = parseFloat(poljePocetak[0])
-        this.parkingService.lng1 = parseFloat(poljePocetak[1])
-
-        this.parkingService.lat2 = parseFloat(poljeKraj[0])
-        this.parkingService.lng2 = parseFloat(poljeKraj[1])
-
-        this.parkingService.setwaypointsReady(true);
-
-      this.userService.getAllReservationsForUser(this.currentUser!.UserId).subscribe((data) => {
-        this.reservations = data.sort((a: any, b: any) => new Date(a.reservationDate).getTime() - new Date(b.reservationDate).getTime());
-        console.log(data);
-        this.parkingService.getAllParkings().subscribe((data1) => {
-          this.parking = data1;
-          console.log(data1);
-          this.reservations.forEach((reservation: any) => {
-            let matchingParking = {}
-            this.parking.forEach((parking: any) => {
-              parking.parkingSpaces.forEach((parkingSpace: any) => {
-                if (parkingSpace.parkingSpaceId == reservation.parkingSpaceID) {
-                  matchingParking = parking;
-                }
-              })
-            }
-            );
-      
-            if (matchingParking) {
-              reservation.parkingData = matchingParking;
-            }
-          });
-
-          console.log(this.reservations);
-          this.loaded = true;
-        })
-      })
-
-    }
-
-    findParking(id: number) {
-      return this.parking.find((x) => x.ParkingId == id);
-    }
-
-
     
-
-    finalAddress(data:string[]):void{
-       let adresa = "";
-       if(data[0] !== undefined) adresa = adresa + data[0] + " ";
-       if(data[1] !== undefined) adresa = adresa + data[1] + ", ";
-       if(data[2] !== undefined) adresa = adresa + data[2] + ", ";
-       if(data[3] !== undefined) adresa = adresa + data[3];
-       console.log("Konacna adresa je " + adresa);
-
-       (<HTMLInputElement>document.getElementById(data[4])).value = adresa;
-       if(data[5] == "1") {
-        (<HTMLInputElement>document.getElementById("end")).value = "";
-       }
-       
-       if(data[4] == "start") this.pocetak = data[6] + " " + data[7];
-       if(data[4] == "end") this.kraj = data[6] + " " + data[7];
-    }
-    
-
-    
-
-
-
- 
-
 }

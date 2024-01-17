@@ -571,9 +571,9 @@ namespace SpotPicker.Services
 
                 // Check if a reservation with the given criteria exists in the database
                 bool reservationExists = _db.Reservations.Any(r =>
-                    r.ParkingSpaceID == psId &&
-                    r.ReservationDate == rDate &&
-                    r.ReservationDuration == rDuration
+                    r.ParkingSpaceID == reservation.ParkingSpaceID &&
+                    r.ReservationDate == reservation.ReservationDate &&
+                    r.ReservationDuration == reservation.ReservationDuration
                 );
 
                 if (reservationExists)
@@ -598,32 +598,30 @@ namespace SpotPicker.Services
                     ex.Data["Code"] = 406;
                     throw ex;
                 }
-
-                // Calculate the total parking price
-                double userHours = (rDuration - rDate).TotalMinutes / 60.0;
-                Console.WriteLine("userHours " + userHours);
-                int parkingId = _db.ParkingSpaces.FirstOrDefault(p => p.Id == psId)?.Id ?? 0;
-                Console.WriteLine("parkingId " + parkingId);
-                double pricePerHour = _db.Parkings.FirstOrDefault(p => p.Id == parkingId)?.PricePerHour ?? 0;
-                Console.WriteLine("pricePerHour " + pricePerHour);
-                double parkingPrice = userHours * pricePerHour;
-                Console.WriteLine("parkingPrice " + parkingPrice);
-                double totalParkingPrice = Math.Round(parkingPrice, 2);
-                Console.WriteLine("totalParkingPrice" + totalParkingPrice);
-
-
-                // Check if the user has enough money in the wallet
-                Wallet userWallet = _db.Wallets.FirstOrDefault(w => w.UserID == userId);
-                if (userWallet == null || userWallet.Balance < totalParkingPrice)
+                if (payedWithCard)
                 {
-                    var ex = new Exception("Not enough money in the wallet.");
-                    ex.Data["Code"] = 406;
-                    throw ex;
-                }
+                    double userHours = (rDuration - rDate).TotalMinutes / 60.0;
+                    int parkingId = _db.ParkingSpaces.FirstOrDefault(p => p.Id == psId)?.Id ?? 0;
+                    double pricePerHour = _db.Parkings.FirstOrDefault(p => p.Id == parkingId)?.PricePerHour ?? 0;
+                    double parkingPrice = userHours * pricePerHour;
+                    double totalParkingPrice = Math.Round(parkingPrice, 2);
 
-                // Pay for the reservation
-                Console.WriteLine(totalParkingPrice);
-                int transactionId = payForReservation(userId, (float)totalParkingPrice);
+
+                    // Check if the user has enough money in the wallet
+                    Wallet userWallet = _db.Wallets.FirstOrDefault(w => w.UserID == userId);
+                    if (userWallet == null || userWallet.Balance < totalParkingPrice)
+                    {
+                        var ex = new Exception("Not enough money in the wallet.");
+                        ex.Data["Code"] = 406;
+                        throw ex;
+                    }
+
+                    // Pay for the reservation
+                    Console.WriteLine(totalParkingPrice);
+                    int transactionId = payForReservation(userId, (float)totalParkingPrice);
+                }
+                // Calculate the total parking price
+                
 
                 // Add the transaction ID to the reservation
                 //reservation.TransactionID = transactionId;

@@ -122,7 +122,6 @@ export class MapComponent implements OnInit {
     this.parkingService.getAllParkings().subscribe((parkings) => {
       let userId = this.userService.getDecodedToken()?.UserId;
       parkings.forEach((parking : any) => {
-        console.log(parking);
         parking.parkingSpaces.forEach((spot: any) => {
           var points: LatLngExpression[] = [];
           spot.points.forEach((point: any) => {

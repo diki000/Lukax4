@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import * as L from 'leaflet';
 import { ParkingSpace } from 'src/app/models/ParkingSpot';
 import { User } from 'src/app/models/User';
@@ -51,7 +51,11 @@ export class ReservationComponent {
   currentDate = new Date();
 
   constructor(private parkingService: ParkingService, private userService: UserService) {
-    
+    let token = localStorage.getItem('jwt');
+    if(token != undefined){
+      this.userService.checkToken();
+    }
+
    }
 
   private initMap(): void {
@@ -69,7 +73,6 @@ export class ReservationComponent {
     this.parkingService.getAllParkings().subscribe((parkings) => {
       this.allParkingData = parkings;
 
-      console.log(this.allParkingData)
       parkings.forEach((parking: any) => {
         parking.parkingSpaces.forEach((spot: any) => {
           var points: L.LatLngExpression[] = [];
@@ -83,9 +86,11 @@ export class ReservationComponent {
 
             polygon.on('click', (e: L.LeafletMouseEvent) => {
               if (this.selectedParkingSpaces.includes(spot)) {
+                this.selectedParkingSpaceManager = spot.parkingManagerId;
                 this.selectedParkingSpaces.splice(this.selectedParkingSpaces.indexOf(spot), 1);
                 polygon.setStyle({ color: 'yellow' });
               } else {
+                
                 this.selectedParkingSpaces.push(spot);
                 polygon.setStyle({ color: 'red' });
               }
@@ -102,6 +107,11 @@ export class ReservationComponent {
 
   ngOnInit(): void {
     this.user = this.userService.currentUser
+    // if(document.getElementById("map")){
+    //   document.getElementById("map")?.remove();
+    //   document.getElementById('map-frame')!.innerHTML = "<div id='map'></div>";
+
+    // }
     this.initMap();
     // this.addMapClickListener();
   }
@@ -127,7 +137,6 @@ export class ReservationComponent {
       this.secondStep2 = true;
       this.showPopup = false;
       this.userService.getAllFreePlacesForGivenTime(this.startDate2!, this.endDate2!).subscribe((parkingsSpaces: any) => {
-        console.log(parkingsSpaces);
         parkingsSpaces.forEach((parkingSpace: any) => {
           var spot = this.allParkingSpaces.find((item) => item.parkingSpaceId == parkingSpace)
           var points: L.LatLngExpression[] = [];
@@ -213,22 +222,24 @@ export class ReservationComponent {
   }
 
   finilize() {
-    console.log(this.ponavljanje);
     let startFinal = this.startDate1 ? this.startDate1 : this.startDate2;
     let endFinal = this.endDate1 ? this.endDate1 : this.endDate2;
     let r = this.ponavljanje.toLocaleLowerCase() == 'da' ? true : false;
     let p = this.selectedPaymentMethod.toLocaleLowerCase() == 'wallet' ? true : false;
-
+    
     if(this.selectedPaymentMethod == 'wallet') {
+
       if(this.userService.balance < this.payUpTotal) {
         alert("Nemate dovoljno novaca na računu");
         return;
       } else {
         this.userService.payForReservation(this.userService.currentUser.UserId, this.payUpTotal).subscribe((data) => {
           alert("Uspješno ste platili rezervaciju");
+
           this.userService.getTransactions(this.userService.currentUser.UserId).subscribe((data) => {
             this.userService.updateTransactions(data);
           });
+          
           this.userService.getBalance(this.userService.currentUser.UserId).subscribe((data) => {
             this.userService.updateBalance(data);
           });
@@ -250,14 +261,10 @@ export class ReservationComponent {
     let endFinal = this.endDate1 ? this.endDate1 : this.endDate2;
     for (let i = 0; i < this.reservations.length; i++) {
       let av = false;
-      console.log(this.reservations[i].reservedDates);
       for (let j = 0; j < this.reservations[i].reservedDates.length; j++) {
         let date2 = new Date(this.reservations[i].reservedDates[j].item2);
         let date3 = new Date(this.reservations[i].reservedDates[j].item3);
-        console.log(date2, date3);
-        console.log(startFinal);
-        console.log(endFinal);
-        console.log(startFinal! >= date2)
+
         if ((startFinal! >= date2 && startFinal! <= date3) || (endFinal! <= date3 && endFinal! >= date2) || (startFinal! <= date2 && endFinal! >= date3)) {
           av = false;
           break;
@@ -275,7 +282,6 @@ export class ReservationComponent {
     if (this.reservations.length == 0) {
       var array = this.selectedParkingSpaces.map((item: any) => item.parkingSpaceId);
       reservedSpot = array[0];
-      console.log(reservedSpot);
     }
 
     if (reservedSpot == 0) {
@@ -295,11 +301,9 @@ export class ReservationComponent {
     let endFinal = this.endDate1 ? this.endDate1 : this.endDate2;
     for (let i = 0; i < this.allParkingData.length; i++) {
       for (let j = 0; j < this.allParkingData[i].parkingSpaces.length; j++) {
-        console.log(this.allParkingData[i].parkingSpaces[j].parkingSpaceId, this.selectedParkingSpace)
         if (this.allParkingData[i].parkingSpaces[j].parkingSpaceId == this.selectedParkingSpace) {
           this.payUp = this.allParkingData[i].pricePerHour;
-          console.log(this.payUp);
-          console.log(startFinal!.getTime())
+
           var totalHours = Math.abs(startFinal!.getTime() - endFinal!.getTime()) / 36e5;
           this.payUpTotal = this.payUp * totalHours;
         }

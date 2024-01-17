@@ -181,7 +181,7 @@ namespace SpotPicker.Services
                 bool reserved = false;
                 foreach (var reservation in reservations)
                 {
-                    if (reservation.Time.AddHours(reservation.Duration) > DateTime.Now)
+                    if (reservation.Time.AddHours(reservation.Duration) > DateTime.UtcNow)
                     {
                         reserved = true;
                         break;
@@ -263,7 +263,7 @@ namespace SpotPicker.Services
                     ParkingSpaceId = parkingSpace.Id,
                     ParkingManagerId = parkingSpace.ParkingManagerId,
                     Duration = duration,
-                    Time = DateTime.Now,
+                    Time = DateTime.UtcNow,
                     PaymentType = paymentType
                 };
                 if (paymentType == 1) // 1 je placanje odma racunom u aplikaciji
@@ -273,6 +273,7 @@ namespace SpotPicker.Services
                     var transactionID = _userFunctions.payForReservation(userId, (float)(pricePerHour * duration));
                     reservation.TransactionId= transactionID;
                 }
+
                 _db.InstantReservations.Add(reservation);
                 _db.SaveChanges();
             }

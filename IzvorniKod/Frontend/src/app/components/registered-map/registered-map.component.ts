@@ -7,6 +7,9 @@ import 'leaflet-draw';
 import '@geoapify/leaflet-address-search-plugin';
 import { HttpClient } from '@angular/common/http';
 import { DashboardComponent } from '../dashboard/dashboard.component';
+import { SidebarService } from 'src/app/services/sidebar.service';
+import { UserService } from 'src/app/services/user.service';
+import { Point } from 'src/app/models/MapPoint';
 
 
 @Component({
@@ -18,10 +21,13 @@ export class RegisteredMapComponent implements OnInit{
     @Output() childEvent: EventEmitter<any> = new EventEmitter<any>();
     private map!: L.Map;
     private centroid: L.LatLngExpression = [45.79704, 15.85911]; 
-    constructor(private parkingService: ParkingService, private http: HttpClient) { }
+    private currentUser = this.userService.currentUser;
+    constructor(private parkingService: ParkingService, private http: HttpClient, private sidebarService: SidebarService, private userService: UserService) { }
+
     private markerStart!:L.Marker | undefined;
     private markerEnd!:L.Marker | undefined;
     private route!: L.Polyline;
+
     private initMap(): void {
       this.map = L.map('map', {
         center: this.centroid,
@@ -37,8 +43,9 @@ export class RegisteredMapComponent implements OnInit{
       var otherParkings : L.FeatureGroup = new L.FeatureGroup();
       this.parkingService.getAllParkings().subscribe((parkings) => {
         parkings.forEach((parking : any) => {
-          var points: L.LatLngExpression[] = [];
           parking.parkingSpaces.forEach((spot: any) => {
+            var points: L.LatLngExpression[] = [];
+
             spot.points.forEach((point: any) => {
               points.push([point.latitude, point.longitude]);
             });
@@ -67,7 +74,11 @@ export class RegisteredMapComponent implements OnInit{
     }
 
     this.parkingService.waypointsready$.subscribe((data) => {
-        this.parkingService.getQuickestPath(this.parkingService.lat1, this.parkingService.lng1, this.parkingService.lat2,this.parkingService.lng2).subscribe((data) => {
+      if(data == true){
+        this.userService.checkToken();
+        this.currentUser = this.userService.getCurrentUser();
+        this.parkingService.getNearestParkingSpace(this.currentUser!.UserId, this.parkingService.lng1, this.parkingService.lat1, this.parkingService.lng2, this.parkingService.lat2, 1, this.parkingService.duration, this.parkingService.paymentType).subscribe((data : any) => {
+          this.parkingService.getQuickestPath(this.parkingService.lat1, this.parkingService.lng1, data.latitude, data.longitude).subscribe((data) => {
             if(this.route !== undefined) this.map.removeLayer(this.route);
             let points = []
             for(const step of data.routes[0].legs[0].steps) {
@@ -77,8 +88,29 @@ export class RegisteredMapComponent implements OnInit{
                 }
             }
             this.route = L.polyline(points, { color: "blue" }).addTo(this.map);
+            this.userService.getTransactions(this.userService.currentUser.UserId).subscribe((data) => {
+              this.userService.updateTransactions(data);
+            });
+            
+            this.userService.getBalance(this.userService.currentUser.UserId).subscribe((data) => {
+              this.userService.updateBalance(data);
+            });
         })
+        },
+        (error) => {
+          if(error.status == 419){
+            alert("Nema slobodnih mjesta na parkingu");
+          }
+          else if(error.status == 421){
+            alert("Nemate dovoljno novaca na računu");
+          }
+          else{
+            alert("Došlo je do pogreške");
+          }
+        })
+      }
       })
+      
 
     this.map.on('click', (event)=>{
         const lat = event.latlng.lat.toString();
@@ -115,8 +147,11 @@ export class RegisteredMapComponent implements OnInit{
 }
   
     ngOnInit(): void {
-      this.initMap();
+      if(document.getElementById('map') != null){
+        document.getElementById('map')!.remove();
+      }
       
+      this.initMap();
     }
 
 }

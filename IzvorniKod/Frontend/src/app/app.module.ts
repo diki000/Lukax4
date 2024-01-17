@@ -26,6 +26,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { AccordionModule } from 'primeng/accordion';
+import { FindParkingComponent } from './components/find-parking/find-parking.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { AccordionModule } from 'primeng/accordion';
     UnregisteredMapComponent,
     RegisteredMapComponent,
     ReservationComponent,
-    StatisticsComponent
+    StatisticsComponent,
+    FindParkingComponent
   ],
   imports: [
     FormsModule,

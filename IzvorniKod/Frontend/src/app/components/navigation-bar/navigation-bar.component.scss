@@ -151,7 +151,7 @@
     height: calc(100vh - 55px);
     width: 100vw;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 99;        
+    z-index: 9999;        
 }                                                                                                           
 
 .popup {
@@ -164,7 +164,7 @@
     border-radius: 10px;
     padding: 20px;
     box-shadow: -2px 7px 10px 0 rgba(0, 0, 0, 0.5);
-    z-index: 100;
+    z-index: 10000;
     font-size: 24px;
     display: flex;
     flex-direction: column;

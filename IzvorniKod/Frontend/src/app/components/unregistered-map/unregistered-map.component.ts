@@ -27,8 +27,8 @@ export class UnregisteredMapComponent implements OnInit{
     var otherParkings : L.FeatureGroup = new L.FeatureGroup();
     this.parkingService.getAllParkings().subscribe((parkings) => {
       parkings.forEach((parking : any) => {
-        var points: L.LatLngExpression[] = [];
         parking.parkingSpaces.forEach((spot: any) => {
+          var points: L.LatLngExpression[] = [];
           spot.points.forEach((point: any) => {
             points.push([point.latitude, point.longitude]);
           });

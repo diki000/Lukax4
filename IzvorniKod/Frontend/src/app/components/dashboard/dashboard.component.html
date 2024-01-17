@@ -2,7 +2,7 @@
     <app-admin></app-admin>
     <app-sidebar></app-sidebar>
     <app-owner *ngIf="openCreateParking |async"></app-owner>
-    <app-reservation *ngIf="openReserve |async"></app-reservation>
+    <app-reservation *ngIf="(openReservation |async) && (isLoggedIn$ |async) && !(isAdmin$ | async)"></app-reservation>
     <app-statistics *ngIf="openStatistics | async"></app-statistics>
     <!--za neprijavljenog korisnika-->
     <div *ngIf="!(isLoggedIn$ | async)" class="unregistered">
@@ -21,7 +21,7 @@
         <app-unregistered-map></app-unregistered-map>
     </div>
     <!--za prijavljenog korisnika-->
-    <div *ngIf="(isLoggedIn$ | async) && !(openCreateParking |async) && !(openReserve |async) && !(openStatistics | async) && loaded" class="resrvationDetails">
+    <div *ngIf="(isLoggedIn$ | async) && !(openCreateParking |async) && !(openReservation |async) && !(openStatistics | async) && loaded" class="resrvationDetails">
         <p-accordion>
             <p-accordionTab *ngFor="let r of reservations; let i = index">
                 <ng-template pTemplate="header">
@@ -42,52 +42,13 @@
                         Cijena po satu: {{r.parkingData.pricePerHour | number:'1.2-2'}} €
                     </div>
                     <div *ngIf="r.parkingData.idParkingImagePath" style="margin-top: 10px;">
-                        <img width="100px" height="100px" [src]="'https://localhost:7020/' + r.parkingData.idParkingImagePath" alt="">
+                        <img width="100px" height="100px" [src]="'https://spotpicker.online/assets2/' + r.parkingData.idParkingImagePath" alt="">
                     </div>
                 </div>
             </p-accordionTab>
         </p-accordion>
     </div>
     <!-- za prijavljenog korisnika -->
-    <div *ngIf="openReserve | async" class="registered">
-        <div class="create-reserve">
-            <div class="container">
-                <div class="content">
-                    <form [formGroup]="createReserveForm">
-                        <div class="topic">Izaberite parkirno mjesto</div>
-                        <div class="input-box">
-                            <input type="text" id="start" formControlName="StartDest" required>
-                            <label>Na karti odaberite početnu adresu</label>
-                        </div>
-                        <div class="input-box">
-                            <input type="text" id="end" formControlName="EndDest" required>
-                            <label>Na karti odaberite završnu adresu</label>
-                        </div>
-                        <div class="input-box">
-                            <input type="number" formControlName="Duration" required>
-                            <label>Odaberite duljinu trajanja parkiranja (sati)</label>
-                        </div>
-                        <div class="placanje">
-                            <a class="opcija prva" id="prva" (click)="odaberiPlacanje('prva')">
-                                <i class='bx bx-wallet icon'></i>
-                                <label>Plaćanje odmah aplikacijom</label>
-                            </a>
-                            <a class="opcija druga" id="druga" (click)="odaberiPlacanje('druga')">
-                                <i class='bx bx-money icon'></i>
-                                <label>Plaćanje prilikom dolaska</label>
-                            </a>
-                        </div>
-                        <div class="input-box">
-                            <div class="submit" (click)="rezerviraj()">Pronađi parking</div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+    <app-find-parking *ngIf="(openFindParking | async) && (isLoggedIn$ | async)"></app-find-parking>
         
-        
-        <app-registered-map (childEvent)="finalAddress($event)"></app-registered-map>
-        
-    </div>
-    
 </div>
