@@ -1,9 +1,9 @@
-<head>
+<!-- <head>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-</head>
+</head> -->
 
     <div class="create-parking" *ngIf="isOwner">
         <div class="container">
@@ -30,7 +30,7 @@
                         <label>Broj parkirnih mjesta za bicikle</label>
                     </div>
                     <div class="img-box">
-                        <input type="file" accept="image/*" formControlName="File" required >
+                        <input type="file" accept="image/*" formControlName="File" (change)="onFileSelected($event)" required >
                         <label>Slika parkinga</label>
                     </div>
                     <div class="map" id="map-wrapper">

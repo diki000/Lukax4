@@ -59,7 +59,7 @@
               <label for="do">Do:</label>
             </span>
           </div>
-          <button (click)="showAvailableSpots()">Rezerviraj</button>
+          <button (click)="showAvailableSpots()">Prikaži dostupna mjesta</button>
         </div>
         <div class="reservationWays" *ngIf="secondStep2">
           <div class="point">
@@ -72,12 +72,27 @@
     </div>
     <div *ngIf="step3 && !final" class="step3">
       <div class="goBack" (click)="lastStep()">Idi nazad</div>
-      <div class="title">
-        Dovrši rezervaciju za parkirno mjesto {{selectedParkingSpace}} u terminu od {{(startDate1 ? startDate1 : startDate2) | date: 'dd.MM.yy, HH:mm'}} do {{(endDate1 ? endDate1 :endDate2) | date: 'dd.MM.yy, HH:mm'}}
+      <div class="title summary">
+        Pregled rezervacije
+      </div>
+      <div class="sum">
+        <div>
+          Parkirno mjesto: {{selectedParkingSpace}}
+        </div>
+        <div>
+          Od: {{(startDate1 ? startDate1 : startDate2) | date: 'dd.MM.yy, HH:mm'}}
+        </div>
+        <div>
+          Do: {{(endDate1 ? endDate1 :endDate2) | date: 'dd.MM.yy, HH:mm'}}
+        </div>
       </div>
       <div class="prompt">
-        Cijena po satu: {{payUp | number:'1.2-2'}}
-        Ukupna cijena: {{payUpTotal | number:'1.2-2'}}
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <span>Cijena po satu: </span> <span> {{payUp | number:'1.2-2'}} €</span> 
+        </div>
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <span>Ukupna cijena: </span> <span>{{payUpTotal | number:'1.2-2'}} €</span>
+        </div>
       </div>
       <div class="prompt">Odaberi naćin plaćanja</div>
       <div class="radio">

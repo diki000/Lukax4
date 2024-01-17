@@ -11,14 +11,15 @@ export class ParkingService {
 
   constructor(private http: HttpClient) { }
 
-  public addNewParking(parking: Parking): Observable<any>{
-    let httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      })
-    };
-    let body = JSON.stringify(parking);
-    return this.http.post<any>(this.url + "/AddNewParking", body, httpOptions);
+  public addNewParking(parking: FormData): Observable<any>{
+    // let httpOptions = {
+    //   headers: new HttpHeaders({
+    //     'Content-Type': 'application/json',
+    //   })
+    // };
+    // let body = JSON.stringify(parking);
+    // return this.http.post<any>(this.url + "/AddNewParking", body, httpOptions);
+    return this.http.post<any>(this.url + "/AddNewParking", parking);
   }
   public getAllParkings(): Observable<Parking[]>{
     return this.http.get<Parking[]>(this.url + "/GetAllParkings");

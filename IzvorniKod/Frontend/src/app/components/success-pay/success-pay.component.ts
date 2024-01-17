@@ -19,10 +19,7 @@ export class SuccessPayComponent {
   }
 
   reservation() {
-    this.router.navigate(['/dashboard']).then(() => {
-      window.location.reload();
-    }
-    );
+    this.router.navigate(['/dashboard']);
   }
 
 }

@@ -35,13 +35,15 @@ export class UserService {
     return null;
   }
   
-  
-  
   private authSubject : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(localStorage.getItem('jwt') != null);
   private adminSubject : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.getDecodedToken()?.RoleId == 3);
+  private transactionsSource = new BehaviorSubject<Transaction[]>([]);
+  private walletSource = new BehaviorSubject<Wallet>({WalletID: 0, UserID: 0, Balance: 0});
   
   isLoggedIn$ = this.authSubject.asObservable();
   isAdmin$ = this.authSubject.asObservable();
+  transactions$ = this.transactionsSource.asObservable();
+  wallet$ = this.walletSource.asObservable();
   moneyToTransfer: number = 0;
   balance: number = 0;
 
@@ -116,6 +118,15 @@ export class UserService {
     return this.http.get<Wallet>(this.url + "/GetWallet?id=" + id);
   }
 
+  public updateBalance(wallet : Wallet) {
+    console.log(wallet);
+    this.walletSource.next(wallet);
+  }
+
+  updateTransactions(transactions: Transaction[]): void {
+    this.transactionsSource.next(transactions);
+  }
+
   public getTransactions(id: number): Observable<Transaction[]>{
     return this.http.get<Transaction[]>(this.url + "/GetLast5Transactions?id=" + id);
   }
@@ -138,6 +149,10 @@ export class UserService {
       };
       let body = JSON.stringify({Id, Amount});
       return this.http.post<any>(this.url + "/payForReservation", body, httpOptions);
+    }
+
+    public getAllReservationsForUser(id: number): Observable<any>{
+      return this.http.get<any>(this.url + "/getReservationsForUser?id=" + id);
     }
 
     public getAllFreePlacesForGivenTime(start: Date, end: Date): Observable<number[]> {

@@ -27,6 +27,16 @@ export class NavigationBarComponent implements OnInit{
     let token = localStorage.getItem('jwt');
     this.isAdmin$ = this.userService.isAdmin();
     this.loggedIn$ = this.userService.isLoggedIn();
+    this.userService.transactions$.subscribe((data) => {
+      this.transactions = data.sort((a, b) => {
+        return new Date(b.timeAndDate).getTime() - new Date(a.timeAndDate).getTime();
+      }
+      );
+    })
+
+    this.userService.wallet$.subscribe((data : any) => {
+      this.wallet = data.balance;
+    })
     if(token != undefined){
       this.userService.updateLoggedInState(true);
       this.userService.checkToken();
@@ -46,6 +56,7 @@ export class NavigationBarComponent implements OnInit{
             return new Date(b.timeAndDate).getTime() - new Date(a.timeAndDate).getTime();
           }
           );
+          this.userService.updateTransactions(this.transactions);
         })
       }
     }

@@ -20,4 +20,32 @@
         </div>
         <app-unregistered-map></app-unregistered-map>
     </div>
+    <!--za prijavljenog korisnika-->
+    <div *ngIf="(isLoggedIn$ | async) && !(openCreateParking |async) && !(openReservation |async) && !(openStatistics | async) && loaded" class="resrvationDetails">
+        <p-accordion>
+            <p-accordionTab *ngFor="let r of reservations; let i = index">
+                <ng-template pTemplate="header">
+                    <div class="reservation-header">
+                        <div class="reservation-header-title">
+                            Rezervacija {{i + 1}}
+                        </div>
+                        <div class="reservation-header-date">
+                            {{r.reservationDate | date:'dd.MM.yyyy. HH:mm'}} - {{r.reservationDuration | date:'dd.MM.yyyy. HH:mm'}}
+                        </div>
+                    </div>
+                </ng-template>
+                <div>
+                    <div>
+                        Ime parkinga: {{r.parkingData.name}}
+                    </div>
+                    <div>
+                        Cijena po satu: {{r.parkingData.pricePerHour | number:'1.2-2'}} €
+                    </div>
+                    <div *ngIf="r.parkingData.idParkingImagePath" style="margin-top: 10px;">
+                        <img width="100px" height="100px" [src]="'https://localhost:7020/' + r.parkingData.idParkingImagePath" alt="">
+                    </div>
+                </div>
+            </p-accordionTab>
+        </p-accordion>
+    </div>
 </div>

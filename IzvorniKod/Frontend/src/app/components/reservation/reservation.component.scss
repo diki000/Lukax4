@@ -151,6 +151,11 @@ position: relative;
    align-items: center;
    justify-content: center;
    gap: 10px;
+
+   label {
+      font-family: 'Roboto-Light';
+      margin-left: 5px;
+   }
 }
 
 .fini {
@@ -163,6 +168,7 @@ position: relative;
    margin: 10px auto 0 auto;
    border-radius: 10px;
    padding: 10px 20px;
+   margin-top: 20px;
 }
 
 .step3 {
@@ -171,12 +177,29 @@ position: relative;
    label {
       font-size: 1.2rem;
       font-weight: 600;
-      margin: 10px 0;
+      margin: 10px 5px;
    }
 }
 
 .prompt {
    font-size: 1.2rem;
    font-weight: 600;
-   margin: 10px 0;
+   margin: 20px 0;
+}
+
+.summary {
+   padding: 20px 10px;
+   text-align: center;
+   border-bottom: 1px solid #ff86ca;
+   margin-bottom: 10px;
+}
+
+.sum {
+   display: flex;
+   flex-direction: column	;
+   align-items: flex-start;
+   gap: 10px;
+   font-family: 'Roboto-Regular';
+   font-size: 18px;
+   
 }

@@ -24,11 +24,13 @@ namespace SpotPicker.Controllers
         }
         [HttpPost]
         [Route("api/[controller]/AddNewParking")]
-        public IActionResult AddNewParking([FromBody] ParkingModel parking)
+        public async Task<IActionResult> AddNewParking()
         {
             try
             {
-                _parkingFunctions.addNewParking(parking);
+                JObject parking1 =  JObject.Parse((Request.Form["parking"]!));
+                ParkingModel parkingObject = parking1.ToObject<ParkingModel>();
+                await _parkingFunctions.addNewParking(parkingObject, Request);
                 return Ok();
             }
             catch(Exception ex)
