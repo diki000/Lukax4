@@ -16,7 +16,7 @@ export class SidebarService {
   }
 
   get openReservation$() {
-    return this.openReservation.asObservable();
+    return this.openReserve.asObservable();
   }
 
   get openStatistics$() {
@@ -27,7 +27,7 @@ export class SidebarService {
   }
 
   setOpenReservation(value: boolean) {
-    this.openReservation.next(value);
+    this.openReserve.next(value);
   }
 
   setOpenStatistics(value: boolean) {

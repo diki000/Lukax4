@@ -2,7 +2,7 @@
     <app-admin></app-admin>
     <app-sidebar></app-sidebar>
     <app-owner *ngIf="openCreateParking |async"></app-owner>
-    <app-reservation *ngIf="openReservation |async"></app-reservation>
+    <app-reservation *ngIf="openReserve |async"></app-reservation>
     <app-statistics *ngIf="openStatistics | async"></app-statistics>
     <!--za neprijavljenog korisnika-->
     <div *ngIf="!(isLoggedIn$ | async)" class="unregistered">

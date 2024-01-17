@@ -5,7 +5,6 @@ import { Map, LatLng, LatLngExpression, Control, DomUtil, DomEvent } from 'leafl
 import { tileLayer, marker } from 'leaflet';
 import 'leaflet-draw';
 import '@geoapify/leaflet-address-search-plugin';
-import * as GeoSearch from 'leaflet-geosearch';
 import { HttpClient } from '@angular/common/http';
 import { DashboardComponent } from '../dashboard/dashboard.component';
 
