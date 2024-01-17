@@ -32,7 +32,7 @@ export class DashboardComponent implements OnInit{
   
   //@ViewChild('childComponentRef', { static: false }) childComponent! : RegisteredMapComponent;
 
-  constructor(private userService: UserService, private sidebarService: SidebarService, private parkingservice:ParkingService) {
+  constructor(private userService: UserService, private sidebarService: SidebarService, private parkingService:ParkingService) {
     let token = localStorage.getItem('jwt');
     this.isLoggedIn$ = this.userService.isLoggedIn();
     
@@ -116,13 +116,13 @@ export class DashboardComponent implements OnInit{
 
         let poljePocetak = this.pocetak.split(" ")
         let poljeKraj = this.kraj.split(" ")
-        this.parkingservice.lat1 = parseFloat(poljePocetak[0])
-        this.parkingservice.lng1 = parseFloat(poljePocetak[1])
+        this.parkingService.lat1 = parseFloat(poljePocetak[0])
+        this.parkingService.lng1 = parseFloat(poljePocetak[1])
 
-        this.parkingservice.lat2 = parseFloat(poljeKraj[0])
-        this.parkingservice.lng2 = parseFloat(poljeKraj[1])
+        this.parkingService.lat2 = parseFloat(poljeKraj[0])
+        this.parkingService.lng2 = parseFloat(poljeKraj[1])
 
-        this.parkingservice.setwaypointsReady(true);
+        this.parkingService.setwaypointsReady(true);
 
       this.userService.getAllReservationsForUser(this.currentUser!.UserId).subscribe((data) => {
         this.reservations = data.sort((a: any, b: any) => new Date(a.reservationDate).getTime() - new Date(b.reservationDate).getTime());

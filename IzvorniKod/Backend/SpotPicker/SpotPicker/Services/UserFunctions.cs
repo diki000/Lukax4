@@ -486,7 +486,7 @@ namespace SpotPicker.Services
                     // Find reservations for the parking space
                     var reservations = _db.Reservations
                         .Where(r => r.ParkingSpaceID == parkingSpaceId &&
-                                    r.ReservationDate >= DateTimeOffset.UtcNow)
+                                    r.ReservationDuration >= DateTimeOffset.UtcNow)
                         .Select(r => Tuple.Create(parkingSpaceId, r.ReservationDate, r.ReservationDuration))
                         .ToList();
 

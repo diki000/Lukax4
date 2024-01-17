@@ -140,6 +140,7 @@ export class ReservationComponent {
           polygon.on('click', (e: L.LeafletMouseEvent) => {
             polygon.setStyle({ color: 'blue' });
             this.selectedParkingSpace = spot.parkingSpaceId;
+            this.selectedParkingSpaceManager = spot.parkingManagerId;
             this.findPrice();
             this.lastStep();
           });
@@ -234,10 +235,10 @@ export class ReservationComponent {
           this.final = true;
         });
 
-        this.userService.makeReservation(this.userService.currentUser.UserId, this.selectedParkingSpace, startFinal!, endFinal!, r, p).subscribe((data) => {});  
+        this.userService.makeReservation(this.userService.currentUser.UserId, this.selectedParkingSpace, startFinal!, endFinal!, r, p, this.selectedParkingSpaceManager).subscribe((data) => {});  
       }
     } else {
-      this.userService.makeReservation(this.userService.currentUser.UserId, this.selectedParkingSpace, startFinal!, endFinal!, r, p).subscribe((data) => {
+      this.userService.makeReservation(this.userService.currentUser.UserId, this.selectedParkingSpace, startFinal!, endFinal!, r, p, this.selectedParkingSpaceManager).subscribe((data) => {
         this.final = true;
       });
     }
