@@ -23,7 +23,9 @@ export class DashboardComponent implements OnInit{
   placanje : number = 1;
   pocetak : string = "";
   kraj : string = "";
-  
+  reservations: any[] = [];
+  parking : any[] = [];
+  loaded = false;
   
   
   createReserveForm: FormGroup = new FormGroup({});
@@ -50,6 +52,7 @@ export class DashboardComponent implements OnInit{
       this.userService.updateLoggedInState(false);
       this.currentUser = null;
     }
+    
   }
 
     ngOnInit(): void {
@@ -120,7 +123,40 @@ export class DashboardComponent implements OnInit{
         this.parkingservice.lng2 = parseFloat(poljeKraj[1])
 
         this.parkingservice.setwaypointsReady(true);
+
+      this.userService.getAllReservationsForUser(this.currentUser!.UserId).subscribe((data) => {
+        this.reservations = data.sort((a: any, b: any) => new Date(a.reservationDate).getTime() - new Date(b.reservationDate).getTime());
+        console.log(data);
+        this.parkingService.getAllParkings().subscribe((data1) => {
+          this.parking = data1;
+          console.log(data1);
+          this.reservations.forEach((reservation: any) => {
+            let matchingParking = {}
+            this.parking.forEach((parking: any) => {
+              parking.parkingSpaces.forEach((parkingSpace: any) => {
+                if (parkingSpace.parkingSpaceId == reservation.parkingSpaceID) {
+                  matchingParking = parking;
+                }
+              })
+            }
+            );
+      
+            if (matchingParking) {
+              reservation.parkingData = matchingParking;
+            }
+          });
+
+          console.log(this.reservations);
+          this.loaded = true;
+        })
+      })
+
     }
+
+    findParking(id: number) {
+      return this.parking.find((x) => x.ParkingId == id);
+    }
+
 
     
 

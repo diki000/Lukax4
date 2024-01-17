@@ -264,5 +264,20 @@ namespace SpotPicker.Controllers
                 return StatusCode(statusCode);
             }
         }
+
+        [HttpGet]
+        [Route("api/[controller]/getReservationsForUser")]
+        public IActionResult getReservationsForUser(int id)
+        {
+            try
+            {
+                List<ReservationModel> reservations =  _userFunctions.getReservationsForUser(id);
+                return Ok(reservations);
+            } catch(Exception e)
+            {
+                return BadRequest();
+            }
+        }
+
     }
 }

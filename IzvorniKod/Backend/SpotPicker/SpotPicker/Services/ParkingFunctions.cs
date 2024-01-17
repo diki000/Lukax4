@@ -18,7 +18,7 @@ namespace SpotPicker.Services
             _userFunctions = new UserFunctions(database, config);
         }
 
-        public void addNewParking(ParkingModel parking)
+        public async Task addNewParking(ParkingModel parking, HttpRequest request)
         {
             Parking dbParking = new Parking()
             {
@@ -59,6 +59,58 @@ namespace SpotPicker.Services
                 }
                 _db.SaveChanges();
             }
+            await UpladImages(request, currentParkingId);
+        }
+
+        public async Task UpladImages(HttpRequest request, int parkingId)
+        {
+            try
+            {
+                string filePath;
+                var file = request.Form.Files[0];
+
+                if (file.Length > 0)
+                {
+                    string uniqueFileName = Guid.NewGuid().ToString();
+
+                    string fileExtension = Path.GetExtension(file.FileName);
+
+                    string fileName = uniqueFileName + fileExtension;
+
+                    string uploadPath = Path.Combine("assets2", "images", "parkingIdPhoto");
+
+                    if (!Directory.Exists(uploadPath))
+                    {
+                        Directory.CreateDirectory(uploadPath);
+                    }
+
+                    filePath = Path.Combine(uploadPath, fileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(fileStream);
+                    }
+
+                    var parkingUpdate = _db.Parkings.Where(p => p.Id == parkingId).FirstOrDefault();
+                    if (parkingUpdate != null)
+                    {
+                        parkingUpdate.idParkingImagePath = filePath;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                using (StreamWriter writer = new StreamWriter("assets2/errorLog.txt"))
+                {
+                    writer.WriteLine(ex.Message);
+
+                    // You can continue writing more lines or use other writer methods as needed.
+                }
+                throw new Exception(message: ex.Message);
+            }
+
+            _db.SaveChanges();
         }
         public ParkingModel[] getAllParkings()
         {

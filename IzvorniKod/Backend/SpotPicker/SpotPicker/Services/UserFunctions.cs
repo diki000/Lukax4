@@ -642,5 +642,26 @@ namespace SpotPicker.Services
             }
         }
 
+        public List<ReservationModel> getReservationsForUser(int id)
+        {
+            var reservations = _db.Reservations.Where(r => r.UserID == id).ToList();
+            List<ReservationModel> reservationsList = new List<ReservationModel>();
+            for(int i = 0; i < reservations.Count; i++)
+            {
+                ReservationModel reservation = new ReservationModel()
+                {
+                    UserID = reservations[i].UserID,
+                    ParkingSpaceID = reservations[i].ParkingSpaceID,
+                    ReservationDate = reservations[i].ReservationDate,
+                    ReservationDuration = reservations[i].ReservationDuration,
+                    IsRepeating = reservations[i].IsRepeating,
+
+                };
+
+                reservationsList.Add(reservation);
+            }
+
+            return reservationsList;
+        }
     }
 }

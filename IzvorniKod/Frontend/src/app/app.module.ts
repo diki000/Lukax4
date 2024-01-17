@@ -25,6 +25,7 @@ import { StatisticsComponent } from './components/statistics/statistics.componen
 import { CalendarModule } from 'primeng/calendar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { AccordionModule } from 'primeng/accordion';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { RadioButtonModule } from 'primeng/radiobutton';
     CommonModule,
     CalendarModule,
     BrowserAnimationsModule,
-    RadioButtonModule 
+    RadioButtonModule ,
+    AccordionModule
     ],
   providers: [],
   bootstrap: [AppComponent]
