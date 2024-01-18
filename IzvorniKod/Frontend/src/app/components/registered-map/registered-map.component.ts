@@ -50,7 +50,11 @@ export class RegisteredMapComponent implements OnInit{
               points.push([point.latitude, point.longitude]);
             });
             var polygon = L.polygon(points);
+            if(spot.isOccupied == true)
             polygon.setStyle({ color: 'red' });
+            else
+            polygon.setStyle({ color: 'green' });
+          
             polygon.addTo(otherParkings);
           });
         });
