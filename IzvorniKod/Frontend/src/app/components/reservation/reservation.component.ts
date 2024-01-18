@@ -227,32 +227,53 @@ export class ReservationComponent {
     let r = this.ponavljanje.toLocaleLowerCase() == 'da' ? true : false;
     let p = this.selectedPaymentMethod.toLocaleLowerCase() == 'wallet' ? true : false;
     
-    if(this.selectedPaymentMethod == 'wallet') {
+    // if(this.selectedPaymentMethod == 'wallet') {
 
-      if(this.userService.balance < this.payUpTotal) {
-        alert("Nemate dovoljno novaca na računu");
-        return;
-      } else {
-        this.userService.payForReservation(this.userService.currentUser.UserId, this.payUpTotal).subscribe((data) => {
-          alert("Uspješno ste platili rezervaciju");
+    //   if(this.userService.balance < this.payUpTotal) {
+    //     alert("Nemate dovoljno novaca na računu");
+    //     return;
+    //   } else {
+    //     this.userService.payForReservation(this.userService.currentUser.UserId, this.payUpTotal).subscribe((data) => {
+    //       alert("Uspješno ste platili rezervaciju");
 
-          this.userService.getTransactions(this.userService.currentUser.UserId).subscribe((data) => {
-            this.userService.updateTransactions(data);
-          });
+    //       this.userService.getTransactions(this.userService.currentUser.UserId).subscribe((data) => {
+    //         this.userService.updateTransactions(data);
+    //       });
           
-          this.userService.getBalance(this.userService.currentUser.UserId).subscribe((data) => {
-            this.userService.updateBalance(data);
-          });
-          this.final = true;
-        });
+    //       this.userService.getBalance(this.userService.currentUser.UserId).subscribe((data) => {
+    //         this.userService.updateBalance(data);
+    //       });
+    //       this.final = true;
+    //     });
 
-        this.userService.makeReservation(this.userService.currentUser.UserId, this.selectedParkingSpace, startFinal!, endFinal!, r, p, this.selectedParkingSpaceManager).subscribe((data) => {});  
-      }
-    } else {
-      this.userService.makeReservation(this.userService.currentUser.UserId, this.selectedParkingSpace, startFinal!, endFinal!, r, p, this.selectedParkingSpaceManager).subscribe((data) => {
-        this.final = true;
+    //     this.userService.makeReservation(this.userService.currentUser.UserId, this.selectedParkingSpace, startFinal!, endFinal!, r, p, this.selectedParkingSpaceManager).subscribe((data) => {});  
+    //   }
+    // } else {
+    //   this.userService.makeReservation(this.userService.currentUser.UserId, this.selectedParkingSpace, startFinal!, endFinal!, r, p, this.selectedParkingSpaceManager).subscribe((data) => {
+    //     this.final = true;
+    //   });
+    // }
+
+    this.userService.makeReservation(this.userService.currentUser.UserId, this.selectedParkingSpace, startFinal!, endFinal!, r, p, this.selectedParkingSpaceManager).subscribe((data) => {
+      alert("Uspješno ste platili rezervaciju");
+
+      this.userService.getTransactions(this.userService.currentUser.UserId).subscribe((data) => {
+        this.userService.updateTransactions(data);
       });
-    }
+      
+      this.userService.getBalance(this.userService.currentUser.UserId).subscribe((data) => {
+        this.userService.updateBalance(data);
+      });
+
+      this.userService.getAllReservationsForUser(this.userService.currentUser.UserId).subscribe((data) => {
+        this.userService.updateReservations(data);
+      });
+      this.final = true;
+    },
+    (error) => {
+      alert("Nemate dovoljno novaca na računu");
+    });
+
   }
 
   fistWayFini() {

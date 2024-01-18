@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from 'src/app/models/User';
 import { SidebarService } from 'src/app/services/sidebar.service';
@@ -28,7 +28,7 @@ export class SidebarComponent implements  OnInit{
         this.sidebarService.setOpenStatistics(false);
       }
       if(this.currentUser!.RoleId == 1) {
-        this.sidebarService.setOpenReservation(true);
+        this.sidebarService.setOpenReservation(false);
         this.sidebarService.setOpenCreateParking(false);
         this.sidebarService.setOpenStatistics(false);
       }
@@ -85,6 +85,13 @@ export class SidebarComponent implements  OnInit{
   }
   otvoriFindParking():void {
     this.sidebarService.setOpenFindParking(true);
+    this.sidebarService.setOpenCreateParking(false);
+    this.sidebarService.setOpenStatistics(false);
+    this.sidebarService.setOpenReservation(false);
+  }
+
+  otvoriHome():void {
+    this.sidebarService.setOpenFindParking(false);
     this.sidebarService.setOpenCreateParking(false);
     this.sidebarService.setOpenStatistics(false);
     this.sidebarService.setOpenReservation(false);

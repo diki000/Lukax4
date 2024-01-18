@@ -21,7 +21,7 @@
         <app-unregistered-map></app-unregistered-map>
     </div>
     <!--za prijavljenog korisnika-->
-    <div *ngIf="(isLoggedIn$ | async) && !(openCreateParking |async) && !(openReservation |async) && !(openStatistics | async) && loaded" class="resrvationDetails">
+    <div *ngIf="(isLoggedIn$ | async) && !(openCreateParking |async) && !(openReservation |async) && !(openStatistics | async) && !(openFindParking | async) && loaded" class="resrvationDetails">
         <p-accordion>
             <p-accordionTab *ngFor="let r of reservations; let i = index">
                 <ng-template pTemplate="header">
@@ -50,5 +50,4 @@
     </div>
     <!-- za prijavljenog korisnika -->
     <app-find-parking *ngIf="(openFindParking | async) && (isLoggedIn$ | async)"></app-find-parking>
-        
 </div>

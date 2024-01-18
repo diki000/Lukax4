@@ -74,29 +74,7 @@ export class FindParkingComponent implements OnInit{
     this.parkingService.duration = this.createReserveForm.value.Duration;
     this.parkingService.setwaypointsReady(true);
 
-    this.userService.getAllReservationsForUser(this.currentUser!.UserId).subscribe((data) => {
-      
-      this.reservations = data.sort((a: any, b: any) => new Date(a.reservationDate).getTime() - new Date(b.reservationDate).getTime());
-      this.parkingService.getAllParkings().subscribe((data1) => {
-        this.parking = data1;
-        this.reservations.forEach((reservation: any) => {
-          let matchingParking = {}
-          this.parking.forEach((parking: any) => {
-            parking.parkingSpaces.forEach((parkingSpace: any) => {
-              if (parkingSpace.parkingSpaceId == reservation.parkingSpaceID) {
-                matchingParking = parking;
-              }
-            })
-          }
-          );
-  
-          if (matchingParking) {
-            reservation.parkingData = matchingParking;
-          }
-        });
-        this.loaded = true;
-      })
-    })
+    
   }
 
   findParking(id: number) {

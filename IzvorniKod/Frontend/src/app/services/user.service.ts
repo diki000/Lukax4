@@ -39,12 +39,14 @@ export class UserService {
   private adminSubject : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.getDecodedToken()?.RoleId == 3);
   private transactionsSource = new BehaviorSubject<Transaction[]>([]);
   private walletSource = new BehaviorSubject<Wallet>({WalletID: 0, UserID: 0, Balance: 0});
+  private reservationsSource = new BehaviorSubject<any[]>([]);
   private klijentSubject : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.getDecodedToken()?.RoleId == 1);
 
   isLoggedIn$ = this.authSubject.asObservable();
   isAdmin$ = this.authSubject.asObservable();
   transactions$ = this.transactionsSource.asObservable();
   wallet$ = this.walletSource.asObservable();
+  reservations$ = this.reservationsSource.asObservable();
   isKlijent$ = this.authSubject.asObservable();
   moneyToTransfer: number = 0;
   balance: number = 0;
@@ -141,6 +143,8 @@ export class UserService {
     return this.http.get<Transaction[]>(this.url + "/GetLast5Transactions?id=" + id);
   }
 
+
+
   public addPayment(Id: number, Amount: number): Observable<any>{
     let httpOptions = {
       headers: new HttpHeaders({
@@ -163,6 +167,10 @@ export class UserService {
 
     public getAllReservationsForUser(id: number): Observable<any>{
       return this.http.get<any>(this.url + "/getReservationsForUser?id=" + id);
+    }
+
+    public updateReservations(reservations: any[]): void {
+      this.reservationsSource.next(reservations);
     }
 
     public getAllFreePlacesForGivenTime(start: Date, end: Date): Observable<number[]> {
