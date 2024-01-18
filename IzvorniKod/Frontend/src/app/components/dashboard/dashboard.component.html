@@ -22,6 +22,15 @@
     </div>
     <!--za prijavljenog korisnika-->
     <div *ngIf="(isLoggedIn$ | async) && !(openCreateParking |async) && !(openReservation |async) && !(openStatistics | async) && !(openFindParking | async) && loaded" class="resrvationDetails">
+        <div *ngIf="reservations.length == 0" class="homestyle">
+            <div class="title">
+                Nemate rezervacija
+            </div>
+            <div class="text">
+                Rezervirajte parking i uživajte u vožnji!
+            </div>
+        </div>
+
         <p-accordion>
             <p-accordionTab *ngFor="let r of reservations; let i = index">
                 <ng-template pTemplate="header">

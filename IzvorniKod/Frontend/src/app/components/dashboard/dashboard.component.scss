@@ -235,3 +235,16 @@
     align-items: center;
     width: 100%;
 }
+
+.title {
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.homestyle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+}
