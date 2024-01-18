@@ -1,13 +1,15 @@
 <div id="reservationContainer">
   <div class="map-container">
+    <p-progressSpinner *ngIf="showLoading" class="spinner"></p-progressSpinner>
+
     <div class="map-frame" id="map-frame">
-      <div id="map"></div>
+      <div id="map1"></div>
     </div>
   </div>
   <div class="reservationForm">
     <div  *ngIf="!step3" class="wizardContainer">
       <div class="title">
-        {{user.Username}} {{user.Surname}}, rezervaciju možeš izvršiti na dva načina:
+        {{user.Name}} {{user.Surname}}, rezervaciju možeš izvršiti na dva načina:
       </div>
       <div class="differentWays">
         <div class="reservationWays" *ngIf="!secondStep1">

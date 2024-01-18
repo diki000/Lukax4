@@ -20,6 +20,10 @@ export class LoginComponent implements OnInit{
 
   }
   ngOnInit(): void {
+      this.userService.logout();
+      this.userService.updateLoggedInState(false);
+      this.userService.updateAdminState(false);
+      this.userService.updateKlijentState(false);
       
   }
 

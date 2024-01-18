@@ -6,11 +6,18 @@
    margin-top: 70px;
    width: 100%;
 }
-
+.spinner{
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   z-index: 10000;
+}
 .map-container {
    width: 65%;
    height: calc(100vh - 150px);
    margin-left: 102px;
+   position: relative;
 }
 
 .map-frame {
@@ -20,7 +27,7 @@ width: 100%;
 position: relative;
 }
 
-#map {
+#map1 {
 height: 100%;
 position: relative;
 }

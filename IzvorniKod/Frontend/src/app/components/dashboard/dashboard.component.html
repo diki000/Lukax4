@@ -21,8 +21,9 @@
         <app-unregistered-map></app-unregistered-map>
     </div>
     <!--za prijavljenog korisnika-->
-    <div *ngIf="(isLoggedIn$ | async) && !(openCreateParking |async) && !(openReservation |async) && !(openStatistics | async) && !(openFindParking | async) && loaded" class="resrvationDetails">
-        <div *ngIf="reservations.length == 0" class="homestyle">
+    <div *ngIf="(isLoggedIn$ | async) && !(openCreateParking |async) && !(openReservation |async) && !(openStatistics | async) && !(openFindParking | async) && !(isAdmin$ | async)" class="resrvationDetails">
+        <p-progressSpinner *ngIf="!loaded" class="spinner"></p-progressSpinner>
+        <div *ngIf="reservations.length == 0 && loaded" class="homestyle">
             <div class="title">
                 Nemate rezervacija
             </div>
@@ -31,7 +32,7 @@
             </div>
         </div>
 
-        <p-accordion>
+        <p-accordion *ngIf="loaded">
             <p-accordionTab *ngFor="let r of reservations; let i = index">
                 <ng-template pTemplate="header">
                     <div class="reservation-header">
@@ -51,7 +52,7 @@
                         Cijena po satu: {{r.parkingData.pricePerHour | number:'1.2-2'}} €
                     </div>
                     <div *ngIf="r.parkingData.idParkingImagePath" style="margin-top: 10px;">
-                        <img width="100px" height="100px" [src]="'https://spotpicker.online/assets2/' + r.parkingData.idParkingImagePath" alt="">
+                        <img width="100px" height="100px" [src]="'https://spotpicker.online/' + r.parkingData.idParkingImagePath" alt="">
                     </div>
                 </div>
             </p-accordionTab>

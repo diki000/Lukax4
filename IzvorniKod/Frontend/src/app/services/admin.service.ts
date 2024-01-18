@@ -7,6 +7,7 @@ import { User } from '../models/User';
   providedIn: 'root'
 })
 export class AdminService {
+  //url: string = "https://localhost:7020/api/Admin";
   url: string = "https://spotpicker.online/api/Admin";
   
   constructor(private http: HttpClient) { }

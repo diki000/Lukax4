@@ -47,6 +47,8 @@ export class DashboardComponent implements OnInit{
       else if(this.currentUser?.RoleId == 3){
         this.userService.updateAdminState(true);
         this.isAdmin$ = this.userService.isAdmin();
+        this.userService.updateKlijentState(false);
+        this.sidebarService.setOpenReservation(false);
       }
       else{
         this.userService.updateKlijentState(false);

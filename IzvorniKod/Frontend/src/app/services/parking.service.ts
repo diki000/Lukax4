@@ -7,6 +7,7 @@ import { Parking } from '../models/Parking';
   providedIn: 'root'
 })
 export class ParkingService {
+  //url: string = "https://localhost:7020/api/Parking";
   url: string = "https://spotpicker.online/api/Parking";
   private waypointsReady: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   constructor(private http: HttpClient) { }

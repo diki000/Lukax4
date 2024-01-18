@@ -10,6 +10,7 @@ import { DashboardComponent } from '../dashboard/dashboard.component';
 import { SidebarService } from 'src/app/services/sidebar.service';
 import { UserService } from 'src/app/services/user.service';
 import { Point } from 'src/app/models/MapPoint';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -23,7 +24,7 @@ export class RegisteredMapComponent implements OnInit{
     private centroid: L.LatLngExpression = [45.79704, 15.85911]; 
     private currentUser = this.userService.currentUser;
     constructor(private parkingService: ParkingService, private http: HttpClient, private sidebarService: SidebarService, private userService: UserService) { }
-
+    showLoading : boolean = false;
     private markerStart!:L.Marker | undefined;
     private markerEnd!:L.Marker | undefined;
     private route!: L.Polyline;
@@ -41,7 +42,9 @@ export class RegisteredMapComponent implements OnInit{
         minZoom: 12
       });
       var otherParkings : L.FeatureGroup = new L.FeatureGroup();
+      this.showLoading = true;
       this.parkingService.getAllParkings().subscribe((parkings) => {
+
         parkings.forEach((parking : any) => {
           parking.parkingSpaces.forEach((spot: any) => {
             var points: L.LatLngExpression[] = [];
@@ -54,10 +57,11 @@ export class RegisteredMapComponent implements OnInit{
             polygon.setStyle({ color: 'red' });
             else
             polygon.setStyle({ color: 'green' });
-          
+
             polygon.addTo(otherParkings);
           });
         });
+        this.showLoading = false;
         otherParkings.addTo(this.map);
       tiles.addTo(this.map);
     });
@@ -65,20 +69,22 @@ export class RegisteredMapComponent implements OnInit{
     
     let myIconStart = L.icon({iconUrl:"../../../assets/home.png", iconSize: [32,32], iconAnchor:[16,32]});
     let iconOptionsStart = {
-        title:"company name",
+        title:"Početak",
         draggable:false,
         icon:myIconStart
     }
 
     let myIconEnd = L.icon({iconUrl:"../../../assets/destinations.png", iconSize: [32,32], iconAnchor:[7,31]});
     let iconOptionsEnd = {
-        title:"company name",
+        title:"Kraj",
         draggable:false,
         icon:myIconEnd
     }
 
     this.parkingService.waypointsready$.subscribe((data) => {
       if(data == true){
+        console.log("waypoints ready");
+        this.showLoading = true;
         this.userService.checkToken();
         this.currentUser = this.userService.getCurrentUser();
         this.parkingService.getNearestParkingSpace(this.currentUser!.UserId, this.parkingService.lng1, this.parkingService.lat1, this.parkingService.lng2, this.parkingService.lat2, 1, this.parkingService.duration, this.parkingService.paymentType).subscribe((data : any) => {
@@ -91,6 +97,7 @@ export class RegisteredMapComponent implements OnInit{
                     points.push(point);
                 }
             }
+            this.showLoading = false;
             this.route = L.polyline(points, { color: "blue" }).addTo(this.map);
             this.userService.getTransactions(this.userService.currentUser.UserId).subscribe((data) => {
               this.userService.updateTransactions(data);
@@ -99,9 +106,11 @@ export class RegisteredMapComponent implements OnInit{
             this.userService.getBalance(this.userService.currentUser.UserId).subscribe((data) => {
               this.userService.updateBalance(data);
             });
+            this.parkingService.setwaypointsReady(false);
         })
         },
         (error) => {
+          this.showLoading = false;
           if(error.status == 419){
             alert("Nema slobodnih mjesta na parkingu");
           }
@@ -151,10 +160,13 @@ export class RegisteredMapComponent implements OnInit{
 }
   
     ngOnInit(): void {
-      if(document.getElementById('map') != null){
-        document.getElementById('map')!.remove();
+      // if(document.getElementById('map') != null){
+      //   document.getElementById('map')!.remove();
+      //   console.log("removed");
+      // }
+      if(this.route != undefined){
+        this.map.removeLayer(this.route);
       }
-      
       this.initMap();
     }
 

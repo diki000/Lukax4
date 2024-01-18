@@ -27,6 +27,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { AccordionModule } from 'primeng/accordion';
 import { FindParkingComponent } from './components/find-parking/find-parking.component';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,7 @@ import { FindParkingComponent } from './components/find-parking/find-parking.com
     RegisteredMapComponent,
     ReservationComponent,
     StatisticsComponent,
-    FindParkingComponent
+    FindParkingComponent,
   ],
   imports: [
     FormsModule,
@@ -59,7 +60,8 @@ import { FindParkingComponent } from './components/find-parking/find-parking.com
     CalendarModule,
     BrowserAnimationsModule,
     RadioButtonModule ,
-    AccordionModule
+    AccordionModule,
+    ProgressSpinnerModule
     ],
   providers: [],
   bootstrap: [AppComponent]

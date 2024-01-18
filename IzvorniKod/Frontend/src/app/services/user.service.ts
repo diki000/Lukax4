@@ -9,6 +9,7 @@ import { Transaction } from '../models/Transaction';
   providedIn: 'root'
 })
 export class UserService {
+  //url: string = "https://localhost:7020/api/User"
   url: string = "https://spotpicker.online/api/User";
   currentUser: User = new User(0,"","","","","","",false,0,"");
   private decodedPayload:any = 1;

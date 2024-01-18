@@ -60,7 +60,9 @@ export class OwnerComponent implements OnInit{
         if (this.fileToUpload) {
             formData.append('files', this.fileToUpload[0]);
         }
+        console.log(newParking)
         formData.append('parking', JSON.stringify(newParking));
+        console.log(formData)
         this.parkingService.addNewParking(formData).subscribe(
             response => {
                 alert("Uspješno ste kreirali parking!")

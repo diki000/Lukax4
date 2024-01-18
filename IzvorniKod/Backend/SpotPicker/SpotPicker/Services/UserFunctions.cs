@@ -558,7 +558,6 @@ namespace SpotPicker.Services
                 // Create a new ReservationModel
                 Reservation reservation = new Reservation
                 {
-                    ReservationID = reservationId,
                     UserID = userId,
                     ParkingSpaceID = psId,
                     ParkingManagerID = pmID,
@@ -600,8 +599,8 @@ namespace SpotPicker.Services
                 }
                 if (payedWithCard)
                 {
-                    double userHours = (rDuration - rDate).TotalMinutes / 60.0;
-                    int parkingId = _db.ParkingSpaces.FirstOrDefault(p => p.Id == psId)?.Id ?? 0;
+                    double userHours = (rDuration - rDate).Minutes / 60.0;
+                    int parkingId = _db.ParkingSpaces.FirstOrDefault(p => p.Id == psId)?.ParkingId ?? 0;
                     double pricePerHour = _db.Parkings.FirstOrDefault(p => p.Id == parkingId)?.PricePerHour ?? 0;
                     double parkingPrice = userHours * pricePerHour;
                     double totalParkingPrice = Math.Round(parkingPrice, 2);

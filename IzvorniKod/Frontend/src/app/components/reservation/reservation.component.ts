@@ -5,7 +5,6 @@ import { User } from 'src/app/models/User';
 import { ParkingService } from 'src/app/services/parking.service';
 import { UserService } from 'src/app/services/user.service';
 
-
 @Component({
   selector: 'app-reservation',
   templateUrl: './reservation.component.html',
@@ -33,6 +32,7 @@ export class ReservationComponent {
   selectedParkingSpace: number = 0;
   selectedParkingSpaceManager: number = 0;
 
+  showLoading: boolean = false;
   selectedTime: string = '';
   days: number[] = [0, 1, 2, 3, 4, 5, 6];
   disabledTimeRanges: string[] = ['08:00', '12:30', '15:45'];
@@ -59,7 +59,7 @@ export class ReservationComponent {
    }
 
   private initMap(): void {
-    this.map = L.map('map', {
+    this.map = L.map('map1', {
       center: this.centroid,
       zoom: 17
     });
@@ -70,6 +70,7 @@ export class ReservationComponent {
       minZoom: 12
     });
     // var otherParkings : L.FeatureGroup = new L.FeatureGroup();
+    this.showLoading = true;
     this.parkingService.getAllParkings().subscribe((parkings) => {
       this.allParkingData = parkings;
 
@@ -100,6 +101,7 @@ export class ReservationComponent {
           }
         });
       });
+      this.showLoading = false;
       this.allParkings.addTo(this.map);
       tiles.addTo(this.map);
     });

@@ -28,7 +28,7 @@ export class SidebarComponent implements  OnInit{
         this.sidebarService.setOpenStatistics(false);
       }
       if(this.currentUser!.RoleId == 1) {
-        this.sidebarService.setOpenReservation(false);
+        this.sidebarService.setOpenReservation(true);
         this.sidebarService.setOpenCreateParking(false);
         this.sidebarService.setOpenStatistics(false);
       }
