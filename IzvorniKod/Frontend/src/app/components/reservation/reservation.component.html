@@ -1,13 +1,15 @@
 <div id="reservationContainer">
   <div class="map-container">
-    <div class="map-frame">
-      <div id="map"></div>
+    <p-progressSpinner *ngIf="showLoading" class="spinner"></p-progressSpinner>
+
+    <div class="map-frame" id="map-frame">
+      <div id="map1"></div>
     </div>
   </div>
   <div class="reservationForm">
     <div  *ngIf="!step3" class="wizardContainer">
       <div class="title">
-        {{user.Username}} {{user.Surname}}, rezervaciju možeš izvršiti na dva načina:
+        {{user.Name}} {{user.Surname}}, rezervaciju možeš izvršiti na dva načina:
       </div>
       <div class="differentWays">
         <div class="reservationWays" *ngIf="!secondStep1">
@@ -59,7 +61,7 @@
               <label for="do">Do:</label>
             </span>
           </div>
-          <button (click)="showAvailableSpots()">Rezerviraj</button>
+          <button (click)="showAvailableSpots()">Prikaži dostupna mjesta</button>
         </div>
         <div class="reservationWays" *ngIf="secondStep2">
           <div class="point">
@@ -72,14 +74,29 @@
     </div>
     <div *ngIf="step3 && !final" class="step3">
       <div class="goBack" (click)="lastStep()">Idi nazad</div>
-      <div class="title">
-        Dovrši rezervaciju za parkirno mjesto {{selectedParkingSpace}} u terminu od {{(startDate1 ? startDate1 : startDate2) | date: 'dd.MM.yy, HH:mm'}} do {{(endDate1 ? endDate1 :endDate2) | date: 'dd.MM.yy, HH:mm'}}
+      <div class="title summary">
+        Pregled rezervacije
+      </div>
+      <div class="sum">
+        <div>
+          Parkirno mjesto: {{selectedParkingSpace}}
+        </div>
+        <div>
+          Od: {{(startDate1 ? startDate1 : startDate2) | date: 'dd.MM.yy, HH:mm'}}
+        </div>
+        <div>
+          Do: {{(endDate1 ? endDate1 :endDate2) | date: 'dd.MM.yy, HH:mm'}}
+        </div>
       </div>
       <div class="prompt">
-        Cijena po satu: {{payUp | number:'1.2-2'}}
-        Ukupna cijena: {{payUpTotal | number:'1.2-2'}}
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <span>Cijena po satu: </span> <span> {{payUp | number:'1.2-2'}} €</span> 
+        </div>
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <span>Ukupna cijena: </span> <span>{{payUpTotal | number:'1.2-2'}} €</span>
+        </div>
       </div>
-      <div class="prompt">Odaberi naćin plaćanja</div>
+      <div class="prompt">Odaberi način plaćanja</div>
       <div class="radio">
         <div>
           <p-radioButton name="payment" value="Na mjestu" [(ngModel)]="selectedPaymentMethod" inputId="payment"></p-radioButton>
@@ -87,7 +104,7 @@
         </div>
         <div>
           <p-radioButton name="payment" value="wallet" [(ngModel)]="selectedPaymentMethod" inputId="payment"></p-radioButton>
-          <label for="payment" class="ml-2">Iz walleta</label>
+          <label for="payment" class="ml-2">Iz aplikacije</label>
         </div>
       </div>
       <div class="prompt">

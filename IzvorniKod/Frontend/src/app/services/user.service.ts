@@ -9,7 +9,8 @@ import { Transaction } from '../models/Transaction';
   providedIn: 'root'
 })
 export class UserService {
-  url: string = "https://localhost:7020/api/User";
+  //url: string = "https://localhost:7020/api/User"
+  url: string = "https://spotpicker.online/api/User";
   currentUser: User = new User(0,"","","","","","",false,0,"");
   private decodedPayload:any = 1;
   checkToken() {
@@ -35,14 +36,18 @@ export class UserService {
     return null;
   }
   
-  
-  
   private authSubject : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(localStorage.getItem('jwt') != null);
   private adminSubject : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.getDecodedToken()?.RoleId == 3);
+  private transactionsSource = new BehaviorSubject<Transaction[]>([]);
+  private walletSource = new BehaviorSubject<Wallet>({WalletID: 0, UserID: 0, Balance: 0});
+  private reservationsSource = new BehaviorSubject<any[]>([]);
   private klijentSubject : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.getDecodedToken()?.RoleId == 1);
 
   isLoggedIn$ = this.authSubject.asObservable();
   isAdmin$ = this.authSubject.asObservable();
+  transactions$ = this.transactionsSource.asObservable();
+  wallet$ = this.walletSource.asObservable();
+  reservations$ = this.reservationsSource.asObservable();
   isKlijent$ = this.authSubject.asObservable();
   moneyToTransfer: number = 0;
   balance: number = 0;
@@ -127,9 +132,19 @@ export class UserService {
     return this.http.get<Wallet>(this.url + "/GetWallet?id=" + id);
   }
 
+  public updateBalance(wallet : Wallet) {
+    this.walletSource.next(wallet);
+  }
+
+  updateTransactions(transactions: Transaction[]): void {
+    this.transactionsSource.next(transactions);
+  }
+
   public getTransactions(id: number): Observable<Transaction[]>{
     return this.http.get<Transaction[]>(this.url + "/GetLast5Transactions?id=" + id);
   }
+
+
 
   public addPayment(Id: number, Amount: number): Observable<any>{
     let httpOptions = {
@@ -149,6 +164,14 @@ export class UserService {
       };
       let body = JSON.stringify({Id, Amount});
       return this.http.post<any>(this.url + "/payForReservation", body, httpOptions);
+    }
+
+    public getAllReservationsForUser(id: number): Observable<any>{
+      return this.http.get<any>(this.url + "/getReservationsForUser?id=" + id);
+    }
+
+    public updateReservations(reservations: any[]): void {
+      this.reservationsSource.next(reservations);
     }
 
     public getAllFreePlacesForGivenTime(start: Date, end: Date): Observable<number[]> {
@@ -174,7 +197,6 @@ export class UserService {
           query += "numbers=" + item + "&";
         }
       });
-      console.log(query);
       return this.http.get<any>(this.url + "/GetAllReservationsForChosenPlaces" + query);
     }
 
@@ -185,7 +207,6 @@ export class UserService {
         })
       };
       let body = JSON.stringify({userId : userId, psId : psId, rDate, rDuration, repeat, payedWithCard, pmID});
-      console.log(body);
       return this.http.post<any>(this.url + "/makeReservation", body, httpOptions);
     }
 }

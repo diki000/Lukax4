@@ -25,6 +25,9 @@ import { StatisticsComponent } from './components/statistics/statistics.componen
 import { CalendarModule } from 'primeng/calendar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { AccordionModule } from 'primeng/accordion';
+import { FindParkingComponent } from './components/find-parking/find-parking.component';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @NgModule({
   declarations: [
@@ -43,7 +46,8 @@ import { RadioButtonModule } from 'primeng/radiobutton';
     UnregisteredMapComponent,
     RegisteredMapComponent,
     ReservationComponent,
-    StatisticsComponent
+    StatisticsComponent,
+    FindParkingComponent,
   ],
   imports: [
     FormsModule,
@@ -55,7 +59,9 @@ import { RadioButtonModule } from 'primeng/radiobutton';
     CommonModule,
     CalendarModule,
     BrowserAnimationsModule,
-    RadioButtonModule 
+    RadioButtonModule ,
+    AccordionModule,
+    ProgressSpinnerModule
     ],
   providers: [],
   bootstrap: [AppComponent]

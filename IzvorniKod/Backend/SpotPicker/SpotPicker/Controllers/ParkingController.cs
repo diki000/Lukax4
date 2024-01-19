@@ -24,11 +24,13 @@ namespace SpotPicker.Controllers
         }
         [HttpPost]
         [Route("api/[controller]/AddNewParking")]
-        public IActionResult AddNewParking([FromBody] ParkingModel parking)
+        public async Task<IActionResult> AddNewParking()
         {
             try
             {
-                _parkingFunctions.addNewParking(parking);
+                JObject parking1 =  JObject.Parse((Request.Form["parking"]!));
+                ParkingModel parkingObject = parking1.ToObject<ParkingModel>();
+                await _parkingFunctions.addNewParking(parkingObject, Request);
                 return Ok();
             }
             catch(Exception ex)
@@ -52,7 +54,7 @@ namespace SpotPicker.Controllers
 
         [HttpGet]
         [Route("api/[controller]/GetNearestParkingSpaceCoordinates")]
-        public IActionResult GetNearestParkingSpaceCoordinates(int userId, double startLongitude, double startLatitude, double endLongitude, double endLatitude, int profile, int duration, int paymentType)
+        public IActionResult GetNearestParkingSpaceCoordinates([FromQuery]int userId, [FromQuery] double startLongitude, [FromQuery] double startLatitude, [FromQuery] double endLongitude, [FromQuery] double endLatitude, [FromQuery] int profile, [FromQuery] int duration, [FromQuery] int paymentType)
         {
             try
             {

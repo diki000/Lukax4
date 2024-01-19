@@ -9,7 +9,25 @@
     position: relative;
     width: 100%;
 }
-.unregistered, .registered{
+.unregistered{
+    position:relative;
+    min-width: 100%;
+    min-height: 100vh;
+    width: calc(100% - 250px);
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    flex-direction: row;   
+}
+.spinner{
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translate(-50%, -0%);
+ }
+
+.registered{
     position:relative;
     min-width: 100%;
     min-height: 100vh;
@@ -210,4 +228,29 @@
         display: flex;
         flex-direction: column;
     }
+}
+
+.resrvationDetails {
+    padding: 0 100px 0 120px;
+    margin-top: 100px;
+}
+
+.reservation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.title {
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.homestyle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
 }

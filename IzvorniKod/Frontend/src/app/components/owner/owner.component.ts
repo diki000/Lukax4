@@ -21,6 +21,8 @@ export class OwnerComponent implements OnInit{
     parkingSpots: ParkingSpace[] = [];
     isOwner: boolean = false;
 
+    fileToUpload: File[] | null = null;
+
     createParkingForm: FormGroup = new FormGroup({});
 
     parkingData = {
@@ -54,7 +56,14 @@ export class OwnerComponent implements OnInit{
             newParking.ManagerId = this.userservice.getDecodedToken()!.UserId;
         }
         newParking.parkingSpaces = this.parkingSpots;
-        this.parkingService.addNewParking(newParking).subscribe(
+        const formData = new FormData();
+        if (this.fileToUpload) {
+            formData.append('files', this.fileToUpload[0]);
+        }
+        console.log(newParking)
+        formData.append('parking', JSON.stringify(newParking));
+        console.log(formData)
+        this.parkingService.addNewParking(formData).subscribe(
             response => {
                 alert("Uspješno ste kreirali parking!")
                 this.createParkingForm.reset();
@@ -64,6 +73,10 @@ export class OwnerComponent implements OnInit{
                 alert("Nešto je pošlo po zlu!")
             });
     }
+
+    onFileSelected(event: any){
+        this.fileToUpload = event.target.files;
+      }
 
     smanji():void {
         const body = document.querySelector("body");

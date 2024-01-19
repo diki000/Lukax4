@@ -6,7 +6,7 @@
         <h2>Spot Picker</h2>
     </div>
     <div class="right-container" *ngIf="loggedIn$ | async"> 
-        <div class="wallet" (click)="openWalletPreview()" *ngIf="currentUser?.RoleId==1 &&(isKlijent$ |async) && (loggedIn$ | async)" style="cursor: pointer;">
+        <div class="wallet" (click)="openWalletPreview()" *ngIf="(isKlijent$ |async) && (loggedIn$ | async)" style="cursor: pointer;">
             <img width="35px" src="../../../assets/wallet.png" alt="">
         </div>
         <div class="log-out-wrapper" (click)="logOut()" >
@@ -22,12 +22,12 @@
     </div>
 </div>
 
-<div class="walletPreview" [ngClass]="{'openPreview' : openPreview, 'closePreview' : !openPreview}" *ngIf="(loggedIn$ | async) && currentUser?.RoleId == 1 &&(isKlijent$ |async) " >
+<div class="walletPreview" [ngClass]="{'openPreview' : openPreview, 'closePreview' : !openPreview}" *ngIf="(loggedIn$ | async) &&(isKlijent$ |async) " >
     <div class="header">Tvoj novčanik</div>
     <div>
         <div class="balance">
             <span>
-                Stanje računa: {{wallet}}
+                Stanje računa: {{wallet | number:'1.0-2'}}
             </span>
         </div>
         <div class="wallet-content">
@@ -36,7 +36,7 @@
             </div>
             <div class="transaction" *ngFor="let transaction of transactions.slice(page * 5, (page + 1) * 5)">
                 <div class="transactionDate">{{transaction.timeAndDate | date: 'dd.MM.yy, HH:mm'}}</div>
-                <div class="transactionAmount" [ngStyle]="{'color': transaction.type == 0 ? 'red' : 'black' }" >{{transaction.type == 0 ? "-" : "+"}} {{transaction.amount}} €</div>
+                <div class="transactionAmount" [ngStyle]="{'color': transaction.type == 0 ? 'red' : 'black' }" >{{transaction.type == 0 ? "-" : "+"}} {{transaction.amount | number:'1.0-2'}} €</div>
             </div> 
             <div class="pagination">
                 <button [disabled]="page == 0" (click)="pageChange(0)" [ngStyle]="{'color' : page == 0 ? 'grey' : 'black'}">&leftarrow;</button>

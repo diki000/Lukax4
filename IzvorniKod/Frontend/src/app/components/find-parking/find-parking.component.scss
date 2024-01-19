@@ -1,0 +1,180 @@
+.registered{
+    position:relative;
+    min-width: 100%;
+    min-height: 100vh;
+    left: 250px;
+    width: calc(100% - 250px);
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;   
+}
+.create-reserve{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 440px;
+}
+.registered.close{
+left: 88px;
+width: calc(100% - 88px);
+}
+.container{
+    background: white;
+    width: 100%;
+    border-radius: 6px;
+    margin: 0 20px;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+    position: relative;
+    left: 275px;
+    z-index: 99;
+}
+
+.container .content{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 25px 20px;
+}
+
+.content .topic{
+    font-size: 22px;
+    font-weight: 500;
+    color: rgba(238,0,134,255);
+}
+
+.content .input-box{
+    height: 50px;
+    width: 100%;
+    margin: 16px 0;
+    position: relative;
+}
+
+.content .input-box input{
+   position: absolute;
+   height: 100%;
+   width: 100%;
+   border-radius: 6px;
+   padding-left: 16px;
+   font-size: 16px;
+   outline: none; 
+   background: #ff86ca;
+   border: 2px solid transparent;
+   transition: all 0.3s ease;
+}
+
+.content .input-box label{
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 15px;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+.content .input-box input:focus,
+.content .input-box input:valid
+{
+    background: white;
+    border-color: rgba(238,0,134,255);
+}
+
+.content .input-box input:focus ~ label,
+.content .input-box input:valid ~ label{
+    top: 0;
+    left: 12px;
+    background: white;
+}
+
+.content .placanje{
+    height: 50px;
+    width: 100%;
+    margin: 16px 0;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    
+}
+
+.content .placanje .opcija{
+    width: 50%;
+    height: 180%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid transparent;
+    border-color: black;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.content .placanje .opcija:hover{
+    cursor: pointer;
+}
+
+.content .placanje .opcija label{
+    text-align: center;
+}
+
+.content .placanje .opcija.prva{
+    margin-right: 5px;
+}
+.content .placanje .opcija.druga{
+    margin-left: 5px;
+}
+
+.content .placanje .opcija.prva.aktivna{
+    border: 4px solid transparent;
+    border-color: rgba(238,0,134,255);;
+}
+.content .placanje .opcija.prva.aktivna i{
+    color: rgba(238,0,134,255);;
+}
+.content .placanje .opcija.prva.aktivna label{
+    color: rgba(238,0,134,255);;
+}
+
+
+.content .placanje .opcija.druga.aktivna{
+    border: 4px solid transparent;
+    border-color: rgba(238,0,134,255);;
+}
+.content .placanje .opcija.druga.aktivna i{
+    color: rgba(238,0,134,255);;
+}
+.content .placanje .opcija.druga.aktivna label{
+    color: rgba(238,0,134,255);;
+}
+
+
+
+.placanje .icon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    margin-top: 5px;
+}
+
+.content .input-box .submit{
+    font-size: 18px;
+    font-weight: 500;
+    background: rgba(238,0,134,255);
+    color: white;
+    cursor: pointer;
+    border-radius: 6px;
+    padding-left: 16px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    position: relative;
+    top: 35px;
+    display: flex;
+    justify-content: center;
+}
+
+.content .input-box .submit:hover{
+    background: rgb(242, 0, 255);
+    //color: black;
+}

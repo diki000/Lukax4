@@ -42,7 +42,6 @@ export class StatisticsComponent implements OnInit{
           this.parkingOccupancy.push(occupeidSpaces);
         }
       });
-      console.log(this.Parkings);
     }
   );
   this.parkingService.getParkingStatistics(this.currentUser!.UserId).subscribe((data: any[]) => {

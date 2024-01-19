@@ -97,7 +97,7 @@ export class MapComponent implements OnInit {
       for(var i = 0; i < markedSpots[0].length; i++){
         points!.push(new Point(markedSpots[0][i].lat, markedSpots[0][i].lng, 0));
       }
-      var newSpot = new ParkingSpace(0, 0, 0, 1, 0,0, points, 0);
+      var newSpot = new ParkingSpace(0, 0, 0, 0, 0,0, points, 0);
       this.parkingSpots.push(newSpot);
       this.parkingSpotsChange.emit(this.parkingSpots);
     });
@@ -122,7 +122,6 @@ export class MapComponent implements OnInit {
     this.parkingService.getAllParkings().subscribe((parkings) => {
       let userId = this.userService.getDecodedToken()?.UserId;
       parkings.forEach((parking : any) => {
-        console.log(parking);
         parking.parkingSpaces.forEach((spot: any) => {
           var points: LatLngExpression[] = [];
           spot.points.forEach((point: any) => {
@@ -174,7 +173,6 @@ export class MapComponent implements OnInit {
         // Iterate over drawn items and set parkingSensor property for clicked point
         this.drawnItems.eachLayer((layer: L.Layer) => {
           if (layer instanceof L.Polygon && layer.getBounds().contains(event.latlng)) {
-            (layer as CustomPolygon).parkingSensor = !(layer as CustomPolygon).parkingSensor;
             var points: Point[] | undefined = [];
             layer.getLatLngs().forEach((point: any) => {
               point.forEach((point: any) => {
@@ -195,7 +193,6 @@ export class MapComponent implements OnInit {
               }
             });
             this.parkingSpotsChange.emit(this.parkingSpots);
-            
           }
         });
       }
@@ -244,10 +241,5 @@ export class MapComponent implements OnInit {
   enableReservationMode(){
     this.reservationModeEnabled = !this.reservationModeEnabled;
   }
-}
-interface CustomPolygon extends L.Polygon {
-  parkingSensor?: boolean;
-  ownerId?: number;
-  occupied?: boolean;
 }
 

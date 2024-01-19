@@ -26,6 +26,16 @@ export class NavigationBarComponent implements OnInit{
   constructor(private userService : UserService, private router: Router) { 
     let token = localStorage.getItem('jwt');
     this.loggedIn$ = this.userService.isLoggedIn();
+    this.userService.transactions$.subscribe((data) => {
+      this.transactions = data.sort((a, b) => {
+        return new Date(b.timeAndDate).getTime() - new Date(a.timeAndDate).getTime();
+      }
+      );
+    })
+
+    this.userService.wallet$.subscribe((data : any) => {
+      this.wallet = data.balance;
+    })
     this.isKlijent$ = this.userService.isKlijent();
     if(token != undefined){ 
       this.userService.updateLoggedInState(true);
@@ -48,6 +58,7 @@ export class NavigationBarComponent implements OnInit{
             return new Date(b.timeAndDate).getTime() - new Date(a.timeAndDate).getTime();
           }
           );
+          this.userService.updateTransactions(this.transactions);
         })
       }
     }
@@ -59,6 +70,23 @@ export class NavigationBarComponent implements OnInit{
   }
 
   ngOnInit(): void {
+    this.isKlijent$ = this.userService.isKlijent();
+    this.isKlijent$?.subscribe((data) => {
+      if(data){
+        this.userService.getBalance(this.currentUser!.UserId).subscribe((data : any) => {
+          this.userService.balance = data.balance;
+          this.wallet = data.balance;
+        })
+
+        this.userService.getTransactions(this.currentUser!.UserId).subscribe((data) => {
+          this.transactions = data.sort((a, b) => {
+            return new Date(b.timeAndDate).getTime() - new Date(a.timeAndDate).getTime();
+          }
+          );
+          this.userService.updateTransactions(this.transactions);
+        })
+      }
+    })
   }
 
   logOut(){
