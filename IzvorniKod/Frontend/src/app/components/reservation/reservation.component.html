@@ -1,0 +1,148 @@
+<div id="reservationContainer">
+  <div class="map-container">
+    <p-progressSpinner *ngIf="showLoading" class="spinner"></p-progressSpinner>
+
+    <div class="map-frame" id="map-frame">
+      <div id="map1"></div>
+    </div>
+  </div>
+  <div class="reservationForm">
+    <div  *ngIf="!step3" class="wizardContainer">
+      <div class="title">
+        {{user.Name}} {{user.Surname}}, rezervaciju možeš izvršiti na dva načina:
+      </div>
+      <div class="differentWays">
+        <div class="reservationWays" *ngIf="!secondStep1">
+          <div class="point">
+            1
+          </div>
+          Označi na mapi željena parkirna mjesta i zatim klikni na gumb
+          <button (click)="showAvailableTimes()">Prikaži slobodne termine</button>
+        </div>
+        <div class="reservationWays" *ngIf="secondStep1">
+          <div class="point">
+            1
+          </div>
+          <div class="goBack" (click)="stepBack(1)">Idi nazad</div>
+          Odaberi od slobodnih termina kada želiš rezervirati parkirno mjesto
+          <div  (click)="togglePopup()" class="goBack close" style="text-align: center; margin-top: 10px;">
+            Prikaži zauzeta vremena
+          </div>
+          <div class="calendarContainer">
+            <span class="p-float-label">
+              <p-calendar [(ngModel)]="startDate1" inputId="od" [touchUI]="true" dateFormat="dd.mm.yy" [showTime]="true" [minDate]="currentDate"></p-calendar>
+              <label for="od">Od:</label>
+            </span>
+            <span style="margin: 0 5px;">-</span>
+            <span class="p-float-label">
+              <p-calendar [(ngModel)]="endDate1" inputId="do" [touchUI]="true" dateFormat="dd.mm.yy" [showTime]="true" [minDate]="startDate1 == undefined ? currentDate : startDate1" [disabled]="startDate1 == undefined"></p-calendar>
+              <label for="do">Do:</label>
+            </span>
+          </div>
+          <button (click)="fistWayFini()">Dovrši</button>
+        </div>
+        <div class="or">
+          &nbsp; ili &nbsp;
+        </div>
+        <div class="reservationWays" *ngIf="!secondStep2">
+          <div class="point">
+            2
+          </div>
+          Odaberi na kalendaru željeni datum i vrijeme rezervacije, a
+          mi ćemo ti na mapi označiti dostupna parkirna mjesta.
+          <div class="calendarContainer">
+            <span class="p-float-label">
+              <p-calendar [(ngModel)]="startDate2" inputId="od" [touchUI]="true" dateFormat="dd.mm.yy" [showTime]="true" [minDate]="currentDate"></p-calendar>
+              <label for="od">Od:</label>
+            </span>
+            <span style="margin: 0 5px;">-</span>
+            <span class="p-float-label">
+              <p-calendar [(ngModel)]="endDate2" inputId="do" [touchUI]="true" dateFormat="dd.mm.yy" [showTime]="true" [minDate]="startDate2 == undefined ? currentDate : startDate2" [disabled]="startDate2 == undefined"></p-calendar>
+              <label for="do">Do:</label>
+            </span>
+          </div>
+          <button (click)="showAvailableSpots()">Prikaži dostupna mjesta</button>
+        </div>
+        <div class="reservationWays" *ngIf="secondStep2">
+          <div class="point">
+            2
+          </div>
+          <div class="goBack" (click)="stepBack(2)">Idi nazad</div>
+          Odaberi parkirno mjesto na karti označeno zelenom bojom
+        </div>
+      </div>
+    </div>
+    <div *ngIf="step3 && !final" class="step3">
+      <div class="goBack" (click)="lastStep()">Idi nazad</div>
+      <div class="title summary">
+        Pregled rezervacije
+      </div>
+      <div class="sum">
+        <div>
+          Parkirno mjesto: {{selectedParkingSpace}}
+        </div>
+        <div>
+          Od: {{(startDate1 ? startDate1 : startDate2) | date: 'dd.MM.yy, HH:mm'}}
+        </div>
+        <div>
+          Do: {{(endDate1 ? endDate1 :endDate2) | date: 'dd.MM.yy, HH:mm'}}
+        </div>
+      </div>
+      <div class="prompt">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <span>Cijena po satu: </span> <span> {{payUp | number:'1.2-2'}} €</span> 
+        </div>
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <span>Ukupna cijena: </span> <span>{{payUpTotal | number:'1.2-2'}} €</span>
+        </div>
+      </div>
+      <div class="prompt">Odaberi način plaćanja</div>
+      <div class="radio">
+        <div>
+          <p-radioButton name="payment" value="Na mjestu" [(ngModel)]="selectedPaymentMethod" inputId="payment"></p-radioButton>
+          <label for="payment" class="ml-2">Na mjestu</label>
+        </div>
+        <div>
+          <p-radioButton name="payment" value="wallet" [(ngModel)]="selectedPaymentMethod" inputId="payment"></p-radioButton>
+          <label for="payment" class="ml-2">Iz aplikacije</label>
+        </div>
+      </div>
+      <div class="prompt">
+        Je li rezervacija ponavljajuća?
+      </div>
+      <div class="radio">
+        <div>
+          <p-radioButton name="pon" value="da" [(ngModel)]="ponavljanje" inputId="pon"></p-radioButton>
+          <label for="payment" class="ml-2">Da</label>
+        </div>
+        <div>
+          <p-radioButton name="pon" value="ne" [(ngModel)]="ponavljanje" inputId="pon"></p-radioButton>
+          <label for="payment" class="ml-2">Ne</label>
+        </div>
+      </div>
+      <button class="fini" (click)="finilize()">{{selectedPaymentMethod == 'wallet' ? "Plati i " : ""}}Rezerviraj</button>
+    </div>
+    <div *ngIf="final" class="title">
+      Rezervacija je uspješno izvršena!
+      Hvala!
+    </div>
+  </div>
+
+</div>
+
+<div class="zauzetoPopup" *ngIf="showPopup">
+  <div class="title">Zauzeti termini</div>
+  <div class="close" style="text-align: end; font-size: 24px;" (click)="togglePopup()">x</div>
+  <div style="border-bottom: 1px solid black;" *ngFor="let zauzeto of reservations">
+    <div class="reserved">
+      <div>
+        Za parkirno mjesto {{zauzeto.space}}, rezervirani termini su:
+      </div>
+      <div>
+        <div *ngFor="let res of zauzeto.reservedDates">
+          {{res.item2 | date: 'dd.MM.yy, HH:mm'}} - {{res.item3 | date: 'dd.MM.yy, HH:mm'}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

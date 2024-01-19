@@ -1,13 +1,59 @@
-<div class="navbar-wrapper" *ngIf="loggedIn$ | async">
+<div class="navbar-wrapper">
     <div class="logo">
-        <img src="../../../assets/logo.png" alt="logo">
+        <img src="../../../assets/logo.png" alt="logo" [routerLink]="'/dashboard'" style="cursor: pointer;">
     </div>
-    <div class="brand-name">
+    <div class="brand-name" [routerLink]="'/dashboard'" style="cursor: pointer;">
         <h2>Spot Picker</h2>
     </div>
-    <div class="log-out-wrapper" (click)="logOut()">
-        <div class="log-out">
-            Odjavi se
+    <div class="right-container" *ngIf="loggedIn$ | async"> 
+        <div class="wallet" (click)="openWalletPreview()" *ngIf="(isKlijent$ |async) && (loggedIn$ | async)" style="cursor: pointer;">
+            <img width="35px" src="../../../assets/wallet.png" alt="">
+        </div>
+        <div class="log-out-wrapper" (click)="logOut()" >
+            <div class="log-out">
+                Odjavi se
+            </div>
         </div>
     </div>
+    <div class="log-out-wrapper" [routerLink]="'/login'"  *ngIf="!(loggedIn$ | async)">
+        <div class="log-out">
+            Prijavi se
+        </div>
+    </div>
+</div>
+
+<div class="walletPreview" [ngClass]="{'openPreview' : openPreview, 'closePreview' : !openPreview}" *ngIf="(loggedIn$ | async) &&(isKlijent$ |async) " >
+    <div class="header">Tvoj novčanik</div>
+    <div>
+        <div class="balance">
+            <span>
+                Stanje računa: {{wallet | number:'1.0-2'}}
+            </span>
+        </div>
+        <div class="wallet-content">
+            <div class="transactionsTitle">
+                Transakcije
+            </div>
+            <div class="transaction" *ngFor="let transaction of transactions.slice(page * 5, (page + 1) * 5)">
+                <div class="transactionDate">{{transaction.timeAndDate | date: 'dd.MM.yy, HH:mm'}}</div>
+                <div class="transactionAmount" [ngStyle]="{'color': transaction.type == 0 ? 'red' : 'black' }" >{{transaction.type == 0 ? "-" : "+"}} {{transaction.amount | number:'1.0-2'}} €</div>
+            </div> 
+            <div class="pagination">
+                <button [disabled]="page == 0" (click)="pageChange(0)" [ngStyle]="{'color' : page == 0 ? 'grey' : 'black'}">&leftarrow;</button>
+                <span>{{page + 1}}</span>
+                <button [disabled]="(page + 1) * 5 >= transactions.length" (click)="pageChange(1)" [ngStyle]="{'color' : (page + 1) * 5 >= transactions.length ? 'grey' : 'black'}">&rightarrow;</button>
+            </div>
+        </div>
+    </div>
+    <div style="margin-top: auto;">
+        <button class="newTransaction" (click)="paymentPopupToggle()">Uplati novac</button>
+    </div>
+</div>
+
+<div *ngIf="paymentPopup" class="background"></div>
+
+<div *ngIf="paymentPopup && (loggedIn$ | async)" class="popup">
+    <div>Unesi koliko želiš uplatiti na vlastiti račun</div>
+    <input type="number" [(ngModel)]="amount" placeholder="Unesi iznos">
+    <button (click)="sendMoney(); paymentPopupToggle()">Kreni na plaćanje</button>
 </div>

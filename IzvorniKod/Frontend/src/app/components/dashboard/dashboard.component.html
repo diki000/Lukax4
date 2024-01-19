@@ -1,2 +1,63 @@
-<p>Dobro došao {{currentUser.name}} {{currentUser.surname}}</p>
-<app-admin></app-admin>
+<div class="dashboard-wrapper">
+    <app-admin></app-admin>
+    <app-sidebar></app-sidebar>
+    <app-owner *ngIf="openCreateParking |async"></app-owner>
+    <app-reservation *ngIf="(openReservation |async) && (isLoggedIn$ |async) && !(isAdmin$ | async)"></app-reservation>
+    <app-statistics *ngIf="openStatistics | async"></app-statistics>
+    <!--za neprijavljenog korisnika-->
+    <div *ngIf="!(isLoggedIn$ | async)" class="unregistered">
+        <div class="welcome">
+            <div class="title">
+                Dobro došao na <span style="color: #ff86ca;">SpotPicker™</span>!
+            </div>
+            <div class="text">
+                Prijavi se na račun i potraži najbliži parking već danas!
+            </div>
+            <div class="text">
+                <span>Imaš parking i želiš ga oglasiti na našoj aplikaciji?</span>
+                <span>Prijavi se kao vlasnik</span>
+            </div>
+        </div>
+        <app-unregistered-map></app-unregistered-map>
+    </div>
+    <!--za prijavljenog korisnika-->
+    <div *ngIf="(isLoggedIn$ | async) && !(openCreateParking |async) && !(openReservation |async) && !(openStatistics | async) && !(openFindParking | async) && !(isAdmin$ | async)" class="resrvationDetails">
+        <p-progressSpinner *ngIf="!loaded" class="spinner"></p-progressSpinner>
+        <div *ngIf="reservations.length == 0 && loaded" class="homestyle">
+            <div class="title">
+                Nemate rezervacija
+            </div>
+            <div class="text">
+                Rezervirajte parking i uživajte u vožnji!
+            </div>
+        </div>
+
+        <p-accordion *ngIf="loaded">
+            <p-accordionTab *ngFor="let r of reservations; let i = index">
+                <ng-template pTemplate="header">
+                    <div class="reservation-header">
+                        <div class="reservation-header-title">
+                            Rezervacija {{i + 1}}
+                        </div>
+                        <div class="reservation-header-date">
+                            {{r.reservationDate | date:'dd.MM.yyyy. HH:mm'}} - {{r.reservationDuration | date:'dd.MM.yyyy. HH:mm'}}
+                        </div>
+                    </div>
+                </ng-template>
+                <div>
+                    <div>
+                        Ime parkinga: {{r.parkingData.name}}
+                    </div>
+                    <div>
+                        Cijena po satu: {{r.parkingData.pricePerHour | number:'1.2-2'}} €
+                    </div>
+                    <div *ngIf="r.parkingData.idParkingImagePath" style="margin-top: 10px;">
+                        <img width="100px" height="100px" [src]="'https://spotpicker.online/' + r.parkingData.idParkingImagePath" alt="">
+                    </div>
+                </div>
+            </p-accordionTab>
+        </p-accordion>
+    </div>
+    <!-- za prijavljenog korisnika -->
+    <app-find-parking *ngIf="(openFindParking | async) && (isLoggedIn$ | async)"></app-find-parking>
+</div>

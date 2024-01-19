@@ -12,7 +12,22 @@ import { ForgotPasswordComponent } from './components/forgot-password/forgot-pas
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { NavigationBarComponent } from './components/navigation-bar/navigation-bar.component';
 import { AdminComponent } from './components/admin/admin.component';
+import { BankTransferComponent } from './components/bank-transfer/bank-transfer.component';
+import { SuccessPayComponent } from './components/success-pay/success-pay.component';
+import { OwnerComponent } from './components/owner/owner.component';
+import { MapComponent } from './components/map/map.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { UnregisteredMapComponent } from './components/unregistered-map/unregistered-map.component';
+import { RegisteredMapComponent } from './components/registered-map/registered-map.component';
+import { ReservationComponent } from './components/reservation/reservation.component';
+import { StatisticsComponent } from './components/statistics/statistics.component';
 
+import { CalendarModule } from 'primeng/calendar';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { AccordionModule } from 'primeng/accordion';
+import { FindParkingComponent } from './components/find-parking/find-parking.component';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @NgModule({
   declarations: [
@@ -22,7 +37,17 @@ import { AdminComponent } from './components/admin/admin.component';
     RegisterComponent,
     DashboardComponent,
     NavigationBarComponent,
-    AdminComponent
+    AdminComponent,
+    BankTransferComponent,
+    SuccessPayComponent,
+    OwnerComponent,
+    MapComponent,
+    SidebarComponent,
+    UnregisteredMapComponent,
+    RegisteredMapComponent,
+    ReservationComponent,
+    StatisticsComponent,
+    FindParkingComponent,
   ],
   imports: [
     FormsModule,
@@ -31,7 +56,13 @@ import { AdminComponent } from './components/admin/admin.component';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    CommonModule],
+    CommonModule,
+    CalendarModule,
+    BrowserAnimationsModule,
+    RadioButtonModule ,
+    AccordionModule,
+    ProgressSpinnerModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })
