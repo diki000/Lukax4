@@ -22,7 +22,7 @@
 				\item  \underbar{Neregistrirani korisnik (inicijator) može:}
 				
 				\begin{packed_enum}
-					\item na karti pregledati lokacije parkirališta i tlocrt parkirališta
+					\item na karti pregledati lokacije parkirališta i parkirališna mjesta
 					\item stvoriti korisnički račun, tj. registrirati se za šta su mu potrebni korisničko ime, lozinka,  ime, prezime, slika osobne iskaznice, IBAN i email adresa 
 				\end{packed_enum}
 			
@@ -31,7 +31,7 @@
 				\begin{packed_enum}
 					\item prijaviti se u sustav koristeći korisničko ime i lozinku
 					\item na karti odabrati adresu do koje želi doći
-					\item na karti pregledati lokacije parkirališta, tlocrt parkirališta i dostupna parkirna mjesta
+					\item na karti pregledati lokacije parkirališta, parkirališna mjesta i dostupna parkirna mjesta
 					\item rezervirati parkirno mjesto, termin i trajanje za koje je zainteresiran
 					\item platiti rezervaciju parkinga 
 				\end{packed_enum}
@@ -104,7 +104,7 @@
 					\noindent \underbar{\textbf{UC2 -prijava korisnika}}
 					\begin{packed_item}
 						
-						\item \textbf{Glavni sudionik: }registrirani korisnik
+						\item \textbf{Glavni sudionik: }neprijavljeni korisnik
 						\item  \textbf{Cilj:} prijava u korisnički račun
 						\item  \textbf{Sudionici:} baza podataka
 						\item  \textbf{Preduvjet:} prethodna registracija
@@ -185,7 +185,7 @@
 						
 						\item \textbf{Glavni sudionik: }prijavljeni korisnik
 						\item  \textbf{Cilj:} izabrati parkiralište na kojem će kasnije rezervirati mjesto
-						\item  \textbf{Sudionici:} sudionici
+						\item  \textbf{Sudionici:} baza podataka
 						\item  \textbf{Preduvjet:} prethodna prijava
 						\item  \textbf{Opis osnovnog tijeka:}
 						
@@ -205,31 +205,32 @@
 						
 						\item \textbf{Glavni sudionik: }prijavljeni korisnik
 						\item  \textbf{Cilj:} rezervirati specifično parkirno mjesto
-						\item  \textbf{Sudionici:} sudionici
+						\item  \textbf{Sudionici:} baza podataka
 						\item  \textbf{Preduvjet:} odabrano parkiralište
 						\item  \textbf{Opis osnovnog tijeka:}
 						
 						\item[] \begin{packed_enum}
 							
-							\item korisnik klikne na ikonu parkirališta
+							
 							\item na karti parkirališta odabire mjesto za koje je zainteresiran
 							\item u kalendaru izabire datum
 							\item korisniku se prikazuju slobodni sati za odabrano mjesto i datum
-							\item korisnik bira vremensko razdoblje
+							\item korisnik bira datum rezervacije između ponuđenih datuma
 							\item korisnik potvrđuje rezervaciju
-							\item web stranica se preusmjerava na stranicu za plaćanje
+							\item web stranica preusmjerava korisnika na stranicu za plaćanje
 						\end{packed_enum}
 						
 						\item  \textbf{Opis mogućih odstupanja:}
 						
 						\item[] \begin{packed_item}
 							
-							\item[4.a] sva vremena za taj datum i mjesto su zauzeti
+							\item[4.a] sva vremena za taj datum i mjesto su zauzeta
 							\item[] \begin{packed_enum}
 								
 								\item korisnik sam mora odabrati neki drugi datum ili mjesto
 								
 							\end{packed_enum}
+					
 							
 						\end{packed_item}
 					\end{packed_item}
@@ -239,7 +240,7 @@
 						
 						\item \textbf{Glavni sudionik: }prijavljeni korisnik
 						\item  \textbf{Cilj:} rezervirati mjesto u specifičnom terminu
-						\item  \textbf{Sudionici:} sudionici
+						\item  \textbf{Sudionici:} baza podataka
 						\item  \textbf{Preduvjet:} odabrano parkiralište
 						\item  \textbf{Opis osnovnog tijeka:}
 						
@@ -266,43 +267,31 @@
 								
 							\end{packed_enum}
 							
+							\item[5.a] korisnik ne želi platitit karticom, već dolaskom na parking
+							\item[] \begin{packed_enum}
+								
+								\item korisnik će dolaskom na parking platiti rezervaciju
+								
+								
+							\end{packed_enum}
 							
 						\end{packed_item}
 					\end{packed_item}
 					
-					\noindent \underbar{\textbf{UC6.1-plaćanje prilikom dolaska}}
-					\begin{packed_item}
-						
-						
-						\item \textbf{Glavni sudionik: }prijavljeni korisnik
-						\item  \textbf{Cilj:} plaćanje parkinga prilikom dolaska na lokaciju
-						\item  \textbf{Sudionici:} baza podataka
-						\item  \textbf{Preduvjet:} registracija korisnika
-						\item  \textbf{Opis osnovnog tijeka:}
-						
-						\item[] \begin{packed_enum}
-							
-							\item  Korisnik dolazi rezervira parkirališno mjesto
-							\item  Korisnik dolazi na lokaciju parkirališnog mjesta
-							\item  Korisnik plaća rezervirano mjesto
-						\end{packed_enum}
-						
 					
-							
-					\end{packed_item}
 					
-					\noindent \underbar{\textbf{UC6.2-plaćanje prilikom rezervacije}}
+					\noindent \underbar{\textbf{UC6.1-plaćanje prilikom rezervacije}}
 					\begin{packed_item}
 						
 						\item \textbf{Glavni sudionik: }prijavljeni korisnik
 						\item  \textbf{Cilj:} plaćanje karticom prilikom rezervacije
 						\item  \textbf{Sudionici:} baza podataka
-						\item  \textbf{Preduvjet:} registracija korisnika
+						\item  \textbf{Preduvjet:} odabrano parkirališno mjesto
 						\item  \textbf{Opis osnovnog tijeka:}
 						
 						\item[] \begin{packed_enum}
 							
-							\item  Korisnik odabire parkirališno mjesto i slobodan termin
+							
 							\item  Korisnik odabire mogućnost plaćanja karticom prilikom rezervacije
 							\item Korisnik unosi podatke s kartice
 							\item Nakon uspješnog plaćanja mjesto je rezervirano
@@ -323,13 +312,13 @@
 						\end{packed_item}
 					\end{packed_item}
 					
-					\noindent \underbar{\textbf{UC6.3-plaćanje sredstvima u novčaniku aplikacije}}
+					\noindent \underbar{\textbf{UC6.2-plaćanje sredstvima u novčaniku aplikacije}}
 					\begin{packed_item}
 						
 						\item \textbf{Glavni sudionik: }prijavljeni korisnik
 						\item  \textbf{Cilj:} plaćanje parkirnog mjesta sredstvima unutar aplikacije
 						\item  \textbf{Sudionici:} baza podataka
-						\item  \textbf{Preduvjet:} registracija korisnika, dodavanje novaca u novčanik
+						\item  \textbf{Preduvjet:} registracija korisnika, dodavanje novaca u novčanik, odabir parkirnog mjesta
 						\item  \textbf{Opis osnovnog tijeka:}
 						
 						\item[] \begin{packed_enum}
@@ -360,7 +349,7 @@
 						\item \textbf{Glavni sudionik: }prijavljeni korisnik
 						\item  \textbf{Cilj:} korištenje sredstava novčanika aplikacije za plaćanje
 						\item  \textbf{Sudionici:} baza podataka
-						\item  \textbf{Preduvjet:} registracija korisnika
+						\item  \textbf{Preduvjet:} prijava korisnika
 						\item  \textbf{Opis osnovnog tijeka:}
 						
 						\item[] \begin{packed_enum}
@@ -379,7 +368,7 @@
 						\item \textbf{Glavni sudionik: }administrator
 						\item  \textbf{Cilj:} izmjena osobnih podataka postojećih korisnika
 						\item  \textbf{Sudionici:} baza podataka
-						\item  \textbf{Preduvjet:} registracija korisnika
+						\item  \textbf{Preduvjet:} prijava korisnika kao administratora
 						\item  \textbf{Opis osnovnog tijeka:}
 						
 						\item[] \begin{packed_enum}
@@ -399,7 +388,7 @@
 						\item \textbf{Glavni sudionik: }administrator
 						\item  \textbf{Cilj:} potvrda uspješne prijave voditelju
 						\item  \textbf{Sudionici:} baza podataka
-						\item  \textbf{Preduvjet:} registracija korisnika
+						\item  \textbf{Preduvjet:} prijava korisnika kao administratora
 						\item  \textbf{Opis osnovnog tijeka:}
 						
 						\item[] \begin{packed_enum}
@@ -412,32 +401,13 @@
 						
 					\end{packed_item}
 					
-					\noindent \underbar{\textbf{UC10-brisanje korisnika}}
-					\begin{packed_item}
-						
-						\item \textbf{Glavni sudionik: }administrator
-						\item  \textbf{Cilj:}  izmjena osobnih podataka postojećih korisnika
-						\item  \textbf{Sudionici:} baza podataka
-						\item  \textbf{Preduvjet:} registracija korisnika
-						\item  \textbf{Opis osnovnog tijeka:}
-						
-						\item[] \begin{packed_enum}
-							
-							\item  Administrator odabire opciju pregled korisnika
-							\item  Administrator otvara željeni profil
-							\item  Administrator odabire opciju uredi
-							\item  Administrator izmjenjuje podatke
-							\item  Promjene se ažuriraju u bazi podataka
-						\end{packed_enum}
-
-					\end{packed_item}
 					
-					\noindent \underbar{\textbf{UC11-unos podataka o parkiralištu}}
+					\noindent \underbar{\textbf{UC10-unos podataka o parkirnom mjestu}}
 					\begin{packed_item}
 						\item \textbf{Glavni sudionik: }voditelj parkinga
 						\item  \textbf{Cilj:} unos podataka o parkirnom mjestu
 						\item  \textbf{Sudionici:} baza podataka
-						\item  \textbf{Preduvjet:} registracija korisnika, potvrda uloge voditelja
+						\item  \textbf{Preduvjet:} registracija korisnika, voditeljski račun
 						\item  \textbf{Opis osnovnog tijeka:}
 						
 						\item[] \begin{packed_enum}
@@ -451,7 +421,7 @@
 
 					\end{packed_item}
 					
-					\noindent \underbar{\textbf{UC12-dodavanje dostupnosti parkirnog mjesta}}
+					\noindent \underbar{\textbf{UC11-postavljanje statusa dostupnosti parkirnog mjesta}}
 					\begin{packed_item}
 						
 						\item \textbf{Glavni sudionik: }voditelj parkinga
@@ -464,32 +434,15 @@
 							
 							\item  Voditelj otvara kartu parkirališnih mjesta
 							\item  Voditelj odabire željeno parkirališno mjesto
-							\item  Voditelj odabire opciju dostupno
+							\item  Voditelj odabire opciju dostupno/nedostupno
 							\item  Promjene se ažuriraju u bazi podataka
 						\end{packed_enum}
 
 					\end{packed_item}
 					
-					\noindent \underbar{\textbf{UC13-micanje dostupnosti parkirnog mjesta}}
-					\begin{packed_item}
-						
-						\item \textbf{Glavni sudionik: }voditelj parkinga
-						\item  \textbf{Cilj:} : ucrtava dostupna parkirališna mjesta u kartu
-						\item  \textbf{Sudionici:} baza podataka
-						\item  \textbf{Preduvjet:} registracija korisnika, potvrda uloge voditelja
-						\item  \textbf{Opis osnovnog tijeka:}
-						
-						\item[] \begin{packed_enum}
-							
-							\item  Voditelj otvara kartu parkirališnih mjesta
-							\item  Voditelj odabire željeno parkirališno mjesto
-							\item  Voditelj odabire opciju nedostupno
-							\item  Promjene se ažuriraju u bazi podataka
-						\end{packed_enum}
-
-					\end{packed_item}
+			
 					
-					\noindent \underbar{\textbf{UC14-pregledavanje statistike za parkiralište}}
+					\noindent \underbar{\textbf{UC12-pregledavanje statistike za parkiralište}}
 					\begin{packed_item}
 						
 						\item \textbf{Glavni sudionik: }voditelj parkinga
@@ -508,7 +461,7 @@
 						
 					\end{packed_item}
 					
-					\noindent \underbar{\textbf{UC15 -pregled parkirališnih mjesta}}
+					\noindent \underbar{\textbf{UC13 -pregled parkirališnih mjesta}}
 					\begin{packed_item}
 						
 						\item \textbf{Glavni sudionik: }korisnik
@@ -524,6 +477,7 @@
 						\end{packed_enum}
 
 					\end{packed_item}
+				
 
 				\section{Dijagram obrazaca uporabe} 
 			
@@ -531,24 +485,24 @@
 				
 			\begin{figure}[]
 				\centering
-				\fbox{\includegraphics[width=\textwidth,keepaspectratio]{slike/spotPicker.png}}
-				\label{fig:spotPicker}
+				\fbox{\includegraphics[width=\textwidth,keepaspectratio]{slike/UseCaseDijagram.png}}
+				\label{fig:UseCaseDijagram}
 			\end{figure}
 			\pagebreak
 					
 				
 			\subsection{Sekvencijski dijagrami}
 				
-				 \textbf{\textit{Obrazac uporabe UC4 - Odabir parkirališta}}
+				 \textbf{Obrazac uporabe UC4 - Odabir parkirališta}
 				  
 				
-				 \textit{Klijent, nakon što pokrene aplikaciju, šalje zahtjev za pregled svih dostupnih parkirališta. Aplikacija, koristeći bazu podataka, dohvaća popis parkirališta te ih prikazuje korisniku. Nakon pregleda, klijent odabire specifično parkiralište koje ga zanima. Aplikacija zatim prikazuje dodatne informacije o odabranom parkiralištu, uključujući naziv, opis, fotografiju, cjenik i slobodna parkirališna mjesta. Dodatno, klijent može pregledati dostupna parkirališna mjesta na karti povezanoj s odabranim parkiralištem, a ovisno o odabiru, informacije o zauzetosti pojedinih mjesta}
+				 {Klijent, nakon što pokrene aplikaciju, šalje zahtjev za pregled svih dostupnih parkirališta. Aplikacija, koristeći bazu podataka, dohvaća popis parkirališta te ih prikazuje korisniku. Nakon pregleda, klijent odabire specifično parkiralište koje ga zanima. Aplikacija zatim prikazuje dodatne informacije o odabranom parkiralištu, uključujući naziv, opis, fotografiju, cjenik i slobodna parkirališna mjesta.}
 				    
 				       \begin{figure}[hbt!]
 				    	   \centering
-				    	   \includegraphics[width=0.7\linewidth]{slike/uc4.png}
+				    	   \includegraphics[width=0.7\linewidth]{slike/SeqDijagram4.png}
 				    	   \caption{Sekvencijski dijagram za UC4}
-				        	\label{fig:uc4}
+				        	\label{fig:SeqDijagram4}
 				       \end{figure}
 				    
 				    
@@ -556,11 +510,11 @@
 				    
 				    
 				    
-				   \textbf{\textit{Obrazac uporabe UC5 - Rezervacija mjesta}}
+				   \textbf{Obrazac uporabe UC5 - Rezervacija mjesta}
 				   
 				   
 				  
-				   \textit{Klijent, nakon što je odabrao željeno parkiralište, pristupa informacijama o dostupnim parkirališnim mjestima. Aplikacija mu prikazuje kartu parkirališta s označenim slobodnim i zauzetim mjestima. Tada klijent šalje upit za odabranim mjestom, a aplikacija provjerava raspoloživost tog mjesta. Ukoliko je mjesto slobodno, klijentu se potvrđuje rezervacija, a sustav ažurira informacije o zauzetosti i evidentira rezervaciju.U slučaju da mjesta nisu slobodna, aplikacija obavještava klijenta o nedostupnosti te ga vraća na korak odabira novih mjesta ili termina.}
+				   {Klijent, nakon što je odabrao željeno parkiralište, pristupa informacijama o dostupnim parkirališnim mjestima. Aplikacija mu prikazuje kartu parkirališta s označenim slobodnim i zauzetim mjestima. Tada klijent šalje upit za odabranim mjestom, a aplikacija provjerava raspoloživost tog mjesta. Ukoliko je mjesto slobodno, klijentu se potvrđuje rezervacija, a sustav ažurira informacije o zauzetosti i evidentira rezervaciju.U slučaju da mjesta nisu slobodna, aplikacija obavještava klijenta o nedostupnosti te ga vraća na korak odabira novih mjesta ili termina.}
 				   
 				   \pagebreak
 				   
@@ -584,17 +538,17 @@
 				    
 				    
 			     	
-				    \textbf{\textit{Obrazac uporabe UC6 - Plaćanje parkirališta}}
+				    \textbf{Obrazac uporabe UC6 - Plaćanje parkirališta}
 				    				
-				     \textit{Kada klijent odluči platiti parkiranje, sustav prikazuje opcije plaćanja prilikom rezervacije ili prilikom dolaska na lokaciju parkirališta. Klijent odabire željeni način plaćanja. Ako odabere plaćanje unutar aplikacije, tada aplikacija provjerava stanje novčanika. Rezervacija će se naplatiti ako klijent ima dovoljno sredstava u novčaniku, a u protivnom će mu se prikazati da treba nadoplatit svoj novčanik. Ako se odluči za opciju plaćanja parkinga na parkiralištu, tada će mu aplikacija to prihvatit i potvrdit.}
+				     {Kada klijent odluči platiti parkiranje, sustav prikazuje opcije plaćanja prilikom rezervacije ili prilikom dolaska na lokaciju parkirališta. Klijent odabire željeni način plaćanja. Ako odabere plaćanje unutar aplikacije, tada aplikacija provjerava stanje novčanika. Rezervacija će se naplatiti ako klijent ima dovoljno sredstava u novčaniku, a u protivnom će mu se prikazati da treba nadoplatit svoj novčanik. Ako se odluči za opciju plaćanja parkinga na parkiralištu, tada će mu aplikacija to prihvatiti i potvrditi.}
 				     
 				     
 				     
 				      \begin{figure}[hbt!]
 				      	\centering
-				      	\includegraphics[width=0.7\linewidth]{slike/UC6.png}
+				      	\includegraphics[width=0.7\linewidth]{slike/SeqDijagram6.png}
 				      	\caption{Sekvencijski dijagram za UC6}
-				      	\label{fig:uc6}
+				      	\label{fig:SeqDijagram6}
 				      \end{figure}
 				      
 				    
@@ -608,11 +562,8 @@
 				\item Sustav treba omogućiti rad više korisnika u stvarnom vremenu.
 				\item Korisničko sučelje i sustav moraju podržavati hrvatsku abecedu (dijakritičke znakove) pri unosu i prikazu tekstualnog sadržaja.
 				\item Izvršavanje dijela programa u kojem se pristupa bazi podataka ne smije trajati duže od nekoliko sekundi.
-				\item Sustav treba biti implementiran kao web aplikacija koristeći objektno-orijentirane jezike.
-				\item Neispravno korištenje korisničkog sučelja ne smije narušiti funkcionalnost i rad sustava.
-				\item Sustav treba biti jednostavan za korištenje; korisnici se moraju znati koristiti sučeljem bez opsežnih uputa.
-				\item Nadogradnja sustava ne smije narušavati postojeće funkcionalnosti sustava.
-				\item Sustav kao valutu koristi evro. 
+				\item Sustav treba biti implementiran kao web aplikacija koristeći objektno-orijentirane jezike.				
+				\item Sustav kao valutu koristi euro. 
 			\end{itemize}
 			 
 			 

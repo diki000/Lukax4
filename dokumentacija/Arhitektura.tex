@@ -22,7 +22,7 @@
 				\begin{itemize}
 					\item \textbf{Model:} Središnja komponenta sustava koja predstavlja dinamičke strukture podataka neovisne o korisničkom sučelju. Model izravno upravlja podacima, logikom i pravilima aplikacije. Također, prima ulazne podatke od Controllera.
 					
-					\item \textbf{View:} Odgovoran je za prikaz podataka, poput grafa ili tabličnog prikaza. View omogućuje različite prikaze istih informacija, poput grafičkog ili tabličnog prikaza podataka.
+					\item \textbf{View:} Omogućuje različite prikaze istih informacija, poput grafičkog ili tabličnog prikaza podataka.
 					
 					\item \textbf{Controller:} Prima ulaze od korisnika i prilagođava ih za prosljeđivanje Modelu ili Viewu. Controller upravlja korisničkim zahtjevima i temeljem njih izvodi daljnju interakciju s ostalim elementima sustava. Osim posredovanja između Modela i Viewa, Controller igra ključnu ulogu u usmjeravanju tijeka aplikacije.
 				\end{itemize}
@@ -173,7 +173,7 @@
 				\SetCell{LightGreen} reservation ID	& INT & jedinstveni identifikator rezervacije  	\\ \hline 
 				\SetCell{LightBlue} user ID & INT & ID na korisnika koji je napravio rezervaciju, strani ključ	\\ \hline 
 				reservation date & DATETIME & datum i vrijeme rezervacije	\\ \hline 
-				duration & ID	& vremenska duljina rezervacije, u satima	\\ \hline 
+				duration & TIME	& vremenska duljina rezervacije, u satima	\\ \hline 
 				\SetCell{LightBlue}vehicle type & INT	& tip vozila na čije ime glasi rezervacija, strani ključ na tablicu vehicle	\\ \hline 
 				\SetCell{LightBlue} parking space id & INT	& jedinstveni identifikator koje je točno parkirno mjesto rezervirano, strani ključ	\\ \hline 
 				repeating & BOOLEAN	& vrijednost koja pokazuje treba li se rezervacija periodički ponavljati (na dnevnoj, tjednoj ili mjesečnoj razini...) \\ \hline
@@ -219,70 +219,6 @@
 			\end{figure}
 			
 			
-			\section{Dijagram razreda} 
-			
-			{ Na slikama su prikazani razredi („Class“) koji su korišteni za implementaciju backend-a. Na slici \ref{fig:controllers} su prikazani razredi koji nasljeđuju Controller razred. Sve funkcije implementirane u Controller razredu vraćaju IActionResult (podatke i odgovarajući kod). Također, sve funkcije ne komuniciraju direktno s bazom podataka nego pozivaju funkcije iz određenih servisa koji imaju implementiranu tu funkcionalnost. Funkcije u kontrolerima kao parametre primaju odgovarajući model. }
-			
-			\begin{figure}[h]
-				\centering
-				\includegraphics[width=\textwidth,keepaspectratio]{slike/progi4_1.png}
-				\caption{dio Controllers}
-				\label{fig:controllers}
-			\end{figure}
-			\pagebreak
-			
-			{Modeli razreda odražavaju strukturu baze podataka unutar aplikacije. Metode implementirane unutar tih razreda izravno komuniciraju s bazom podataka kako bi dobile tražene informacije. Razred User predstavlja generičnog korisnika aplikacije koji se može registrirati. Na taj razred referira se razred Manager (jer je svaki Manager ujedno i User).}
-			
-			\begin{figure}[h]
-				\centering
-				\includegraphics[width=\textwidth,keepaspectratio]{slike/progi_1.png}
-				\caption{dio Models}
-				\label{fig:models}
-			\end{figure}
-			\eject
-			
-			
-			\begin{figure}[h]
-				\centering
-				\includegraphics[width=\textwidth,keepaspectratio]{slike/progi3_1.png}
-				\caption{dio Services}
-				\label{fig:services}
-			\end{figure}
-			
-			{U dijagramu razreda na slici \ref{fig:services} prikazani je dio servisa. Svi servisi kao svoj atribut, između ostalih, imaju instancu objekta \_EFCore koji predstavlja kontekst za bazu podataka i instancu IConfiguration objekta koji služi za dohvaćanje konstanti. Funkcije definirane u pojedinom razredu dohvaćaju, mijenjaju i dodaju podatke u bazu podataka i manipuliraju podacima koje vraćaju kontroleru koji šalje nazad do korisnika.}
-			
-			\begin{figure}[h]
-				\centering
-				\includegraphics[width=\textwidth,keepaspectratio]{slike/progi2_1.png}
-				\caption{Reprezentacija baze podataka}
-				\label{fig:repr}
-			\end{figure}
-			
-			\eject
-			
-			\pagebreak
-			
-			\section{Dijagram stanja}
-			
-			\textbf{\textit{dio 2. revizije}}\\
-			
-			\textit{Potrebno je priložiti dijagram stanja i opisati ga. Dovoljan je jedan dijagram stanja koji prikazuje \textbf{značajan dio funkcionalnosti} sustava. Na primjer, stanja korisničkog sučelja i tijek korištenja neke ključne funkcionalnosti jesu značajan dio sustava, a registracija i prijava nisu. }
-			
-			
-			\eject 
-			
-			\section{Dijagram aktivnosti}
-			
-			\textbf{\textit{dio 2. revizije}}\\
-			
-			\textit{Potrebno je priložiti dijagram aktivnosti s pripadajućim opisom. Dijagram aktivnosti treba prikazivati značajan dio sustava.}
-			
-			\eject
-			\section{Dijagram komponenti}
-			
-			\textbf{\textit{dio 2. revizije}}\\
-			
-			\textit{Potrebno je priložiti dijagram komponenti s pripadajućim opisom. Dijagram komponenti treba prikazivati strukturu cijele aplikacije.}
 			
 			
 		\section{Dijagram razreda} 
@@ -299,13 +235,16 @@
 			
 			{Modeli razreda odražavaju strukturu baze podataka unutar aplikacije. Metode implementirane unutar tih razreda izravno komuniciraju s bazom podataka kako bi dobile tražene informacije. Razred User predstavlja generičnog korisnika aplikacije koji se može registrirati. Na taj razred referira se razred Manager (jer je svaki Manager ujedno i User).}
 			
+				\pagebreak
+			
 			\begin{figure}[h]
 				\centering
 				\includegraphics[width=\textwidth,keepaspectratio]{slike/progi_1.png}
 				\caption{dio Models}
 				\label{fig:models}
 			\end{figure}
-			\eject
+			
+				\pagebreak
 		
 			
 			\begin{figure}[h]
@@ -315,7 +254,10 @@
 				\label{fig:services}
 			\end{figure}
 			
+				\pagebreak
+			
 			{U dijagramu razreda na slici \ref{fig:services} prikazani je dio servisa. Svi servisi kao svoj atribut, između ostalih, imaju instancu objekta \_EFCore koji predstavlja kontekst za bazu podataka i instancu IConfiguration objekta koji služi za dohvaćanje konstanti. Funkcije definirane u pojedinom razredu dohvaćaju, mijenjaju i dodaju podatke u bazu podataka i manipuliraju podacima koje vraćaju kontroleru koji šalje nazad do korisnika.}
+				\pagebreak
 			
 			\begin{figure}[h]
 				\centering
@@ -324,28 +266,57 @@
 				\label{fig:repr}
 			\end{figure}
 			
-			\eject
+		
 			
 			\pagebreak
 		
 		\section{Dijagram stanja}
 			
-			\textbf{\textit{dio 2. revizije}}\\
 			
-			\textit{Potrebno je priložiti dijagram stanja i opisati ga. Dovoljan je jedan dijagram stanja koji prikazuje \textbf{značajan dio funkcionalnosti} sustava. Na primjer, stanja korisničkog sučelja i tijek korištenja neke ključne funkcionalnosti jesu značajan dio sustava, a registracija i prijava nisu. }
+			
+			{Dijagram stanja prikazuje stanja objekta te prijelaze iz jednog stanja u drugo temeljene na događajima. Na slici je prikazan dijagram stanja za registriranog korisnika bilo kao admin ili korisnik. Nakon prijave admina kao korisničkog admina prikazuje mu se početna stranica na kojoj može pregledati sve registrirane korisnike te izmjenjivati njihove podatke. Ako se admin prijavi kao vlasnik parkinga prikazuje mu se početna stranica na kojoj može unositi podatke o parkirnom mjestu, podatke o dostupnosti parkirnog mjesta te dohvatiti statistiku grafa o parkingu. Korisnik s druge strane kada se prijavi na svojoj početnoj stranici pregledava parkirališta, odabire parkirno mjesto te odabire plaćanje dolaskom na parking ili plaćanje karticom te sredstvima iz novčanika. }
+			
+		
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=\textwidth,keepaspectratio]{slike/DijagramStanjacopyy.png}
+				\caption{Dijagram stanja}
+				\label{fig:DijagramStanjacopyy}
+			\end{figure}
+			
 			
 			
 			\eject 
 		
 		\section{Dijagram aktivnosti}
 			
-			\textbf{\textit{dio 2. revizije}}\\
 			
-			 \textit{Potrebno je priložiti dijagram aktivnosti s pripadajućim opisom. Dijagram aktivnosti treba prikazivati značajan dio sustava.}
+			
+			 {Dijagram aktivnosti koristi se za opis modela upravljačkog ili podatkovnog toka. Nije namijenjen modeliranju događaja potaknutog ponašanja. U modeliranju upravljačkog toka, svaki sljedeći korak slijedi nakon završetka prethodnog, pri čemu se naglašava jednostavnost. Na slici je prikazan dijagram aktivnosti koji opisuje proces rezerviranja parkirnog mjesta. Korisnik nakon uspješne prijave odabire parking, parkirališno mjesto, datum i vrijeme. Zatim mu se prikazuju opcije plaćanja te rezervacije gdje nakon uspješne transakcije korisniku se potvrđuje rezervacija.}
+			
+			\begin{figure}[hbt!]
+				\centering
+				\includegraphics[width=0.7\linewidth]{slike/DijagrammmAktivnosti.png}
+				\caption{Dijagram aktivnosti}
+				\label{fig:DijagrammmAktivnosti}
+			\end{figure}
+			
 			
 			\eject
 		\section{Dijagram komponenti}
 		
-			\textbf{\textit{dio 2. revizije}}\\
+			
 		
-			 \textit{Potrebno je priložiti dijagram komponenti s pripadajućim opisom. Dijagram komponenti treba prikazivati strukturu cijele aplikacije.}
+			 {Dijagram komponenti, prikazan na slici, ilustrira organizaciju i međusobnu povezanost komponenti, unutarnju strukturu te odnose s okolinom. Sustav je dostupan putem dva različita sučelja. Sučeljem za dohvat HTML, CSS i JS datoteka pristupaju datoteke koje pripadaju frontend dijelu aplikacije. Router je komponenta koja, na temelju upita s URL-a, određuje koja datoteka će biti poslužena na sučelju. Frontend se sastoji od niza JavaScript datoteka grupiranih u logičke cjeline nazvane prema tipovima korisnika koji im pristupaju. Sve JavaScript datoteke ovise o Angular biblioteci, iz koje se pozivaju gotove komponente poput gumba, obrazaca i slično.}
+			 
+			 {Sučeljem za dohvat JSON podataka pristupa se REST API komponenti, koja poslužuje podatke pripadajuće backend dijelu aplikacije. EntityFrameworkCore je odgovoran za dohvaćanje tablica iz baze podataka putem SQL upita. Podaci koji stižu iz baze šalju se dalje MVC arhitekturi u obliku DTO (Data Transfer Object).}
+			 
+			
+			 
+			 \begin{figure}[h]
+			 	\centering
+			 	\includegraphics[width=\textwidth,keepaspectratio]{slike/DijagramKomponenti.png}
+			 	\caption{Dijagram komponenti}
+			 	\label{fig:DijagramKomponenti}
+			 \end{figure}
+			 
