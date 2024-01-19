@@ -146,9 +146,9 @@ namespace SpotPicker.Services
 
         }
 
-        public double HaversineDistance(double lat1, double lon1, double lat2, double lon2)
+        public static double HaversineDistance(double lat1, double lon1, double lat2, double lon2)
         {
-            const double R = 6371000;
+            const double R = 6371;
 
             double dLat = DegreeToRadian(lat2 - lat1);
             double dLon = DegreeToRadian(lon2 - lon1);
@@ -164,7 +164,7 @@ namespace SpotPicker.Services
             return distance;
         }
 
-        public double DegreeToRadian(double degree)
+        public static double DegreeToRadian(double degree)
         {
             return degree * Math.PI / 180;
         }
