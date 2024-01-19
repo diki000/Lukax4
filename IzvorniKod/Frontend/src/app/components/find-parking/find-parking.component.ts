@@ -73,10 +73,7 @@ export class FindParkingComponent implements OnInit{
     this.parkingService.lat2 = parseFloat(poljeKraj[0])
     this.parkingService.lng2 = parseFloat(poljeKraj[1])
     this.parkingService.duration = this.createReserveForm.value.Duration;
-    if(this.createReserveForm.value.StartDest == "" || this.createReserveForm.value.EndDest == "" || this.createReserveForm.value.Duration == "" || this.createReserveForm.value.Payement == "")
-      this.parkingService.setwaypointsReady(false);
-    else
-      this.parkingService.setwaypointsReady(true);
+    this.parkingService.setwaypointsReady(true);
   }
 
   findParking(id: number) {
