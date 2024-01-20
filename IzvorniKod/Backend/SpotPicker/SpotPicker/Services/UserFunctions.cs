@@ -136,16 +136,16 @@ namespace SpotPicker.Services
                 }
 
                 // ako je user vlasnik parkinga, provjeri je li potvrdjen od admina, ako nije returnaj error
-            if (existingUser.RoleID == 2 && managerCheck.ConfirmedByAdmin != null && managerCheck.ConfirmedByAdmin == false)
-            {
-                    var ex = new Exception();
-                    ex.Data["Kod"] = 403;
-                    throw ex;
-                    //throw new Exception("Owner not confirmed by admin. Status code: 403"); // vlasnik parkinga nije potvrdjen od admina
-                }
+                if (existingUser.RoleID == 2 && managerCheck.ConfirmedByAdmin is null)
+                {
+                        var ex = new Exception();
+                        ex.Data["Kod"] = 403;
+                        throw ex;
+                        //throw new Exception("Owner not confirmed by admin. Status code: 403"); // vlasnik parkinga nije potvrdjen od admina
+                   }
 
-                return korisnik; // AKO SVE VALJA, VRATI USERA NA FRONT
-            }
+                    return korisnik; // AKO SVE VALJA, VRATI USERA NA FRONT
+             }
             else
             {
                 //throw new Exception("Incorrect password. Status code: 402"); //lozinka nevalja
@@ -183,7 +183,7 @@ namespace SpotPicker.Services
             return Token;
         }
 
-        public bool checkPasswordRegex(string password)
+        public static bool checkPasswordRegex(string password)
         {
             var pattern = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$";
             Match m = Regex.Match(password, pattern);
